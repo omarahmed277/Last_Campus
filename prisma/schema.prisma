@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String   @id @default(uuid())
+  name            String   @db.VarChar(50)
+  email           String   @unique @db.VarChar(255)
+  phone           String   @db.VarChar(20)
+  gender          Gender
+  country         String
+  experienceLevel ExperienceLevel
+  bio             String?  @db.Text
+  role            Role     @default(USER)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  specializations UserSpecialization[]
+  mentorSessions  Session[] @relation("MentorSessions") // ✅ Mentor in sessions
+  userSessions    Session[] @relation("UserSessions")   // ✅ User in sessions
+}
+
+model Specialization {
+  id    String @id @default(uuid())
+  name  String @unique
+
+  users UserSpecialization[]
+}
+
+model UserSpecialization {
+  userId           String
+  specializationId String
+
+  user            User           @relation(fields: [userId], references: [id])
+  specialization  Specialization @relation(fields: [specializationId], references: [id])
+
+  @@id([userId, specializationId])
+}
+
+model Session {
+  id        String      @id @default(uuid())
+  userId    String
+  mentorId  String
+  meetLink  String      @db.VarChar(255) // Google Meet link
+  status    SessionStatus @default(SCHEDULED)
+  createdAt DateTime    @default(now())
+
+  user   User @relation("UserSessions", fields: [userId], references: [id])
+  mentor User @relation("MentorSessions", fields: [mentorId], references: [id])
+}
+
+enum Role {
+  USER
+  MENTOR
+}
+
+enum Gender {
+  Male
+  Female
+}
+
+enum ExperienceLevel {
+  مبتدئ
+  متوسط
+  خبير
+}
+
+enum SessionStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELED
+}
