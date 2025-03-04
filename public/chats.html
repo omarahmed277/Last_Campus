@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Chats</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="chat-container">
+      <h2>Your Chats</h2>
+      <button id="logoutBtn" class="logout-btn">Logout</button>
+      <!-- ✅ Logout Button -->
+      <div id="chatList" class="chat-list"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script>
+      function geToken() {
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        const needed = 'access_token';
+
+        for (let cookie of ca) {
+          let [key, value] = cookie.split('=');
+          key = key.trim(); // ✅ Trim spaces to ensure a correct match
+
+          if (key === needed) {
+            return value;
+          }
+        }
+        return null;
+      }
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        let token = localStorage.getItem('token');
+        if (!token) {
+          token = geToken();
+        }
+
+        if (!token) {
+          window.location.href = '/login.html'; // ✅ Redirect if not logged in
+          return;
+        }
+
+        try {
+          console.log(token);
+          const decoded = jwt_decode(token);
+          const id = decoded.sub;
+
+          const res = await fetch(`/chat/${id}/chats`, {
+            method: 'GET',
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (!res.ok) {
+            throw new Error('Failed to load chats.');
+          }
+
+          const chats = await res.json();
+          const chatList = document.getElementById('chatList');
+
+          chats.forEach((chat) => {
+            const chatElement = document.createElement('div');
+            chatElement.innerHTML = `<a href="/chat.html?chatId=${chat.id}">${chat.participants.filter((u) => u.userId != id)[0].user.name}</a>`;
+            chatList.appendChild(chatElement);
+          });
+        } catch (error) {
+          localStorage.removeItem('token');
+          window.location.href = '/login.html'; // ✅ Force logout if token is invalid
+        }
+      });
+
+      // ✅ Logout Function
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('token'); // ✅ Remove token
+        window.location.href = '/login.html'; // ✅ Redirect to login
+      });
+    </script>
+
+    <style>
+      .logout-btn {
+        background-color: #ff4d4d;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 14px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+      }
+
+      .logout-btn:hover {
+        background-color: #cc0000;
+      }
+    </style>
+  </body>
+</html>

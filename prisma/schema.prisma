@@ -3,75 +3,65 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider = "mysql" // or "postgresql" or "sqlite"
+  url      = env("DATABASE_URL") // Add your database URL to .env file
 }
 
 model User {
-  id              String   @id @default(uuid())
-  name            String   @db.VarChar(50)
-  email           String   @unique @db.VarChar(255)
-  phone           String   @db.VarChar(20)
-  gender          Gender
-  country         String
-  experienceLevel ExperienceLevel
-  bio             String?  @db.Text
-  role            Role     @default(USER)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  specializations UserSpecialization[]
-  mentorSessions  Session[] @relation("MentorSessions") // ✅ Mentor in sessions
-  userSessions    Session[] @relation("UserSessions")   // ✅ User in sessions
+  id         Int     @id @default(autoincrement())
+  name       String
+  email      String  @unique
+  password   String?
+  googleId   String? @unique
+  linkedinId String? @unique
+  chats    ChatParticipants[]
+  messages Message[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
-model Specialization {
-  id    String @id @default(uuid())
-  name  String @unique
-
-  users UserSpecialization[]
+model Chat {
+  id          String             @id @default(uuid()) // Unique chat ID
+  type        ChatType           @default(DIRECT) // Supports direct & group chats
+  participants ChatParticipants[]
+  messages    Message[]
+  createdAt   DateTime @default(now())
 }
 
-model UserSpecialization {
-  userId           String
-  specializationId String
+model ChatParticipants {
+  id       String @id @default(uuid())
+  user     User   @relation(fields: [userId], references: [id])
+  userId   Int
+  chat     Chat   @relation(fields: [chatId], references: [id])
+  chatId   String
+  joinedAt DateTime @default(now())
 
-  user            User           @relation(fields: [userId], references: [id])
-  specialization  Specialization @relation(fields: [specializationId], references: [id])
-
-  @@id([userId, specializationId])
+  @@unique([userId, chatId]) // Ensures a user can be in a chat only once
 }
 
-model Session {
-  id        String      @id @default(uuid())
-  userId    String
-  mentorId  String
-  meetLink  String      @db.VarChar(255) // Google Meet link
-  status    SessionStatus @default(SCHEDULED)
-  createdAt DateTime    @default(now())
+model Message {
+  id        String   @id @default(uuid()) // Unique message ID
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  chatId    String
+  sender    User     @relation(fields: [senderId], references: [id])
+  senderId  Int
+  content   String   // Text message content
+  type      MessageType @default(TEXT) // Supports different message types
+  read      Boolean  @default(false) // Read receipt
+  createdAt DateTime @default(now())
 
-  user   User @relation("UserSessions", fields: [userId], references: [id])
-  mentor User @relation("MentorSessions", fields: [mentorId], references: [id])
+  @@index([chatId]) // Optimizes message retrieval for a chat
 }
 
-enum Role {
-  USER
-  MENTOR
+enum ChatType {
+  DIRECT // One-on-one chat
+  GROUP  // Group chat (Future feature)
 }
 
-enum Gender {
-  Male
-  Female
-}
-
-enum ExperienceLevel {
-  مبتدئ
-  متوسط
-  خبير
-}
-
-enum SessionStatus {
-  SCHEDULED
-  COMPLETED
-  CANCELED
+enum MessageType {
+  TEXT    // Plain text
+  IMAGE   // Image message
+  VIDEO   // Video message
+  AUDIO   // Audio message
+  FILE    // File attachment
 }

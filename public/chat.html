@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <div class="chat-box">
+      <div id="messages" class="messages"></div>
+      <div class="input-box">
+        <input type="text" id="messageInput" placeholder="Type a message..." />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <!-- Include required scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <!-- ✅ Add this -->
+
+    <script>
+      function geToken() {
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        const needed = 'access_token';
+
+        for (let cookie of ca) {
+          let [key, value] = cookie.split('=');
+          key = key.trim(); // ✅ Trim spaces to ensure a correct match
+
+          if (key === needed) {
+            return value;
+          }
+        }
+        return null;
+      }
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        let token = localStorage.getItem('token');
+        if (!token) {
+          token = geToken();
+        }
+
+        if (!token) {
+          window.location.href = '/login.html';
+          return;
+        }
+
+        const decoded = jwt_decode(token);
+        if (decoded.exp * 1000 < Date.now()) {
+          window.location.href = '/login.html';
+          return;
+        }
+
+        const id = decoded.sub;
+        const urlParams = new URLSearchParams(window.location.search);
+        const chatId = urlParams.get('chatId');
+
+        // ✅ Ensure Socket.io is available
+        const socket = io('http://localhost:3000', {
+          auth: { token },
+        });
+
+        const res = await fetch(`/chat/${chatId}/messages`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!res.ok) {
+          localStorage.removeItem('token');
+          window.location.href = '/login.html';
+          return;
+        }
+
+        const messages = await res.json();
+        const messagesDiv = document.getElementById('messages');
+
+        messages.forEach((msg) => {
+          const msgElement = document.createElement('p');
+          msgElement.textContent = `${msg.sender.name}: ${msg.content}`;
+          messagesDiv.appendChild(msgElement);
+        });
+
+        console.log(chatId);
+        console.log(`chat-${chatId}`);
+        socket.on(`chat-${chatId}`, (message) => {
+          console.log(message);
+          const msgElement = document.createElement('p');
+          msgElement.textContent = `${message.sender.name}: ${message.content}`;
+          messagesDiv.appendChild(msgElement);
+        });
+
+        window.sendMessage = function () {
+          const input = document.getElementById('messageInput');
+          socket.emit('sendMessage', {
+            chatId,
+            senderId: id,
+            content: input.value,
+          });
+          input.value = '';
+        };
+      });
+    </script>
+  </body>
+</html>
