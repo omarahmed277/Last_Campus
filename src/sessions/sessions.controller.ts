@@ -1,5 +1,7 @@
-import { Controller, Post, Body, Param, Patch } from '@nestjs/common';
+import { Controller, Post, Body, Param, Patch, Get, UseGuards, Req } from '@nestjs/common';
 import { SessionsService } from './sessions.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { ApiResponse } from 'src/common/interfaces/response.interface';
 
 @Controller('sessions')
 export class SessionsController {
@@ -32,5 +34,11 @@ export class SessionsController {
     @Body('userId') requestedUserId: number,
   ) {
     return this.sessionsService.rejectSession(sessionId, requestedUserId);
+  }
+
+  @Get("user")
+  @UseGuards(JwtAuthGuard)
+  async getUserSessions(@Req() req): Promise<ApiResponse<any>> {
+    return this.sessionsService.userSessions(req.user.id)
   }
 }

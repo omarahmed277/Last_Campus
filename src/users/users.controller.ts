@@ -8,6 +8,7 @@ import {
   Delete,
   NotFoundException,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -26,8 +27,10 @@ export class UsersController {
   }
 
   @Get()
-  async getAllUsers(): Promise<ApiResponse<any>> {
-    return this.usersService.getAllUsers();
+  async getAllUsers(
+    @Query() query: { email?: string },
+  ): Promise<ApiResponse<any>> {
+    return this.usersService.getAllUsers(query);
   }
 
   @Get(':id')

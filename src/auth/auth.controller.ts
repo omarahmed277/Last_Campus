@@ -9,18 +9,20 @@ import {
   HttpStatus,
   Query,
   Res,
+  Patch,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { LinkedInAuthGuard } from './guards/linkedin-auth.guard';
-import { lastValueFrom } from 'rxjs';
-import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { Response } from 'express';
+import { ApiResponse } from 'src/common/interfaces/response.interface';
+import { ForgetPasswordDto } from './dto/forget-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { CompleteRegistrationDto } from './dto/complete-registration.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -44,7 +46,7 @@ export class AuthController {
   googleLogin() {}
 
   @Get('google/callback')
-  // @UseGuards(AuthGuard('google'))
+  @UseGuards(AuthGuard('google'))
   async googleAuthCallback(
     @Query('code') code: string,
     @Req() req,
@@ -61,12 +63,28 @@ export class AuthController {
       };
 
       // 2️⃣ Validate and create/update user with the formatted profile
-      const { access_token } = await this.authService.validateOAuthUser(
-        formattedProfile,
-        'google',
-      );
+      const { access_token, user, missingFields } =
+        await this.authService.validateOAuthUser(formattedProfile, 'google');
 
       res.cookie('access_token', access_token);
+
+      if (missingFields.length > 0) {
+        // Pass existing user data and missing fields as query params
+        const queryParams = new URLSearchParams({
+          name: user.name || '',
+          email: user.email || '',
+          phone: user.phone || '',
+          gender: user.gender || '',
+          country: user.country || '',
+          specialization: user.specialization || '',
+          experienceLevel: user.experienceLevel || '',
+          bio: user.bio || '',
+          missingFields: JSON.stringify(missingFields), // Convert array to a string
+        }).toString();
+
+        return res.redirect(`/signup.html?${queryParams}`);
+      }
+
       return res.redirect('/chats.html'); // Redirect after login
     } catch (error) {
       throw new HttpException(
@@ -144,13 +162,28 @@ export class AuthController {
       };
 
       // 4️⃣ Validate and create/update user with the formatted profile
-      const { access_token } = await this.authService.validateOAuthUser(
-        formattedProfile,
-        'linkedin',
-      );
+      const { access_token, user, missingFields } =
+        await this.authService.validateOAuthUser(formattedProfile, 'linkedin');
 
-      console.log(access_token);
       res.cookie('access_token', access_token);
+
+      if (missingFields.length > 0) {
+        // Pass existing user data and missing fields as query params
+        const queryParams = new URLSearchParams({
+          name: user.name || '',
+          email: user.email || '',
+          phone: user.phone || '',
+          gender: user.gender || '',
+          country: user.country || '',
+          specialization: user.specialization || '',
+          experienceLevel: user.experienceLevel || '',
+          bio: user.bio || '',
+          // missingFields: JSON.stringify(missingFields),
+        }).toString();
+
+        return res.redirect(`/signup.html?${queryParams}`);
+      }
+
       return res.redirect('/chats.html'); // Redirect after login
     } catch (error) {
       throw new HttpException(
@@ -159,6 +192,78 @@ export class AuthController {
           'LinkedIn authentication failed',
         error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    }
+  }
+
+  // Endpoint for completing registration with additional details
+  @Patch('complete-registration')
+  @UseGuards(JwtAuthGuard)
+  async completeRegistration(
+    @Req() req,
+    @Body()
+    completeRegistrationDto: CompleteRegistrationDto,
+  ) {
+    return this.authService.completeRegistration(
+      req.user.id,
+      completeRegistrationDto,
+    );
+  }
+
+  // forget password endpoints
+  @Post('forget-password')
+  async forgetPassword(@Body() dto: ForgetPasswordDto) {
+    return this.authService.forgetPassword(dto.email);
+  }
+
+  @Post('reset-password')
+  @UseGuards(JwtAuthGuard)
+  async resetPassword(@Req() req, @Body() dto: ResetPasswordDto) {
+    return this.authService.resetPassword(
+      req.user.userId,
+      dto.resetCode,
+      dto.newPassword,
+    );
+  }
+
+  // email verification endpoints
+  @UseGuards(JwtAuthGuard)
+  @Patch('verify-email')
+  async verifyEmail(@Req() req, @Body() body: { code: string }) {
+    try {
+      const { code } = body;
+      const userId = req.user.id;
+
+      const isVerified = await this.authService.verifyEmail(userId, code);
+
+      if (isVerified) {
+        return {
+          message: 'Email verified successfully',
+        };
+      }
+
+      throw new HttpException(
+        'Invalid or expired verification code',
+        HttpStatus.BAD_REQUEST,
+      );
+    } catch (error) {
+      throw new HttpException(
+        error.message || 'Verification failed',
+        error.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('resend-verification-code')
+  async resendVerificationCode(@Req() req): Promise<ApiResponse<any>> {
+    try {
+      await this.authService.generateAndSendVerificationCode(req.user);
+      return {
+        success: true,
+        message: 'code resend to your email, check it.',
+      };
+    } catch (error) {
+      throw new HttpException('Error happened', HttpStatus.BAD_REQUEST);
     }
   }
 

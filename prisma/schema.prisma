@@ -8,9 +8,23 @@ datasource db {
 }
 
 model User {
-  id         Int                @id @default(autoincrement())
-  name       String
-  email      String             @unique
+  id                      Int             @id @default(autoincrement())
+  name                    String          @db.VarChar(50)
+  email                   String          @unique
+  emailVerified           Boolean         @default(false)
+  verificationCode        String?
+  verificationCodeExpires DateTime?
+  resetCode               String?
+  resetCodeExpires        DateTime?
+  phone                   String          @default("+201000000000") @db.VarChar(20)
+  gender                  Gender          @default(MALE)
+  country                 String          @default("Egypt") @db.VarChar(100)
+  specialization          String          @default("Other") @db.VarChar(100)
+  experienceLevel         ExperienceLevel @default(BEGINNER)
+  bio                     String?         @db.Text
+  signup_method           SignupMethod    @default(MANUAL)
+
+  // Existing relations and fields
   password   String?
   googleId   String?            @unique
   linkedinId String?            @unique
@@ -23,6 +37,23 @@ model User {
   sessionsReceived  Session[] @relation(name: "RequestedRelation")
 }
 
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum ExperienceLevel {
+  BEGINNER
+  INTERMEDIATE
+  EXPERT
+}
+
+enum SignupMethod {
+  MANUAL
+  GOOGLE
+  LINKEDIN
+}
+
 model Chat {
   id           String             @id @default(uuid()) // Unique chat ID
   type         ChatType           @default(DIRECT) // Supports direct & group chats
@@ -33,7 +64,7 @@ model Chat {
 
 model ChatParticipants {
   id       String   @id @default(uuid())
-  user     User     @relation(fields: [userId], references: [id])
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   Int
   chat     Chat     @relation(fields: [chatId], references: [id])
   chatId   String
@@ -46,7 +77,7 @@ model Message {
   id        String      @id @default(uuid()) // Unique message ID
   chat      Chat        @relation(fields: [chatId], references: [id])
   chatId    String
-  sender    User        @relation(fields: [senderId], references: [id])
+  sender    User        @relation(fields: [senderId], references: [id], onDelete: Cascade)
   senderId  Int
   content   String // Text message content
   type      MessageType @default(TEXT) // Supports different message types
@@ -79,8 +110,8 @@ model Session {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
-  requester User @relation(name: "RequesterRelation", fields: [requesterId], references: [id])
-  requested User @relation(name: "RequestedRelation", fields: [requestedId], references: [id])
+  requester User @relation(name: "RequesterRelation", fields: [requesterId], references: [id], onDelete: Cascade)
+  requested User @relation(name: "RequestedRelation", fields: [requestedId], references: [id], onDelete: Cascade)
 }
 
 enum SessionStatus {

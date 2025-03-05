@@ -1,5 +1,74 @@
-<h2>Session Accepted</h2>
-<p>Hello,</p>
-<p>Your session with {{requesterName}} has been accepted!</p>
-<p>Meeting Link: <a href='{{meetLink}}'>{{meetLink}}</a></p>
-<p>Scheduled at: {{scheduledAt}}</p>
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Session Accepted - Tawgeeh</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f4f4f4;
+      }
+      .container {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        color: #2c3e50;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 15px;
+      }
+      .session-details {
+        margin: 20px 0;
+        padding: 15px;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+      }
+      .meet-link {
+        word-break: break-all;
+        color: #2980b9;
+        text-decoration: none;
+      }
+      .meet-link:hover {
+        text-decoration: underline;
+      }
+      .footer {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 12px;
+        color: #7f8c8d;
+        border-top: 1px solid #ecf0f1;
+        padding-top: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class='container'>
+      <div class='header'>
+        <h1>Session Accepted</h1>
+      </div>
+
+      <div class='session-details'>
+        <p>Hello,</p>
+        <p>Your session with
+          <strong>{{requesterName}}</strong>
+          has been accepted!</p>
+        <p>Meeting Link:
+          <a href='{{meetLink}}' class='meet-link'>{{meetLink}}</a></p>
+        <p>Scheduled at: <strong>{{scheduledAt}}</strong></p>
+      </div>
+
+      <div class='footer'>
+        <p>&copy; 2024 Tawgeeh. All rights reserved.</p>
+        <p>We wish you a productive session!</p>
+      </div>
+    </div>
+  </body>
+</html>

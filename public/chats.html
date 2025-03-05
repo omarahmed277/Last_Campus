@@ -9,8 +9,17 @@
   <body>
     <div class="chat-container">
       <h2>Your Chats</h2>
+
+      <!-- ✅ Search Bar -->
+      <input
+        type="text"
+        id="searchInput"
+        class="search-input"
+        placeholder="Search by email..."
+      />
+      <button id="searchBtn" class="search-btn">Search</button>
+
       <button id="logoutBtn" class="logout-btn">Logout</button>
-      <!-- ✅ Logout Button -->
       <div id="chatList" class="chat-list"></div>
     </div>
 
@@ -76,22 +85,74 @@
         localStorage.removeItem('token'); // ✅ Remove token
         window.location.href = '/login.html'; // ✅ Redirect to login
       });
+
+      // ✅ Search Function
+      document
+        .getElementById('searchBtn')
+        .addEventListener('click', async () => {
+          const email = document.getElementById('searchInput').value.trim();
+          const api = `/users?email=${email}`;
+          console.log(api);
+          if (!email) return alert('Please enter an email to search.');
+
+          let token = localStorage.getItem('token');
+          if (!token) {
+            token = geToken();
+          }
+
+          try {
+            const res = await fetch(api, {
+              method: 'GET',
+              headers: { Authorization: `Bearer ${token}` },
+            });
+
+            const message = (await res.json()).message;
+            const success = (await res.json()).success;
+            // if (!res.ok) {
+            //   console.log(message)
+            //   throw new Error('User not found.');
+            // }
+
+            const users = (await res.json()).data;
+            const chatList = document.getElementById('chatList');
+            chatList.innerHTML = ''; // Clear existing chat list
+
+            users.forEach((user) => {
+              const userElement = document.createElement('div');
+              userElement.innerHTML = `<a href="/chat.html?userId=${user.id}">${user.name} (${user.email})</a>`;
+              chatList.appendChild(userElement);
+            });
+          } catch (error) {
+            alert('User not found.');
+          }
+        });
     </script>
 
     <style>
-      .logout-btn {
-        background-color: #ff4d4d;
+      .search-input {
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      .search-btn {
+        width: 100%;
+        background-color: #007bff;
         color: white;
         border: none;
-        padding: 10px 15px;
-        cursor: pointer;
+        padding: 10px;
         font-size: 14px;
-        border-radius: 5px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.3s ease;
         margin-bottom: 15px;
       }
 
-      .logout-btn:hover {
-        background-color: #cc0000;
+      .search-btn:hover {
+        background-color: #0056b3;
       }
     </style>
   </body>
