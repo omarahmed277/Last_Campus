@@ -8,31 +8,34 @@ datasource db {
 }
 
 model User {
-  id         Int     @id @default(autoincrement())
+  id         Int                @id @default(autoincrement())
   name       String
-  email      String  @unique
+  email      String             @unique
   password   String?
-  googleId   String? @unique
-  linkedinId String? @unique
-  chats    ChatParticipants[]
-  messages Message[]
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  googleId   String?            @unique
+  linkedinId String?            @unique
+  chats      ChatParticipants[]
+  messages   Message[]
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  sessionsRequested Session[] @relation(name: "RequesterRelation")
+  sessionsReceived  Session[] @relation(name: "RequestedRelation")
 }
 
 model Chat {
-  id          String             @id @default(uuid()) // Unique chat ID
-  type        ChatType           @default(DIRECT) // Supports direct & group chats
+  id           String             @id @default(uuid()) // Unique chat ID
+  type         ChatType           @default(DIRECT) // Supports direct & group chats
   participants ChatParticipants[]
-  messages    Message[]
-  createdAt   DateTime @default(now())
+  messages     Message[]
+  createdAt    DateTime           @default(now())
 }
 
 model ChatParticipants {
-  id       String @id @default(uuid())
-  user     User   @relation(fields: [userId], references: [id])
+  id       String   @id @default(uuid())
+  user     User     @relation(fields: [userId], references: [id])
   userId   Int
-  chat     Chat   @relation(fields: [chatId], references: [id])
+  chat     Chat     @relation(fields: [chatId], references: [id])
   chatId   String
   joinedAt DateTime @default(now())
 
@@ -40,28 +43,48 @@ model ChatParticipants {
 }
 
 model Message {
-  id        String   @id @default(uuid()) // Unique message ID
-  chat      Chat     @relation(fields: [chatId], references: [id])
+  id        String      @id @default(uuid()) // Unique message ID
+  chat      Chat        @relation(fields: [chatId], references: [id])
   chatId    String
-  sender    User     @relation(fields: [senderId], references: [id])
+  sender    User        @relation(fields: [senderId], references: [id])
   senderId  Int
-  content   String   // Text message content
+  content   String // Text message content
   type      MessageType @default(TEXT) // Supports different message types
-  read      Boolean  @default(false) // Read receipt
-  createdAt DateTime @default(now())
+  read      Boolean     @default(false) // Read receipt
+  createdAt DateTime    @default(now())
 
   @@index([chatId]) // Optimizes message retrieval for a chat
 }
 
 enum ChatType {
   DIRECT // One-on-one chat
-  GROUP  // Group chat (Future feature)
+  GROUP // Group chat (Future feature)
 }
 
 enum MessageType {
-  TEXT    // Plain text
-  IMAGE   // Image message
-  VIDEO   // Video message
-  AUDIO   // Audio message
-  FILE    // File attachment
+  TEXT // Plain text
+  IMAGE // Image message
+  VIDEO // Video message
+  AUDIO // Audio message
+  FILE // File attachment
+}
+
+model Session {
+  id            String        @id @default(uuid())
+  requesterId   Int           @map("requester_id") // User who initiates
+  requestedId   Int           @map("requested_id") // User who is invited
+  status        SessionStatus @default(PENDING)
+  googleMeetUrl String? // Null until accepted
+  scheduledAt   DateTime
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  requester User @relation(name: "RequesterRelation", fields: [requesterId], references: [id])
+  requested User @relation(name: "RequestedRelation", fields: [requestedId], references: [id])
+}
+
+enum SessionStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }

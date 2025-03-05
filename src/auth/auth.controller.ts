@@ -44,11 +44,14 @@ export class AuthController {
   googleLogin() {}
 
   @Get('google/callback')
-  @UseGuards(AuthGuard('google'))
-  async googleAuthCallback(@Req() req, @Res() res: Response) {
+  // @UseGuards(AuthGuard('google'))
+  async googleAuthCallback(
+    @Query('code') code: string,
+    @Req() req,
+    @Res() res: Response,
+  ) {
     try {
       // 1️⃣ Format the Google profile data
-      console.log(req.user);
       const formattedProfile = {
         id: req.user.id,
         displayName: req.user.displayName,
