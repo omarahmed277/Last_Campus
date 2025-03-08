@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link rel="stylesheet" href="./CSS/login.css">
+</head>
+<body>
+    <style>
+        .error {
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+    <div class="main_contaner" id="login1">
+        <h1>تسجيل الدخول</h1>
+        <div class="form_contaner">
+            <div class="form_group">
+                <label class="label" for="email">البريد الإلكتروني</label>
+                <div class="wrapper">
+                    <input class="input" type="text" name="email" id="email" placeholder="Moatasmshabaan@gmail.com" oninput="checkInputDirection(this)">
+                    <span id="emailError" class="error"></span>
+                </div>
+            </div>
+            <script>
+                function checkInputDirection(input) {
+    const text = input.value;
+    const isArabic = /[\u0600-\u06FF]/.test(text); 
+
+    if (isArabic) {
+        input.style.direction = 'rtl'; 
+    } else {
+        input.style.direction = 'ltr'; 
+    }
+}
+            </script>
+            <div class="secon_con">
+                <div class="form_group">
+                    <label class="label" for="password">كلمة المرور</label>
+                    <input class="input" type="password" name="password" id="password" placeholder="************************" oninput="checkInputDirection(this)">
+                    <span id="passwordError" class="error"></span>
+                </div>
+                <div class="password_con form_group">
+                   <h4 id="forgetBtn">هل نسيت كلمة المرور؟</h4>
+                    <div class="check">
+                        <label for="ch1">تذكرني</label>
+                        <input class="checkbox" type="checkbox" id="ch1">
+                    </div>
+                </div>
+                <div class="or form_group">
+                    <span></span>
+                    <p>أو</p>
+                    <span></span>
+                </div>
+                <div class="buttons_con form_group">
+                    <button class="GoogleBtn"><img src="./Regestration-images/Google.svg" alt=""></button>
+                    <button class="linkedinBtn"><img src="./Regestration-images/linkedin.svg" alt=""></button>
+                </div>
+            </div>
+            <div class="loginbtn_con">
+                <button class="loginbtn" id="loginButton">تسجيل الدخول</button>
+            </div>
+            <div class="signup_con form_group">
+                <h4 class="signupBtn">انشاء حساب جديد</h4>
+                <p>هل ليس لديك حساب بعد؟</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- password screen2 -->
+    <div class="main_contaner login4" id="passwordScreen2">
+        <div id="arrowRightP2" class="arrowRight">
+            <img src="./Regestration-images/arrow-right.svg" alt="">
+        </div>
+        <h1>إعادة تعيين كلمة المرور</h1>
+        <p>سنرسل لك كود اعادة تعيين كلمة المرور عبر البريد الالكتروني.</p>
+        <div class="form_contaner form_contanerP">
+            <div class="code-input-group">
+                <input type="text" id="resetCode1" name="resetCode1" maxlength="1" class="code-input">
+                <input type="text" id="resetCode2" name="resetCode2" maxlength="1" class="code-input">
+                <input type="text" id="resetCode3" name="resetCode3" maxlength="1" class="code-input">
+                <input type="text" id="resetCode4" name="resetCode4" maxlength="1" class="code-input">
+            </div>
+            <div class="loginbtn_con">
+                <button id="donePass" class="loginbtn">تم</button>
+            </div>
+            <div class="signup_con form_group">
+                <h4>ارسل الكود مرة اخرى</h4>
+                <p>لم يتم ارسال الكود ؟</p>
+            </div>
+        </div>
+    </div>
+    
+ <!-- password screen1 -->
+ <div class="main_contaner login4 hidden" id="passwordScreen1">
+    <div id="arrowRightP1" class="arrowRight">
+        <img src="./Regestration-images/arrow-right.svg" alt="">
+    </div>
+    <h1>نسيت كلمة المرور ؟</h1>
+    <p>لا تقلق , سنرسل لك تعليمات إعادة تعيين كلمة المرور .</p>
+    <div class="form_contaner form_contanerP">
+        <div class="form_group">
+            <label class="label" for="resetEmail">البريد الإلكتروني</label>
+            <div class="wrapper">
+                <input class="input" type="text" name="resetEmail" id="resetEmail" placeholder="Moatasmshabaan@gmail.com" oninput="checkInputDirection(this)">
+                <span id="resetEmailError" class="error"></span>
+            </div>
+        </div>
+        <div class="loginbtn_con">
+            <button id="repassword" class="loginbtn">إعادة تعيين كلمة المرور</button>
+        </div>
+        <div class="signup_con form_group">
+            <h4 class="signupBtn">انشاء حساب جديد</h4>
+            <p>هل ليس لديك حساب بعد؟</p>
+        </div>
+    </div>
+</div>
+
+<!-- password screen3 -->
+<div class="main_contaner login4" id="passwordScreen3">
+    <h1>تعيين كلمة مرور جديدة</h1>
+    <p>يجب ان يكون الطول 8 احرف على الأقل</p>
+    <div class="form_contaner form_contanerP">
+        <div class="form_group">
+            <label class="label" for="newPassword">كلمة المرور</label>
+            <div class="wrapper">
+                <input class="input" type="password" name="newPassword" id="newPassword" placeholder="*********************" oninput="checkInputDirection(this)">
+                <span id="newPasswordError" class="error"></span>
+            </div>
+        </div>
+        <div class="form_group">
+            <label class="label" for="confirmNewPassword">تأكيد كلمة المرور</label>
+            <div class="wrapper">
+                <input class="input" type="password" name="confirmNewPassword" id="confirmNewPassword" placeholder="*********************" oninput="checkInputDirection(this)">
+                <span id="confirmNewPasswordError" class="error"></span>
+            </div>
+        </div>
+        <div class="loginbtn_con">
+            <button class="loginbtn" id="changePasswordBtn">تغيير كلمة المرور</button>
+        </div>
+        <div class="signup_con form_group">
+            <h4 class="signupBtn">انشاء حساب جديد</h4>
+            <p>هل ليس لديك حساب بعد؟</p>
+        </div>
+    </div>
+</div>
+<!-- signup1 -->
+
+<div class="main_contaner main_contanerS" id="signup1">
+    <div class="con">
+        <div class="con1 conformat conChecked"></div>
+        <div class="con2 conformat"></div>
+        <div class="con3 conformat"></div>
+    </div>
+   
+    <h1>انشاء حساب جديد</h1>
+    <div class="form_contaner">
+
+        <div class="form_group">
+            <label class="label" for="">الإسم كاملا</label>
+           <input class="input" type="text" name="fullName" id="fullName" placeholder="ادخل اسمك كاملا" oninput="checkInputDirection(this)">
+			<span id="fullNameError" class="error"></span>
+                    </div>
+        <div class="form_group">
+<label class="label" for="signupEmail">البريد الإلكتروني</label>
+                <input class="input" type="email" name="signupEmail" id="signupEmail" placeholder="Moatasmshabaan@gmail.com" oninput="checkInputDirection(this)">
+			<span id="signupEmailError" class="error"></span>
+        </div>
+                    <div class="form_group">
+                        <label class="label" for="phone">رقم الهاتف </label>
+                                        <input class="input" type="text" name="phone" id="phone" placeholder="010281317744" oninput="checkInputDirection(this)">
+			<span id="phoneError" class="error"></span>
+                                </div>
+        <div class="form_group">
+            <label class="label" for="signupPassword">كلمة المرور </label>
+<input class="input" type="password" name="signupPassword" id="signupPassword" placeholder="************************" oninput="checkInputDirection(this)">
+			<span id="signupPasswordError" class="error"></span>
+</div>
+        <div class="form_group">
+            <label class="label" for="confirmPassword">تأكيد كلمة المرور</label>
+<input class="input" type="password" name="confirmPassword" id="confirmPassword" placeholder="************************" oninput="checkInputDirection(this)">
+			<span id="confirmPasswordError" class="error"></span>    
+</div>
+
+        <div class="group2 form_group">
+            <div class="check">
+                <label for="ch1">لقد قرأت وفهمت سياسة الخصوصية</label>
+                <input class="checkbox" type="checkbox"  id="ch1">
+              </div>
+        
+        <div class="or form_group">
+            <span></span>
+            <p>أو</p>
+            <span></span>
+        </div>
+        <div class="buttons_con form_group">
+            <button class="GoogleBtn"><img src="./Regestration-images/Google.svg" alt=""></button>
+            <button class="linkedinBtn"><img src="./Regestration-images/linkedin.svg" alt=""></button>
+        </div>
+        <div class="loginbtn_con">
+            <button id="loginbtn1" class="loginbtn">التالي</button>
+        </div>
+        <div class="signup_con form_group">
+            <h4>تسجيل الدخول</h4>
+            <p>هل لديك حساب بالفعل؟</p>
+        </div>
+        </div>
+        
+           
+    </div>
+</div>
+
+<!-- signup2 -->
+
+<div class="main_contaner main_contanerS" id="signup2">
+    <div class="con">
+        <div class="con1 conformat conChecked"></div>
+        <div class="con2 conformat conChecked"></div>
+        <div class="con3 conformat"></div>
+    </div>
+    <div id="arrowRightS1" class="arrowRight">
+        <img src="./Regestration-images/arrow-right.svg" alt="">
+    </div>
+    <h1>انشاء حساب جديد</h1>
+    <div class="form_contaner">
+        <div class="form_group">
+            <label class="label" for="specialization">التخصص</label>
+            <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+            <span id="specializationError" class="error"></span>
+        </div>
+        <div class="form_group">
+            <label class="label">البلد</label>
+            <div class="select-wrapper">
+                <select name="country" id="country" required>
+                    <option value="">اختر البلد</option>
+                    <option value="egypt">مصر</option>
+                    <option value="saudi">السعودية</option>
+                    <option value="uae">الإمارات</option>
+                    <option value="other">دولة أخرى</option>
+                </select>
+                <img src="./Regestration-images/CaretDown.svg" alt="" class="select-icon arrowDown">
+            </div>
+            <span id="countryError" class="error"></span>
+        </div>
+        <div class="form_group">
+            <label class="label">عدد سنوات الخبرة</label>
+            <div class="select-wrapper">
+                <select name="experience" id="experience" required>
+                    <option value="">اختر عدد السنوات</option>
+                    <option value="zero-one">0-1 سنين خبرة</option>
+                    <option value="one-three">1-3 سنين خبرة</option>
+                    <option value="three-five">3-5 سنين خبرة</option>
+                    <option value="PlusFive">أكثر من 5 سنوات</option>
+                </select>
+                <img src="./Regestration-images/CaretDown.svg" alt="" class="select-icon arrowDown">
+            </div>
+            <span id="experienceError" class="error"></span>
+        </div>
+        <div class="form_group">
+            <label class="label">الجنس</label>
+            <div class="select-wrapper">
+                <select name="gender" id="gender" required>
+                    <option value="">اختر الجنس</option>
+                    <option value="male">ذكر</option>
+                    <option value="female">أنثى</option>
+                    <option value="other">غير محدد</option>
+                </select>
+                <img src="./Regestration-images/CaretDown.svg" alt="" class="select-icon arrowDown">
+            </div>
+            <span id="genderError" class="error"></span>
+        </div>
+        <div class="form_group">
+            <label class="label">نبذة عني:</label>
+            <textarea name="about_me" id="about_me" placeholder="نبذه عني" required></textarea oninput="checkInputDirection(this)">
+            <span id="aboutMeError" class="error"></span>
+        </div>
+        <div class="group2 form_group">
+            <div class="check">
+                <label for="privacyCheckbox">لقد قرأت وفهمت سياسة الخصوصية</label>
+                <input class="checkbox" type="checkbox" id="privacyCheckbox">
+                <span id="privacyError" class="error"></span>
+            </div>
+            <div class="or form_group">
+                <span></span>
+                <p>أو</p>
+                <span></span>
+            </div>
+            <div class="buttons_con form_group">
+                <button class="GoogleBtn"><img src="./Regestration-images/Google.svg" alt=""></button>
+                <button class="linkedinBtn"><img src="./Regestration-images/linkedin.svg" alt=""></button>
+            </div>
+            <div class="loginbtn_con">
+                <button id="loginbtn2" class="loginbtn">التالي</button>
+            </div>
+            <div class="signup_con form_group">
+                <h4>تسجيل الدخول</h4>
+                <p>هل لديك حساب بالفعل؟</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- signup3 -->
+<div class="main_contaner login4" id="signup3"  >
+    <div class="con">
+        <div class="con1 conformat conChecked"></div>
+        <div class="con2 conformat conChecked"></div>
+        <div class="con3 conformat conChecked"></div>
+    </div>
+   
+    <div id="arrowRightS2" class="arrowRight">
+        <img src="./Regestration-images/arrow-right.svg" alt="">
+    </div>
+    <h1>تأكيد رقم الهاتف</h1>
+    <p>من فضلك أدخل الكود المرسل إلى رقم هاتفك لتأكيده.</p>
+    
+    <div class="form_contaner form_contanerP">
+        <div class="code-input-group">
+            <input type="text" id="resetCode1" name="resetCode1" maxlength="1" class="code-input">
+            <input type="text" id="resetCode2" name="resetCode2" maxlength="1" class="code-input">
+            <input type="text" id="resetCode3" name="resetCode3" maxlength="1" class="code-input">
+            <input type="text" id="resetCode4" name="resetCode4" maxlength="1" class="code-input">
+        </div>
+        <div class="loginbtn_con">
+            <button id="loginbtn3" class="loginbtn">تم</button>
+        </div>
+        <div class="signup_con form_group">
+            <h4>ارسل الكود مرة اخرى</h4>
+            <p>لم يتم ارسال الكود ؟</p>
+        </div>
+</div>
+</div>
+
+<script src="./JS/login.js"></script>
+<script src="./JS/validation.js"></script>
+</body>
+</html>
