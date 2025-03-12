@@ -2,8 +2,10 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/fillters/all-exceptions.filter';
 import { HttpException, HttpStatus, ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as path from 'path';
+// import { Handler, Server } from 'vercel';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -37,7 +39,22 @@ async function bootstrap() {
   // Apply Global Exception Filter
   app.useGlobalFilters(new AllExceptionsFilter());
 
+  // Swagger Configuration
+  const config = new DocumentBuilder()
+    .setTitle('Tawgeeh API')
+    .setDescription('API for managing Tawgeeh')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('/', app, document);
+
   // listen on port
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap().catch((e) => console.error(e));
+
+// Export for Vercel
+// export const handler: Handler = (req, res) => {
+//   server(req, res);
+// };
