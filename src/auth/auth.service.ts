@@ -9,7 +9,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { ExperienceLevel, Gender } from '@prisma/client';
+import { ExperienceLevel, Gender, SignupMethod } from '@prisma/client';
 import { NotificationService } from 'src/notification/notification.service';
 import { NotificationType } from 'src/notification/enums/notification-type.enum';
 import { CompleteRegistrationDto } from './dto/complete-registration.dto';
@@ -71,6 +71,7 @@ export class AuthService {
           email: profile.emails[0].value,
           googleId: provider === 'google' ? profile.id : null,
           linkedinId: provider === 'linkedin' ? profile.id : null,
+          signup_method: provider.toLocaleUpperCase() as SignupMethod,
         },
       });
     }

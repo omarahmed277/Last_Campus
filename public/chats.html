@@ -66,7 +66,8 @@
             throw new Error('Failed to load chats.');
           }
 
-          const chats = await res.json();
+          const chats = (await res.json()).data;
+          console.log(chats)
           const chatList = document.getElementById('chatList');
 
           chats.forEach((chat) => {
@@ -75,6 +76,7 @@
             chatList.appendChild(chatElement);
           });
         } catch (error) {
+          alert(error)
           localStorage.removeItem('token');
           window.location.href = '/login.html'; // ✅ Force logout if token is invalid
         }

@@ -5,6 +5,12 @@ import { ChatGateway } from './chat.gateway';
 @Controller('chat')
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
+  
+  // 🟢 Get all Chats
+  @Get()
+  async getChats() {
+    return this.chatService.getChats();
+  }
 
   // 🟢 Create or Get a Chat
   @Post('create')

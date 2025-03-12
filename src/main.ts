@@ -11,7 +11,7 @@ async function bootstrap() {
   });
 
   // serve static files
-  app.useStaticAssets(path.join(__dirname, '..', 'public'));
+  // app.useStaticAssets(path.join(__dirname, '..', 'public'));
 
   // Enable Global Validation
   app.useGlobalPipes(
