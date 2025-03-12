@@ -50,7 +50,7 @@ async function bootstrap() {
   SwaggerModule.setup('/', app, document);
 
   // listen on port
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT || 3000, "0.0.0.0");
 }
 bootstrap().catch((e) => console.error(e));
 
