@@ -10,7 +10,7 @@ let signup1 = document.getElementById('signup1')
 let signup2 = document.getElementById('signup2')
 let signup3 = document.getElementById('signup3')
 let loginbtn2 = document.getElementById('loginbtn2')
-let loginbtn = document.getElementById('loginbtn1')
+let loginbtn = document.getElementById('loginbtn')
 let arrowRightP1 = document.getElementById('arrowRightP1')
 let arrowRightP2 = document.getElementById('arrowRightP2')
 let arrowRightS1 = document.getElementById('arrowRightS1')
@@ -20,80 +20,68 @@ let arrowDown = document.querySelectorAll('.arrowDown')
 
 
 
-let signupBtn = document.querySelectorAll('.signupBtn')
+let signupBtn = document.getElementById('signupBtn1')
 
 
 
 
-passwordScreen1.style.display = 'none'
-passwordScreen2.style.display = 'none'
-passwordScreen3.style.display = 'none'
-signup1.style.display = 'none'
-signup2.style.display = 'none'
-signup3.style.display = 'none'
+// passwordScreen1.style.display = 'none'
+// passwordScreen2.style.display = 'none'
+// passwordScreen3.style.display = 'none'
+// signup1.style.display = 'none'
+// signup2.style.display = 'none'
+// signup3.style.display = 'none'
 
 
 
 forgetBtn.addEventListener('click' , function(){
-passwordScreen1.style.display = 'block'
-login1.style.display = 'none'
+    window.location.href = 'passwordScreen1.html'
+// login1.style.display = 'none'
 })
 
-repassword.addEventListener('click' , function(){
-    passwordScreen2.style.display = 'block'
-    passwordScreen1.style.display = 'none'
-})
-donePass.addEventListener('click' , function(){
-    passwordScreen3.style.display = 'block'
-    passwordScreen2.style.display = 'none'
-})
+// repassword.addEventListener('click' , function(){
+//     window.location.href = 'passwordScreen2.html'
+//     // passwordScreen1.style.display = 'none'
+// })
+// donePass.addEventListener('click' , function(){
+//     window.location.href = 'passwordScreen3.html'
+//     passwordScreen2.style.display = 'none'
+// })
 
-signupBtn.forEach(btn => {
-    btn.addEventListener('click' , function(){
-        signup1.style.display = 'block'
-        login1.style.display = 'none'
-passwordScreen1.style.display = 'none'
-passwordScreen3.style.display = 'none'
 
+    signupBtn.addEventListener('click' , function(){
+        window.location.href = 'signup1.html'
 
     })
-})
 
 loginbtn.addEventListener('click' , function(){
-signup1.style.display = 'none'
-signup2.style.display = 'block'
+// signup1.style.display = 'none'
+window.location.href = 'signup2.html'
 })
 
 loginbtn2.addEventListener('click' , function(){
-    signup3.style.display = 'block'
-    signup2.style.display = 'none'
+    window.location.href = 'signup2.html'
+    // signup2.style.display = 'none'
     })
 
     arrowRightP1.addEventListener('click' , function(){
         passwordScreen1.style.display = 'none'
-        login1.style.display = 'block'
-        })
+        window.location.href = 'login1.html'
+    })
         arrowRightP2.addEventListener('click' , function(){
             passwordScreen2.style.display = 'none'
-            passwordScreen1.style.display = 'block'
-            })
+            window.location.href = 'passwordScreen1.html'
+        })
             arrowRightS1.addEventListener('click' , function(){
-                signup1.style.display = 'block'
+                window.location.href = 'signup1.html'
                 signup2.style.display = 'none'
                 })
                 arrowRightS2.addEventListener('click' , function(){
                     signup3.style.display = 'none'
-                    signup2.style.display = 'block'
-                    })
+                    window.location.href = 'signup2.html'
+                })
 
-                    arrowRightS2.addEventListener('click' , function(){
-                        signup3.style.display = 'none'
-                        signup2.style.display = 'block'
-                        })
-                        arrowRightS2.addEventListener('click' , function(){
-                            signup3.style.display = 'none'
-                            signup2.style.display = 'block'
-                            })
+                    
                             
                             document.querySelectorAll('.select-icon').forEach(icon => {
                                 icon.addEventListener('click', function() {
@@ -112,6 +100,17 @@ loginbtn2.addEventListener('click' , function(){
                                     icon.classList.remove('rotate'); 
                                 });
                             });
+
+                            function checkInputDirection(input) {
+                                const text = input.value;
+                                const isArabic = /[\u0600-\u06FF]/.test(text); 
+                            
+                                if (isArabic) {
+                                    input.style.direction = 'rtl'; 
+                                } else {
+                                    input.style.direction = 'ltr'; 
+                                }
+                            }
 
                 
                  

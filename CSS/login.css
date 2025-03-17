@@ -17,6 +17,18 @@
     font-family: "Baloo Bhaijaan 2";
     height: 1000px;
   }
+  .error {
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+    color: red;
+}
+.success {
+    color: green;
+}
+.hidden {
+    display: none;
+}
 .con{
   display: flex;
   gap: 2px;
@@ -201,6 +213,16 @@ height: 1px;
     flex-direction: row;
     gap: 8px;
   }
+  input[type="button"]{
+    border: none;
+    cursor: pointer;
+    background-color: #FFF;
+    border-radius: 8px;
+border: 1.5px solid var(--Colors-Neutral-400, #BBB);
+width: 100%;
+background-color: var(--praimary-color);
+
+  }
   button{
     border: none;
     cursor: pointer;
@@ -212,6 +234,10 @@ width: 100%;
   .linkedinBtn{
     background-color: #1275B1 !important;
     border-color: #1275B1 !important;
+  }
+  .GoogleBtn{
+    background-color: #fff !important;
+    
   }
   .loginbtn{
     background-color: var(--praimary-color);
