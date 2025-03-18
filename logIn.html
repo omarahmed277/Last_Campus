@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/signUp.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Baloo+Bhaijaan+2:wght@400..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lalezar&family=Manrope:wght@200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="logIn-module module">
+      <h1>تسجيل الدخول</h1>
+      <form action="" class="logIn-module">
+        <div>
+          <label for="email">البريد الإلكتروني</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Moatasmshabaan@gmail.com"
+          />
+        </div>
+        <div>
+          <label for="password">كلمة المرور </label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="************************"
+          />
+        </div>
+        <div class="save-me">
+          <div>
+            <input type="checkbox" name="checkbox" id="saveMe" />
+            <label for="saveMe">تذكرني</label>
+          </div>
+          <a href="#">هل نسيت كلمة المرور؟</a>
+        </div>
+        <div>
+          <span>أو</span>
+          <div>
+            <a href="#"><img src="./images/linkedin.svg" alt="linkedin" /></a>
+            <a href="#"><img src="./images/Google.svg" alt="Google" /></a>
+          </div>
+          <input type="submit" value="تسجيل الدخول" name="submit" />
+          <p>
+            هل ليس لديك حساب بعد؟ <a href="./signUp1.html">انشاء حساب جديد</a>
+          </p>
+        </div>
+      </form>
+    </div>
+    <div class="forget-pass-module module hidden">
+      <h1>
+        نسيت كلمة المرور ؟
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M8.90997 19.92L15.43 13.4C16.2 12.63 16.2 11.37 15.43 10.6L8.90997 4.08002"
+            stroke="#101828"
+            stroke-width="1.5"
+            stroke-miterlimit="10"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </h1>
+      <p>لا تقلق , سنرسل لك تعليمات إعادة تعيين كلمة المرور .</p>
+      <form action="" class="forget-pass">
+        <div>
+          <label for="email">البريد الإلكتروني</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Moatasmshabaan@gmail.com"
+          />
+        </div>
+        <div>
+          <input type="submit" value="تسجيل الدخول" name="submit" />
+          <p>
+            هل ليس لديك حساب بعد؟ <a href="./signUp1.html">انشاء حساب جديد</a>
+          </p>
+        </div>
+      </form>
+    </div>
+    <div class="forget-pass-code-module module hidden">
+      <h1>
+        إعادة تعيين كلمة المرور
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M8.90997 19.92L15.43 13.4C16.2 12.63 16.2 11.37 15.43 10.6L8.90997 4.08002"
+            stroke="#101828"
+            stroke-width="1.5"
+            stroke-miterlimit="10"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </h1>
+      <p>سنرسل لك كود اعادة تعيين كلمة المرور عبر البريد الالكتروني .</p>
+      <form action="" class="forget-pass-code">
+        <div class="code">
+          <input type="text" name="confirm-code1" />
+          <input type="text" name="confirm-code2" />
+          <input type="text" name="confirm-code3" />
+          <input type="text" name="confirm-code4" />
+        </div>
+        <div>
+          <input type="submit" value="تم" name="submit" />
+          <p>
+            لم يتم ارسال الكود ؟
+            <a href="#" style="text-decoration: underline"
+              >ارسل الكود مرة اخرى</a
+            >
+          </p>
+        </div>
+      </form>
+    </div>
+    <div class="pass-reset-module module hidden">
+      <h1>تعيين كلمة مرور جديدة</h1>
+      <p>يجب ان يكون الطول 8 احرف على الأقل</p>
+      <form action="" class="pass-reset">
+        <div>
+          <label for="password">كلمة المرور </label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="************************"
+          />
+        </div>
+        <div>
+          <label for="confirm-pass">تأكيد كلمة المرور</label>
+          <input
+            type="password"
+            name="confirm-pass"
+            id="confirm-pass"
+            placeholder="************************"
+          />
+        </div>
+        <div>
+          <input type="submit" value="تغيير كلمة المرور " name="submit" />
+          <p>
+            هل ليس لديك حساب بعد؟ <a href="./signUp1.html">انشاء حساب جديد</a>
+          </p>
+        </div>
+      </form>
+    </div>
+    <script>
+      document
+        .querySelector(".logIn-module")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          let formData = {
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+          };
+
+          try {
+            const res = await fetch(
+              "https://tawgeeh-v1-production.up.railway.app/auth/login",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+              }
+            );
+
+            const data = await res.json();
+            console.log(data);
+
+            if (data.errors) {
+              Object.keys(data.errors).forEach((field) => {
+                throw new Error(field);
+              });
+            }
+
+            if (data.successMessage) {
+              document.querySelector(
+                ".end-message"
+              ).textContent = `${data.successMessage}`;
+              // window.alert(data.successMessage);
+            }
+          } catch (err) {
+            document.querySelector(".end-message").textContent = `${err}`;
+            // window.alert(err);
+          }
+        });
+    </script>
+  </body>
+</html>

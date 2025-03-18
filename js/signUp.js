@@ -8,31 +8,17 @@ let userPass = document.querySelector(".signUp1-module #password");
 let userPassConfirm = document.querySelector(".signUp1-module #confirm-pass");
 let checkbox = document.querySelector(".signUp1-module #checkbox");
 
-const user = {
-  userName: "hady",
-  userEmail: "hady@gmail.com",
-  userPhone: "01025541212",
-  userPass: "123123",
-  userPassConfirm: "123123",
-};
-
-function signUp(userName, userEmail, userPhone, userPass, userPassConfirm) {
-  const user = { userName, userEmail, userPhone, userPass, userPassConfirm };
-  console.log(user);
-  return user;
-}
 let valid = false;
 
-function styling(condition, error, input) {
+function styling(condition, error, input, color = "#d2d2d2") {
   if (condition) {
     document.querySelector(`${input} + ${error}`).style.display = "block";
     document.querySelector(`${input}`).style.borderColor = `#db3b21`;
-    return valid;
+    valid = false;
   } else {
     document.querySelector(`${input} + ${error}`).style.display = "none";
-    document.querySelector(`${input}`).style.borderColor = `#d2d2d2`;
+    document.querySelector(`${input}`).style.borderColor = color;
     valid = true;
-    return valid;
   }
 }
 
@@ -56,31 +42,71 @@ signUpForm.addEventListener("submit", (e) => {
 
   styling(userPassConfirm.value !== userPass.value, `p`, `#confirm-pass`);
 
-  if (!valid) return;
+  styling(checkbox.checked === false, `p`, `#checkbox + label`, `#101828`);
 
-  if (checkbox.checked === false) {
-    document.querySelector(`#checkbox + label + p`).style.display = `block`;
-    document.querySelector(`#checkbox + label`).style.color = `#db3b21`;
-    return;
-  } else {
-    document.querySelector(`#checkbox + label + p`).style.display = `none`;
-    document.querySelector(`#checkbox + label`).style.color = `#101828`;
-  }
+  if (!valid) return;
 
   document.querySelector(".signUp1-module").style.display = "none";
   document.querySelector(".signUp2-module").style.display = "block";
+
+  let formData = {
+    userName: document.getElementById("user-name").value,
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value,
+    passwordConfirm: document.getElementById("confirm-pass").value,
+    phone: document.getElementById("phone").value,
+  };
+
+  async function signUp() {
+    try {
+      const res = await fetch(
+        "https://tawgeeh-v1-production.up.railway.app/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await res.json();
+      console.log(data);
+
+      if (data.errors) {
+        Object.keys(data.errors).forEach((field) => {
+          throw new Error(field);
+        });
+      }
+
+      if (data.successMessage) {
+        document.querySelector(
+          ".end-message"
+        ).textContent = `${data.successMessage}`;
+        // window.alert(data.successMessage);
+
+        document.querySelector(".signUp2-module").style.display = "none";
+        document.querySelector(".confirm-email-module").style.display = "block";
+      }
+    } catch (err) {
+      document.querySelector(".end-message").textContent = `${err}`;
+      // window.alert(err);
+    }
+  }
+  signUp();
 });
 
 document.querySelector(".back-to1").addEventListener("click", () => {
   document.querySelector(".signUp1-module").style.display = "block";
   document.querySelector(".signUp2-module").style.display = "none";
 });
-
+//////////////
 document.querySelector(".back-to2").addEventListener("click", () => {
   document.querySelector(".signUp2-module").style.display = "block";
   document.querySelector(".confirm-email-module").style.display = "none";
 });
 
+//////////////
 let signUpForm2 = document.querySelector(".signUp2");
 let userspecialty = document.querySelector("#specialty");
 let usercountry = document.querySelector("#country");
@@ -94,13 +120,78 @@ signUpForm2.addEventListener("submit", (e) => {
   styling(usercountry.value === "select", `p`, `#country`);
   styling(userexperience.value === "select", `p`, `#experience`);
   styling(aboutUser.value === "", `p`, `#about`);
-  if (!valid) {
-    return;
-  } else {
-    document.querySelector(".signUp2-module").style.display = "none";
-    document.querySelector(".confirm-email-module").style.display = "block";
+
+  let formData = {
+    userspecialty: userspecialty.value,
+    usercountry: usercountry.value,
+    userexperience: userexperience.value,
+    aboutUser: aboutUser.value,
+  };
+
+  async function signUp() {
+    try {
+      const res = await fetch(
+        "https://tawgeeh-v1-production.up.railway.app/users",
+        {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await res.json();
+      console.log(data);
+
+      if (data.errors) {
+        Object.keys(data.errors).forEach((field) => {
+          throw new Error(field);
+        });
+      }
+
+      if (data.successMessage) {
+        document.querySelector(
+          ".end-message"
+        ).textContent = `${data.successMessage}`;
+        // window.alert(data.successMessage);
+
+        document.querySelector(".signUp2-module").style.display = "none";
+        document.querySelector(".confirm-email-module").style.display = "block";
+      }
+    } catch (err) {
+      document.querySelector(".end-message").textContent = `${err}`;
+      // window.alert(err);
+    }
   }
+  signUp();
 });
+
+// console.log(formData);
+////////////////
+
+// const codes = document.querySelectorAll(".code input");
+// const confirmEmailForm = document.querySelector(".confirm-email");
+// // console.log(c);
+
+// confirmEmailForm.addEventListener("submit", (event) => {
+//   event.preventDefault();
+
+//   codes.forEach((e, i) => {
+//     e.addEventListener("input", (ele) => {
+//       ele.target.value.length === 1 && codes[i + 1].focus();
+//     });
+
+//     let opt = "";
+
+//     opt += codes[i].value;
+//     let formData = {
+//       opt: opt,
+//     };
+//     console.log(formData);
+//   });
+// });
 
 // logform.addEventListener("submit", (e) => {
 //   const email = document.getElementById("log-email").value;

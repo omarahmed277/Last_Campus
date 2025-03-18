@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign Up</title>
+    <title>Document</title>
     <link rel="stylesheet" href="./css/signUp.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Baloo+Bhaijaan+2:wght@400..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lalezar&family=Manrope:wght@200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap"
@@ -27,7 +27,7 @@
             name="name"
             id="user-name"
           />
-          <p class="error-message">الاسم غير صحيح</p>
+          <p class="error-message" id="error-name">الاسم غير صحيح</p>
         </div>
         <div>
           <label for="email">البريد الإلكتروني</label>
@@ -37,12 +37,14 @@
             id="email"
             placeholder="Moatasmshabaan@gmail.com"
           />
-          <p class="error-message">البريد الاليكترونى غير صحيح</p>
+          <p class="error-message" id="error-email">
+            البريد الاليكترونى غير صحيح
+          </p>
         </div>
         <div>
           <label for="phone">رقم الهاتف </label>
           <input type="tel" name="phone" id="phone" placeholder="01116304577" />
-          <p class="error-message">رقم الهاتف غير صحيح</p>
+          <p class="error-message" id="error-phone">رقم الهاتف غير صحيح</p>
         </div>
         <div>
           <label for="password">كلمة المرور </label>
@@ -52,7 +54,7 @@
             id="password"
             placeholder="************************"
           />
-          <p class="error-message">كلمة المرور غير صحيحه</p>
+          <p class="error-message" id="error-password">كلمة المرور غير صحيحه</p>
         </div>
         <div>
           <label for="confirm-pass">تأكيد كلمة المرور</label>
@@ -62,12 +64,16 @@
             id="confirm-pass"
             placeholder="************************"
           />
-          <p class="error-message">كلمه المرور غير متطابقه</p>
+          <p class="error-message" id="error-confirm-pass">
+            كلمه المرور غير متطابقه
+          </p>
         </div>
         <div class="checkbox">
           <input type="checkbox" name="checkbox" id="checkbox" />
           <label for="checkbox">لقد قرأت وفهمت سياسة الخصوصية</label>
-          <p class="error-message">يرجي قراه سياسه الخصوصيه</p>
+          <p class="error-message" id="error-checkbox">
+            يرجي قراه سياسه الخصوصيه
+          </p>
         </div>
         <div>
           <span>أو</span>
@@ -76,11 +82,10 @@
             <a href="#"><img src="./images/Google.svg" alt="Google" /></a>
           </div>
           <input type="submit" value="التالي" name="submit" />
-          <p>هل لديك حساب بالفعل؟ <a href="#">تسجيل الدخول</a></p>
+          <p>هل لديك حساب بالفعل؟ <a href="./logIn.html">تسجيل الدخول</a></p>
         </div>
       </form>
     </div>
-
     <div class="signUp2-module module hidden">
       <div>
         <span class="active-slide"></span>
@@ -105,6 +110,7 @@
         </svg>
       </div>
       <h1>انشاء حساب جديد</h1>
+      <p class="end-message hidden"></p>
       <form action="" class="signUp2">
         <div>
           <label for="specialty">التخصص</label>
@@ -114,7 +120,7 @@
             name="specialty"
             id="specialty"
           />
-          <p class="error-message">يرجى كتابه التخصص</p>
+          <p class="error-message" id="error-specialty">يرجى كتابه التخصص</p>
         </div>
         <div>
           <label for="country">البلد</label>
@@ -124,7 +130,7 @@
             <option value="saudi">السعوديه</option>
             <option value="palastine">فلسطين</option>
           </select>
-          <p class="error-message">يرجى اختيار اسم دولتك</p>
+          <p class="error-message" id="error-country">يرجى اختيار اسم دولتك</p>
         </div>
         <div>
           <label for="experience">عدد سنوات الخبرة </label>
@@ -133,12 +139,14 @@
             <option value="1-3">1 : 3</option>
             <option value="3-5">3 : 5</option>
           </select>
-          <p class="error-message">يرجى اختيار سنين خبرتك</p>
+          <p class="error-message" id="error-experience">
+            يرجى اختيار سنين خبرتك
+          </p>
         </div>
         <div>
           <label for="about">نبذة عني</label>
           <textarea name="about" id="about" placeholder="نبذة عني"></textarea>
-          <p class="error-message">يرجى كتابه نبذة عنك</p>
+          <p class="error-message" id="error-about">يرجى كتابه نبذة عنك</p>
         </div>
         <div>
           <span>أو</span>
@@ -147,7 +155,7 @@
             <a href="#"><img src="./images/Google.svg" alt="Google" /></a>
           </div>
           <input type="submit" value="التالي" name="submit" />
-          <p>هل لديك حساب بالفعل؟ <a href="#">تسجيل الدخول</a></p>
+          <p>هل لديك حساب بالفعل؟ <a href="./logIn.html">تسجيل الدخول</a></p>
         </div>
       </form>
     </div>
@@ -179,10 +187,10 @@
       <p>من فضلك أدخل الكود المرسل إلى رقم هاتفك لتأكيده.</p>
       <form action="" class="confirm-email">
         <div class="code">
-          <input type="text" name="confirm-code1" />
-          <input type="text" name="confirm-code2" />
-          <input type="text" name="confirm-code3" />
-          <input type="text" name="confirm-code4" />
+          <input type="text" name="confirm-code1" maxlength="1" />
+          <input type="text" name="confirm-code2" maxlength="1" />
+          <input type="text" name="confirm-code3" maxlength="1" />
+          <input type="text" name="confirm-code4" maxlength="1" />
         </div>
         <div>
           <input type="submit" value="تم" name="submit" />
@@ -192,149 +200,6 @@
               >ارسل الكود مرة اخرى</a
             >
           </p>
-        </div>
-      </form>
-    </div>
-    <div class="logIn-module module hidden">
-      <h1>تسجيل الدخول</h1>
-      <form action="" class="logIn-module">
-        <div>
-          <label for="email">البريد الإلكتروني</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Moatasmshabaan@gmail.com"
-          />
-        </div>
-        <div>
-          <label for="password">كلمة المرور </label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="************************"
-          />
-        </div>
-        <div class="save-me">
-          <div>
-            <input type="checkbox" name="checkbox" id="saveMe" />
-            <label for="saveMe">تذكرني</label>
-          </div>
-          <a href="#">هل نسيت كلمة المرور؟</a>
-        </div>
-        <div>
-          <span>أو</span>
-          <div>
-            <a href="#"><img src="./images/linkedin.svg" alt="linkedin" /></a>
-            <a href="#"><img src="./images/Google.svg" alt="Google" /></a>
-          </div>
-          <input type="submit" value="تسجيل الدخول" name="submit" />
-          <p>هل ليس لديك حساب بعد؟ <a href="#">انشاء حساب جديد</a></p>
-        </div>
-      </form>
-    </div>
-    <div class="forget-pass-module module hidden">
-      <h1>
-        نسيت كلمة المرور ؟
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-        >
-          <path
-            d="M8.90997 19.92L15.43 13.4C16.2 12.63 16.2 11.37 15.43 10.6L8.90997 4.08002"
-            stroke="#101828"
-            stroke-width="1.5"
-            stroke-miterlimit="10"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-      </h1>
-      <p>لا تقلق , سنرسل لك تعليمات إعادة تعيين كلمة المرور .</p>
-      <form action="" class="forget-pass">
-        <div>
-          <label for="email">البريد الإلكتروني</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Moatasmshabaan@gmail.com"
-          />
-        </div>
-        <div>
-          <input type="submit" value="تسجيل الدخول" name="submit" />
-          <p>هل ليس لديك حساب بعد؟ <a href="#">انشاء حساب جديد</a></p>
-        </div>
-      </form>
-    </div>
-    <div class="forget-pass-code-module module hidden">
-      <h1>
-        إعادة تعيين كلمة المرور
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-        >
-          <path
-            d="M8.90997 19.92L15.43 13.4C16.2 12.63 16.2 11.37 15.43 10.6L8.90997 4.08002"
-            stroke="#101828"
-            stroke-width="1.5"
-            stroke-miterlimit="10"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-      </h1>
-      <p>سنرسل لك كود اعادة تعيين كلمة المرور عبر البريد الالكتروني .</p>
-      <form action="" class="forget-pass-code">
-        <div class="code">
-          <input type="text" name="confirm-code1" />
-          <input type="text" name="confirm-code2" />
-          <input type="text" name="confirm-code3" />
-          <input type="text" name="confirm-code4" />
-        </div>
-        <div>
-          <input type="submit" value="تم" name="submit" />
-          <p>
-            لم يتم ارسال الكود ؟
-            <a href="#" style="text-decoration: underline"
-              >ارسل الكود مرة اخرى</a
-            >
-          </p>
-        </div>
-      </form>
-    </div>
-    <div class="pass-reset-module module hidden">
-      <h1>تعيين كلمة مرور جديدة</h1>
-      <p>يجب ان يكون الطول 8 احرف على الأقل</p>
-      <form action="" class="pass-reset">
-        <div>
-          <label for="password">كلمة المرور </label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="************************"
-          />
-        </div>
-        <div>
-          <label for="confirm-pass">تأكيد كلمة المرور</label>
-          <input
-            type="password"
-            name="confirm-pass"
-            id="confirm-pass"
-            placeholder="************************"
-          />
-        </div>
-        <div>
-          <input type="submit" value="تغيير كلمة المرور " name="submit" />
-          <p>هل ليس لديك حساب بعد؟ <a href="#">انشاء حساب جديد</a></p>
         </div>
       </form>
     </div>
