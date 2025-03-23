@@ -57,10 +57,48 @@ signUpForm.addEventListener("submit", (e) => {
     phone: document.getElementById("phone").value,
   };
 
-  async function signUp() {
+  // async function signUp() {
+  //   try {
+  //     const res = await fetch(
+  //       "https://tawgeeh-v1-production.up.railway.app/auth/register",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(formData),
+  //       }
+  //     );
+
+  //     const data = await res.json();
+  //     console.log(data);
+
+  //     if (data.errors) {
+  //       Object.keys(data.errors).forEach((field) => {
+  //         throw new Error(field);
+  //       });
+  //     }
+
+  //     if (data.successMessage) {
+  //       document.querySelector(
+  //         ".end-message"
+  //       ).textContent = `${data.successMessage}`;
+  //       // window.alert(data.successMessage);
+
+  //       document.querySelector(".signUp2-module").style.display = "none";
+  //       document.querySelector(".confirm-email-module").style.display = "block";
+  //     }
+  //   } catch (err) {
+  //     document.querySelector(".end-message").textContent = `${err}`;
+  //     // window.alert(err);
+  //   }
+  // }
+  // signUp();
+
+  async function registerUser() {
     try {
-      const res = await fetch(
-        "https://tawgeeh-v1-production.up.railway.app/auth/register",
+      const response = await fetch(
+        "https://tangueh-v1-production.up.railway.app/auth/register",
         {
           method: "POST",
           headers: {
@@ -70,30 +108,27 @@ signUpForm.addEventListener("submit", (e) => {
         }
       );
 
-      const data = await res.json();
-      console.log(data);
-
-      if (data.errors) {
-        Object.keys(data.errors).forEach((field) => {
-          throw new Error(field);
-        });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          `Server error: ${errorData.message || "Unknown error"}`
+        );
       }
 
-      if (data.successMessage) {
-        document.querySelector(
-          ".end-message"
-        ).textContent = `${data.successMessage}`;
-        // window.alert(data.successMessage);
-
-        document.querySelector(".signUp2-module").style.display = "none";
-        document.querySelector(".confirm-email-module").style.display = "block";
+      const data = await response.json();
+      console.log("Success:", data);
+    } catch (error) {
+      if (error instanceof TypeError) {
+        console.error("Network error or CORS issue:", error.message);
+      } else if (error instanceof SyntaxError) {
+        console.error("JSON parsing error:", error.message);
+      } else {
+        console.error("Error:", error.message);
       }
-    } catch (err) {
-      document.querySelector(".end-message").textContent = `${err}`;
-      // window.alert(err);
     }
   }
-  signUp();
+
+  registerUser();
 });
 
 document.querySelector(".back-to1").addEventListener("click", () => {
@@ -209,3 +244,15 @@ signUpForm2.addEventListener("submit", (e) => {
 //     e.preventDefault();
 //   }
 // });
+
+const userData = {
+  name: "John Doe",
+  email: "user@example.com",
+  password: "username@userd1231",
+  phone: "80012345678",
+  gender: "MEL7",
+  country: "Egypt",
+  specialization: "software Engineering",
+  experienceLevel: "INTERMEDIATE",
+  PID: "Full-stack developer with 5 years experience",
+};
