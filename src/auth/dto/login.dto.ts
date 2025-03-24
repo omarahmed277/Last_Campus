@@ -16,7 +16,6 @@ export class LoginDto {
     description: 'Account password (min 6 characters)',
     required: true,
     minLength: 6,
-    sensitive: true, // Marks field as sensitive in Swagger UI
   })
   @IsString()
   @IsNotEmpty({ message: 'Password is required.' })
