@@ -64,10 +64,10 @@
             </button>
         </div>
             <div class="loginbtn_con">
-                <input type="button" value="التالي" id="loginbtn" class="loginbtn">
+                <input type="button" value="التالي" id="signupBtn" class="loginbtn">
             </div>
             <div class="signup_con form_group">
-                <h4>تسجيل الدخول</h4>
+                <h4 id="registerBtn">تسجيل الدخول</h4>
                 <p>هل لديك حساب بالفعل؟</p>
             </div>
             </div>
@@ -77,10 +77,16 @@
     </div>
 
     <script>
-let loginbtn = document.getElementById('loginbtn')
-        loginbtn.addEventListener('click' , function(){
-window.location.href = 'signup2.html'
-})
+let registerBtn = document.getElementById('registerBtn')
+
+
+
+                registerBtn.addEventListener('click' , function(){
+                window.location.href = 'index.html'
+                })
+
+              
+
     </script>
     
     <script src="./JS/login.js"></script>

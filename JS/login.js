@@ -103,12 +103,14 @@ loginbtn2.addEventListener('click' , function(){
 
                             function checkInputDirection(input) {
                                 const text = input.value;
-                                const isArabic = /[\u0600-\u06FF]/.test(text); 
-                            
+                                const isArabic = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(text) || /[0-9]/.test(text);
+                                
                                 if (isArabic) {
-                                    input.style.direction = 'rtl'; 
+                                    input.style.direction = 'rtl';
+                                    input.style.textAlign = 'right'; // لجعل النص يبدأ من اليمين
                                 } else {
-                                    input.style.direction = 'ltr'; 
+                                    input.style.direction = 'ltr';
+                                    input.style.textAlign = 'left'; // لجعل النص يبدأ من اليسار
                                 }
                             }
 

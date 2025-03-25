@@ -91,7 +91,7 @@
                 </button>
             </div>
                 <div class="loginbtn_con">
-                    <input type="button" id="loginbtn" class="loginbtn" value="إنشاء حساب">
+                    <input type="button" id="loginbtn2" class="loginbtn" value="إنشاء حساب">
                 </div>
                 <div class="signup_con form_group">
                     <h4 id="registerBtn">تسجيل الدخول</h4>
@@ -102,14 +102,31 @@
     </div>
 
     <script>
-        let loginbtn = document.getElementById('loginbtn')
-        loginbtn.addEventListener('click' , function(){
-window.location.href = 'signup3.html'
-})
+       
 let arrowRightS1 = document.getElementById('arrowRightS1')
+let registerBtn = document.getElementById('registerBtn')
+
 arrowRightS1.addEventListener('click' , function(){
                 window.location.href = 'signup1.html'
                 })
+
+                registerBtn.addEventListener('click' , function(){
+                window.location.href = 'index.html'
+                })
+
+                function checkInputDirection(input) {
+    const text = input.value;
+    const isArabic = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(text);
+    
+    if (isArabic) {
+        input.style.direction = 'rtl';
+        input.style.textAlign = 'right'; 
+    } else {
+        input.style.direction = 'ltr';
+        input.style.textAlign = 'left'; 
+    }
+}
+
     </script>
     
     <script src="./JS/login.js"></script>

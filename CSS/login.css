@@ -266,6 +266,9 @@ justify-content: center;
     color: var(--mainColor);
     cursor: pointer;
   }
+  .password_con h4:hover{
+    color: var(--praimary-color);
+  }
   .signup_con h4:hover{
     color: var(--praimary-color);
   }

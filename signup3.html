@@ -45,7 +45,33 @@ arrowRightS2.addEventListener('click' , function(){
                     signup3.style.display = 'none'
                     window.location.href = 'signup2.html'
                 })
-    </script>
+
+               
+                document.addEventListener('DOMContentLoaded', function() {
+                    const inputs = document.querySelectorAll('.code-input');
+                    
+                    inputs.forEach((input, index) => {
+                        input.addEventListener('input', function() {
+                            if (this.value.length === this.maxLength) {
+                                const nextInput = inputs[index + 1];
+                                if (nextInput) {
+                                    nextInput.focus();
+                                }
+                            }
+                        });
+            
+                        input.addEventListener('keydown', function(e) {
+                            if (e.key === 'Backspace' && this.value.length === 0) {
+                                const prevInput = inputs[index - 1];
+                                if (prevInput) {
+                                    prevInput.focus();
+                                }
+                            }
+                        });
+                    });
+                });
+            </script>
+
     
     <script src="./JS/login.js"></script>
     <script src="./JS/validation.js"></script>
