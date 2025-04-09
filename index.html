@@ -1,32 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login</title>
+    <title>تسجيل الدخول</title>
     <link rel="stylesheet" href="./CSS/login.css">
 </head>
 <body>
-   
+
     <div class="main_contaner" id="login1">
         <h1>تسجيل الدخول</h1>
-        <form action="/auth/login" method="POST" class="form_contaner">
+        <form id="loginForm" class="form_contaner" method="post">
             <div class="form_group">
                 <label class="label" for="email">البريد الإلكتروني</label>
                 <div class="wrapper">
-                    <input class="input" type="text" name="email" id="email" placeholder="Moatasmshabaan@gmail.com" >
+                    <input class="input" type="text" name="email" id="email" placeholder="Moatasmshabaan@gmail.com">
                     <span id="emailError" class="error"></span>
                 </div>
             </div>
-           
+
             <div class="secon_con">
                 <div class="form_group">
                     <label class="label" for="password">كلمة المرور</label>
-                    <input class="input" type="password" name="password" id="password" placeholder="************************" oninput="checkInputDirection(this)">
+                    <input class="input" type="password" name="password" id="password" placeholder="************************">
                     <span id="passwordError" class="error"></span>
                 </div>
                 <div class="password_con form_group">
-                   <h4 id="forgetBtn">هل نسيت كلمة المرور؟</h4>
+                    <h4 id="forgetBtn">هل نسيت كلمة المرور؟</h4>
                     <div class="check">
                         <label for="ch1">تذكرني</label>
                         <input class="checkbox" type="checkbox" id="ch1">
@@ -38,81 +38,128 @@
                     <span></span>
                 </div>
                 <div class="buttons_con form_group">
-                
-                        <button type="button" class="GoogleBtn">
-                        <img src="./images/Google.svg" alt="">
-                        </button>
-                   
-                    <button type="button" class="linkedinBtn" value="">
-                    <img src="./images/linkedin.svg" alt="">
+                    <button type="button" class="GoogleBtn">
+                        <img src="./images/Google.svg" alt="Google">
+                    </button>
+                    <button type="button" class="linkedinBtn">
+                        <img src="./images/linkedin.svg" alt="LinkedIn">
                     </button>
                 </div>
             </div>
+
             <div class="loginbtn_con">
-                <input type="button" class="loginbtn" id="loginButton" value="تسجيل الدخول">
+                <input type="submit" class="loginbtn" id="loginButton" value="تسجيل الدخول">
             </div>
+
             <div class="signup_con form_group">
                 <h4 id="signupBtn1">انشاء حساب جديد</h4>
                 <p>هل ليس لديك حساب بعد؟</p>
             </div>
         </form>
     </div>
-    
+
     <script>
-        document.getElementById('loginButton').addEventListener('click', async () => {
-            const email = document.getElementById('email');
-            const password = document.getElementById('password');
-            const emailError = document.getElementById('emailError');
-            const passwordError = document.getElementById('passwordError');
-        
-            emailError.textContent = '';
-            passwordError.textContent = '';
-        
-            let hasError = false;
-        
-            if (!email.value.trim()) {
-                emailError.textContent = 'يرجى إدخال البريد الإلكتروني';
-                hasError = true;
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('ch1').checked;
+            
+            // Clear previous errors
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+            
+            // Simple validation
+            let isValid = true;
+            
+            if (!email) {
+                document.getElementById('emailError').textContent = 'البريد الإلكتروني مطلوب';
+                isValid = false;
+            } else if (!/\S+@\S+\.\S+/.test(email)) {
+                document.getElementById('emailError').textContent = 'البريد الإلكتروني غير صالح';
+                isValid = false;
             }
-        
-            if (!password.value.trim()) {
-                passwordError.textContent = 'يرجى إدخال كلمة المرور';
-                hasError = true;
+            
+            if (!password) {
+                document.getElementById('passwordError').textContent = 'كلمة المرور مطلوبة';
+                isValid = false;
+            } else if (password.length < 8) {
+                document.getElementById('passwordError').textContent = 'كلمة المرور يجب أن تكون 8 أحرف على الأقل';
+                isValid = false;
             }
-        
-            if (hasError) return;
-        
+            
+            if (!isValid) return;
+            
+            // Prepare request data
+            const requestBody = {
+                email: email,
+                password: password
+            };
+            
             try {
-                const response = await fetch('https://tawgeeh-v1-production.up.railway.app/auth/login', {
+                // Show loading state
+                const loginButton = document.getElementById('loginButton');
+                loginButton.disabled = true;
+                loginButton.value = 'جاري التحميل...';
+                
+                // Replace with your actual API endpoint
+                const apiUrl = 'https://tawgeeh-v1-production.up.railway.app/auth/login';
+                
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
-                    body: JSON.stringify({
-                        email: email.value.trim(),
-                        password: password.value.trim(),
-                    }),
+                    body: JSON.stringify(requestBody)
                 });
-        
+                
                 const data = await response.json();
-        
+                
                 if (response.ok) {
-                    localStorage.setItem('token', data.token);
-                    alert('تم تسجيل الدخول بنجاح');
-                    window.location.href = '/dashboard';
+                    // Login successful - save the access token
+                    const accessToken = data.access_token;
+                    
+                    // Store token (optionally use rememberMe to decide between sessionStorage/localStorage)
+                    if (rememberMe) {
+                        localStorage.setItem('access_token', accessToken);
+                    } else {
+                        sessionStorage.setItem('access_token', accessToken);
+                    }
+                    
+                    // Redirect to dashboard or home page
+                    // window.location.href = '/dashboard.html';
+                    alert("You Signed In");
                 } else {
-                    if (data.message.includes("email")) emailError.textContent = data.message;
-                    else if (data.message.includes("password")) passwordError.textContent = data.message;
-                    else alert(data.message);
+                    // Handle API errors
+                    if (data.message) {
+                        alert(`خطأ في تسجيل الدخول: ${data.message}`);
+                    } else {
+                        alert('حدث خطأ أثناء تسجيل الدخول');
+                    }
                 }
-            } catch (err) {
-                alert('حدث خطأ أثناء الاتصال بالخادم');
-                console.error(err);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('حدث خطأ في الاتصال بالخادم');
+            } finally {
+                // Reset button state
+                loginButton.disabled = false;
+                loginButton.value = 'تسجيل الدخول';
             }
         });
-        </script>
-               
-
-
+        
+        // Optional: Add click handlers for other buttons
+        document.getElementById('forgetBtn').addEventListener('click', function() {
+            // Handle forgot password
+            window.location.href = '/forgot-password.html';
+        });
+        
+        document.getElementById('signupBtn1').addEventListener('click', function() {
+            // Handle sign up
+            window.location.href = '/signup.html';
+        });
+    </script>
 </body>
 </html>
