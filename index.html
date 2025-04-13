@@ -1,165 +1,81 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول</title>
-    <link rel="stylesheet" href="./CSS/login.css">
-</head>
-<body>
-
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>login</title>
+    <link rel="stylesheet" href="./CSS/login.css" />
+  </head>
+  <body>
     <div class="main_contaner" id="login1">
-        <h1>تسجيل الدخول</h1>
-        <form id="loginForm" class="form_contaner" method="post">
-            <div class="form_group">
-                <label class="label" for="email">البريد الإلكتروني</label>
-                <div class="wrapper">
-                    <input class="input" type="text" name="email" id="email" placeholder="Moatasmshabaan@gmail.com">
-                    <span id="emailError" class="error"></span>
-                </div>
-            </div>
+      <h1>تسجيل الدخول</h1>
+      <form action="/login" method="POST" class="form_contaner">
+        <div class="form_group">
+          <label class="label" for="email">البريد الإلكتروني</label>
+          <div class="wrapper">
+            <input
+              class="input"
+              type="text"
+              name="email"
+              id="email"
+              placeholder="Moatasmshabaan@gmail.com"
+              oninput="checkInputDirection(this)"
+            />
+            <span id="emailError" class="error"></span>
+          </div>
+        </div>
 
-            <div class="secon_con">
-                <div class="form_group">
-                    <label class="label" for="password">كلمة المرور</label>
-                    <input class="input" type="password" name="password" id="password" placeholder="************************">
-                    <span id="passwordError" class="error"></span>
-                </div>
-                <div class="password_con form_group">
-                    <h4 id="forgetBtn">هل نسيت كلمة المرور؟</h4>
-                    <div class="check">
-                        <label for="ch1">تذكرني</label>
-                        <input class="checkbox" type="checkbox" id="ch1">
-                    </div>
-                </div>
-                <div class="or form_group">
-                    <span></span>
-                    <p>أو</p>
-                    <span></span>
-                </div>
-                <div class="buttons_con form_group">
-                    <button type="button" class="GoogleBtn">
-                        <img src="./images/Google.svg" alt="Google">
-                    </button>
-                    <button type="button" class="linkedinBtn">
-                        <img src="./images/linkedin.svg" alt="LinkedIn">
-                    </button>
-                </div>
+        <div class="secon_con">
+          <div class="form_group">
+            <label class="label" for="password">كلمة المرور</label>
+            <input
+              class="input"
+              type="password"
+              name="password"
+              id="password"
+              placeholder="************************"
+              oninput="checkInputDirection(this)"
+            />
+            <span id="passwordError" class="error"></span>
+          </div>
+          <div class="password_con form_group">
+            <h4 id="forgetBtn">هل نسيت كلمة المرور؟</h4>
+            <div class="check">
+              <label for="ch1">تذكرني</label>
+              <input class="checkbox" type="checkbox" id="ch1" />
             </div>
+          </div>
+          <div class="or form_group">
+            <span></span>
+            <p>أو</p>
+            <span></span>
+          </div>
+          <div class="buttons_con form_group">
+            <button type="button" class="GoogleBtn" id="GoogleBtn" value="">
+              <img src="./images/Google.svg" alt="" />
+            </button>
 
-            <div class="loginbtn_con">
-                <input type="submit" class="loginbtn" id="loginButton" value="تسجيل الدخول">
-            </div>
-
-            <div class="signup_con form_group">
-                <h4 id="signupBtn1">انشاء حساب جديد</h4>
-                <p>هل ليس لديك حساب بعد؟</p>
-            </div>
-        </form>
+            <button type="button" class="linkedinBtn" value="" id="linkedinBtn">
+              <img src="./images/linkedin.svg" alt="" />
+            </button>
+          </div>
+        </div>
+        <div class="loginbtn_con">
+          <input
+            type="button"
+            class="loginbtn"
+            id="loginButton"
+            value="تسجيل الدخول"
+          />
+        </div>
+        <div class="signup_con form_group">
+          <h4 id="signupBtn1">انشاء حساب جديد</h4>
+          <p>هل ليس لديك حساب بعد؟</p>
+        </div>
+      </form>
     </div>
-
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // Get form values
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const rememberMe = document.getElementById('ch1').checked;
-            
-            // Clear previous errors
-            document.getElementById('emailError').textContent = '';
-            document.getElementById('passwordError').textContent = '';
-            
-            // Simple validation
-            let isValid = true;
-            
-            if (!email) {
-                document.getElementById('emailError').textContent = 'البريد الإلكتروني مطلوب';
-                isValid = false;
-            } else if (!/\S+@\S+\.\S+/.test(email)) {
-                document.getElementById('emailError').textContent = 'البريد الإلكتروني غير صالح';
-                isValid = false;
-            }
-            
-            if (!password) {
-                document.getElementById('passwordError').textContent = 'كلمة المرور مطلوبة';
-                isValid = false;
-            } else if (password.length < 8) {
-                document.getElementById('passwordError').textContent = 'كلمة المرور يجب أن تكون 8 أحرف على الأقل';
-                isValid = false;
-            }
-            
-            if (!isValid) return;
-            
-            // Prepare request data
-            const requestBody = {
-                email: email,
-                password: password
-            };
-            
-            try {
-                // Show loading state
-                const loginButton = document.getElementById('loginButton');
-                loginButton.disabled = true;
-                loginButton.value = 'جاري التحميل...';
-                
-                // Replace with your actual API endpoint
-                const apiUrl = 'https://tawgeeh-v1-production.up.railway.app/auth/login';
-                
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(requestBody)
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    // Login successful - save the access token
-                    const accessToken = data.access_token;
-                    
-                    // Store token (optionally use rememberMe to decide between sessionStorage/localStorage)
-                    if (rememberMe) {
-                        localStorage.setItem('access_token', accessToken);
-                    } else {
-                        sessionStorage.setItem('access_token', accessToken);
-                    }
-                    
-                    // Redirect to dashboard or home page
-                    // window.location.href = '/dashboard.html';
-                    alert("You Signed In");
-                } else {
-                    // Handle API errors
-                    if (data.message) {
-                        alert(`خطأ في تسجيل الدخول: ${data.message}`);
-                    } else {
-                        alert('حدث خطأ أثناء تسجيل الدخول');
-                    }
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('حدث خطأ في الاتصال بالخادم');
-            } finally {
-                // Reset button state
-                loginButton.disabled = false;
-                loginButton.value = 'تسجيل الدخول';
-            }
-        });
-        
-        // Optional: Add click handlers for other buttons
-        document.getElementById('forgetBtn').addEventListener('click', function() {
-            // Handle forgot password
-            window.location.href = '/forgot-password.html';
-        });
-        
-        document.getElementById('signupBtn1').addEventListener('click', function() {
-            // Handle sign up
-            window.location.href = '/signup.html';
-        });
-    </script>
-</body>
+    <script src="./JS/APIs.js"></script>
+    <script src="./JS/validation.js"></script>
+    <script src="./JS/login.js"></script>
+  </body>
 </html>
