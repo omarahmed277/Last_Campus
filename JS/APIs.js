@@ -1,217 +1,176 @@
-// تسجيل الدخول
-document.getElementById('loginButton')?.addEventListener('click', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+// API Configuration
+const API_BASE_URL = "https://tawgeeh-v1-production.up.railway.app";
 
-    if (!email || !password) {
-        alert('الرجاء إدخال البريد الإلكتروني وكلمة المرور');
-        return;
+// Helper function to get headers
+function getHeaders(includeAuth = false) {
+  const headers = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  };
+
+  if (includeAuth) {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
     }
+  }
 
-    try {
-        const response = await fetch('https://tawgeeh-v1-production.up.railway.app/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password })
-        });
+  return headers;
+}
 
-        const data = await response.json();
+// APIs.js
+document.addEventListener("DOMContentLoaded", function () {
+  // Handle Google buttons
+  const googleBtns = document.querySelectorAll(".GoogleBtn");
+  googleBtns.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      window.location.href =
+        "https://tawgeeh-v1-production.up.railway.app/auth/google";
+    });
+  });
 
-        if (response.ok) {
-            localStorage.setItem('token', data.access_token);
-            alert('تم تسجيل الدخول بنجاح!');
-            window.location.href = '/dashboard';
-        } else {
-            alert(data.message || data.error || 'فشل تسجيل الدخول');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('حدث خطأ أثناء الاتصال بالخادم');
-    }
+  // Handle LinkedIn buttons
+  const linkedinBtns = document.querySelectorAll(".linkedinBtn");
+  linkedinBtns.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      window.location.href =
+        "https://tawgeeh-v1-production.up.railway.app/auth/linkedin";
+    });
+  });
 });
 
-document.getElementById('repassword')?.addEventListener('click', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('resetEmail').value;
-    
-    if (!email) {
-        alert('الرجاء إدخال البريد الإلكتروني');
-        return;
-    }
+// Enhanced error handling
+async function handleApiError(response) {
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    const errorMessage = errorData.message || "حدث خطأ في الخادم";
 
+    switch (response.status) {
+      case 400:
+        throw new Error(`طلب غير صحيح: ${errorMessage}`);
+      case 401:
+        throw new Error(`غير مصرح به: ${errorMessage}`);
+      case 403:
+        throw new Error(`غير مسموح: ${errorMessage}`);
+      case 404:
+        throw new Error(`المورد غير موجود: ${errorMessage}`);
+      case 500:
+        throw new Error(`خطأ في الخادم: ${errorMessage}`);
+      default:
+        throw new Error(`خطأ غير متوقع: ${errorMessage}`);
+    }
+  }
+  return response;
+}
+
+// Authentication Functions
+window.auth = {
+  login: async function (email, password) {
     try {
-        const response = await fetch('https://tawgeeh-v1-production.up.railway.app/auth/forget-password', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({email})
-        });
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify({ email, password }),
+      });
 
-        const data = await response.json();
+      await handleApiError(response);
+      const data = await response.json();
 
-        if (response.ok) {
-            alert('تم إرسال رمز إعادة التعيين إلى بريدك الإلكتروني');
-            window.location.href = 'passwordScreen1.html';
-        } else {
-            alert(data.message || data.error || 'فشل إرسال رمز الإستعادة');
-        }
+      localStorage.setItem("authToken", data.access_token);
+      localStorage.setItem("userData", JSON.stringify(data.user));
+
+      return data;
     } catch (error) {
-        console.error('Error:', error);
-        alert('حدث خطأ أثناء الاتصال بالخادم');
+      console.error("Login error:", error);
+      throw error;
     }
-});
+  },
 
-document.getElementById('resetPasswordBtn')?.addEventListener('click', async (e) => {
-    e.preventDefault();
-    const resetCode = document.querySelector('.resetCodePass1')?.value;
-    const newPassword = document.getElementById('newPassword')?.value;
-    const token = localStorage.getItem('token');
-    
-    if (!resetCode || !newPassword) {
-        alert('الرجاء إدخال الرمز وكلمة المرور الجديدة');
-        return;
-    }
-
+  register: async function (userData) {
     try {
-        const response = await fetch('https://tawgeeh-v1-production.up.railway.app/auth/reset-password', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+ token
-            },
-            body: JSON.stringify({resetCode, newPassword})
-        });
+      // Transform data to match backend expectations
+      const requestBody = {
+        name: userData.fullName,
+        email: userData.email,
+        password: userData.password,
+        phone: userData.phone,
+        gender: userData.gender.toUpperCase(), // Ensure uppercase
+        country: userData.country,
+        specialization: userData.specialization,
+        experienceLevel: mapExperience(userData.experience),
+        bio: userData.aboutMe,
+      };
 
-        const data = await response.json();
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify(requestBody),
+      });
 
-        if (response.ok) {
-            alert('تم تغيير كلمة المرور بنجاح');
-            window.location.href = 'index.html';
-        } else {
-            alert(data.message || data.error || 'فشل تغيير كلمة المرور');
-        }
+      await handleApiError(response);
+      return await response.json();
     } catch (error) {
-        console.error('Error:', error);
-        alert('حدث خطأ أثناء الاتصال بالخادم');
+      console.error("Registration error:", error);
+      throw error;
     }
-});
+  },
 
-document.getElementById('loginbtn2')?.addEventListener('click', async (e) => {
-    e.preventDefault();
-    const name = document.getElementById('fullName').value;
-    const email = document.getElementById('signupEmail').value;
-    const phone = document.getElementById('phone').value;
-    const password = document.getElementById('signupPassword').value;
-    const gender = document.getElementById('gender').value;
-    const country = document.getElementById('country').value;
-    const specialization = document.getElementById('specialization').value;
-    const experienceLevel = document.getElementById('experience').value;
-    const bio = document.getElementById('about_me').value;
-  
-    if (!name || !email || !phone || !password || !gender || !country || !specialization || !experienceLevel) {
-        alert('الرجاء إدخال جميع الحقول المطلوبة');
-        return;
-    }
-
+  verifyPhone: async function (userId, code) {
     try {
-        const response = await fetch('https://tawgeeh-v1-production.up.railway.app/auth/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name, 
-                email, 
-                phone,
-                password,
-                specialization,
-                gender,
-                country,
-                experienceLevel,
-                bio
-            })
-        });
+      const response = await fetch(`${API_BASE_URL}/auth/verify-phone`, {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify({ userId, code }),
+      });
 
-        const data = await response.json();
-
-        if (response.ok) {
-            localStorage.setItem('token', data.access_token);
-            alert('تم إنشاء الحساب بنجاح!');
-            window.location.href = '/dashboard';
-        } else {
-            alert(data.message || data.error || 'فشل إنشاء الحساب');
-        }
+      await handleApiError(response);
+      return await response.json();
     } catch (error) {
-        console.error('Error:', error);
-        alert('حدث خطأ أثناء إنشاء الحساب');
+      console.error("Verification error:", error);
+      throw error;
     }
-});
+  },
 
-document.getElementById('verification-code')?.addEventListener('click', async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-        alert('الرجاء تسجيل الدخول أولاً');
-        return;
-    }
-
+  requestPasswordReset: async function (email) {
     try {
-        const response = await fetch('https://tawgeeh-v1-production.up.railway.app/auth/resend-verification-code', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+ token
-            },
-        });
+      const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify({ email }),
+      });
 
-        const data = await response.json();
-
-        if (response.ok) {
-            alert('تم إعادة إرسال الكود بنجاح!');
-        } else {
-            alert(data.message || data.error || 'فشل إعادة إرسال الكود');
-        }
+      await handleApiError(response);
+      return await response.json();
     } catch (error) {
-        console.error('Error:', error);
-        alert('حدث خطأ أثناء إعادة إرسال الكود');
+      console.error("Password reset request error:", error);
+      throw error;
     }
-});
+  },
 
-document.getElementById('loginbtn')?.addEventListener('click', async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem('token');
-    const code = document.querySelector('.resetCode')?.value;
-
-    if (!token || !code) {
-        alert('الرجاء إدخال كود التحقق');
-        return;
-    }
-
+  resetPassword: async function (email, newPassword, code) {
     try {
-        const response = await fetch('https://tawgeeh-v1-production.up.railway.app/auth/verify-email', {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+ token
-            },
-            body: JSON.stringify({code})
-        });
+      const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify({ email, newPassword, code }),
+      });
 
-        const data = await response.json();
-
-        if (response.ok) {
-            alert('تم التحقق من البريد الإلكتروني بنجاح!');
-            window.location.href = '/dashboard';
-        } else {
-            alert(data.message || data.error || 'فشل التحقق من البريد الإلكتروني');
-        }
+      await handleApiError(response);
+      return await response.json();
     } catch (error) {
-        console.error('Error:', error);
-        alert('حدث خطأ أثناء التحقق من البريد الإلكتروني');
+      console.error("Password reset error:", error);
+      throw error;
     }
-});
+  },
+};
+
+// Helper function to map experience levels
+function mapExperience(experience) {
+  const experienceMap = {
+    "zero-one": "JUNIOR",
+    "one-three": "INTERMEDIATE",
+    "three-five": "SENIOR",
+    PlusFive: "EXPERT",
+  };
+  return experienceMap[experience] || "JUNIOR";
+}

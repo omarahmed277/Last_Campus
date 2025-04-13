@@ -1,290 +1,440 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // ================ الجزء الأول: تحقق من صفحة التسجيل الأولى (البيانات الأساسية) ================
-    // العناصر المطلوبة للصفحة الأولى
-    const fullNameInput = document.getElementById('fullName');
-    const emailInput = document.getElementById('signupEmail');
-    const phoneInput = document.getElementById('phone');
-    const passwordInput = document.getElementById('signupPassword');
-    const confirmPasswordInput = document.getElementById('confirmPassword');
-    const signupBtn = document.getElementById('signupBtn');
+// Input Direction Handling
+function checkInputDirection(input) {
+  const text = input.value;
+  const isArabic =
+    /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(
+      text
+    ) || /[0-9]/.test(text);
 
-    // عناصر رسائل الخطأ للصفحة الأولى
-    const fullNameError = document.getElementById('fullNameError');
-    const emailError = document.getElementById('signupEmailError');
-    const phoneError = document.getElementById('phoneError');
-    const passwordError = document.getElementById('signupPasswordError');
-    const confirmPasswordError = document.getElementById('confirmPasswordError');
+  if (isArabic) {
+    input.style.direction = "rtl";
+    input.style.textAlign = "right";
+  } else {
+    input.style.direction = "ltr";
+    input.style.textAlign = "left";
+  }
+}
 
-    // ================ الجزء الثاني: تحقق من صفحة التسجيل الثانية (البيانات المهنية) ================
-    // العناصر المطلوبة للصفحة الثانية
-    const specializationInput = document.getElementById('specialization');
-    const countrySelect = document.getElementById('country');
-    const experienceSelect = document.getElementById('experience');
-    const genderSelect = document.getElementById('gender');
-    const aboutMeTextarea = document.getElementById('about_me');
-    const privacyCheckbox = document.getElementById('privacyCheckbox');
+// Validation Functions
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(String(email).toLowerCase());
+}
 
-    // عناصر رسائل الخطأ للصفحة الثانية
-    const specializationError = document.getElementById('specializationError');
-    const countryError = document.getElementById('countryError');
-    const experienceError = document.getElementById('experienceError');
-    const genderError = document.getElementById('genderError');
-    const aboutMeError = document.getElementById('aboutMeError');
-    const privacyError = document.getElementById('privacyError');
+function validatePassword(password) {
+  return password.length >= 8;
+}
 
-    // ================ الجزء الثالث: تحقق من صفحة تغيير كلمة المرور ================
-    // العناصر المطلوبة لصفحة تغيير كلمة المرور
-    const newPasswordInput = document.getElementById('newPassword');
-    const confirmNewPasswordInput = document.getElementById('confirmNewPassword');
-    const changePasswordBtn = document.getElementById('changePasswordBtn');
+function validatePhone(phone) {
+  const re = /^[0-9]{10,15}$/;
+  return re.test(phone);
+}
 
-    // عناصر رسائل الخطأ لصفحة تغيير كلمة المرور
-    const newPasswordError = document.getElementById('newPasswordError');
-    const confirmNewPasswordError = document.getElementById('confirmNewPasswordError');
+function validateNotEmpty(value) {
+  return value.trim() !== "";
+}
 
-    // ============================ دوال التحقق المشتركة ============================
-    // دالة للتحقق من صحة البريد الإلكتروني
-    function validateEmail(email) {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
-    }
+function validateCode(code) {
+  return /^\d{4}$/.test(code);
+}
 
-    // دالة للتحقق من صحة كلمة المرور
-    function validatePassword(password) {
-        return password.length >= 8;
-    }
+function validatePasswordsMatch(password, confirmPassword) {
+  return password === confirmPassword;
+}
 
-    // دالة للتحقق من صحة الاسم الكامل
-    function validateFullName(fullName) {
-        return fullName.trim() !== '';
-    }
+// Error Handling
+function showError(element, message) {
+  if (element) {
+    element.textContent = message;
+    element.style.display = "block";
+    element.style.color = "#ff3333";
+    element.style.fontSize = "0.8rem";
+    element.style.marginTop = "5px";
+  }
+}
 
-    // دالة للتحقق من صحة رقم الهاتف
-    function validatePhone(phone) {
-        const regex = /^\d{11}$/;
-        return regex.test(phone);
-    }
+function clearError(element) {
+  if (element) {
+    element.textContent = "";
+    element.style.display = "none";
+  }
+}
 
-    // دالة للتحقق من تطابق كلمة المرور وتأكيدها
-    function validateConfirmPassword(password, confirmPassword) {
-        return password === confirmPassword;
-    }
+// Form Validation Handlers
+document.addEventListener("DOMContentLoaded", function () {
+  // Login Form
+  if (document.getElementById("loginButton")) {
+    document
+      .getElementById("loginButton")
+      .addEventListener("click", async function (e) {
+        e.preventDefault();
 
-    // دالة للتحقق من صحة التخصص
-    function validateSpecialization(specialization) {
-        return specialization.trim() !== '';
-    }
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const emailError = document.getElementById("emailError");
+        const passwordError = document.getElementById("passwordError");
 
-    // دالة للتحقق من صحة القوائم المنسدلة
-    function validateSelect(selectElement) {
-        return selectElement.value !== '';
-    }
+        clearError(emailError);
+        clearError(passwordError);
 
-    // دالة للتحقق من صحة النبذة عني
-    function validateAboutMe(aboutMe) {
-        return aboutMe.trim() !== '';
-    }
+        let isValid = true;
 
-    // دالة للتحقق من الموافقة على سياسة الخصوصية
-    function validatePrivacy(privacyCheckbox) {
-        return privacyCheckbox.checked;
-    }
+        if (!validateEmail(email)) {
+          showError(emailError, "البريد الإلكتروني غير صحيح");
+          isValid = false;
+        }
 
-    // ============================ أحداث التحقق للصفحة الأولى ============================
-    if (fullNameInput) {
-        // Live Validation للاسم الكامل
-        fullNameInput.addEventListener('input', function () {
-            if (!validateFullName(fullNameInput.value)) {
-                fullNameError.textContent = 'الاسم الكامل مطلوب';
+        if (!validatePassword(password)) {
+          showError(passwordError, "كلمة المرور يجب أن تكون 8 أحرف على الأقل");
+          isValid = false;
+        }
+
+        if (isValid) {
+          try {
+            await window.auth.login(email, password);
+            window.location.href = "dashboard.html";
+          } catch (error) {
+            showError(passwordError, error.message);
+          }
+        }
+      });
+  }
+
+  // Signup Step 1
+  if (document.getElementById("signupBtn")) {
+    document
+      .getElementById("signupBtn")
+      .addEventListener("click", function (e) {
+        e.preventDefault();
+
+        const fullName = document.getElementById("fullName").value.trim();
+        const email = document.getElementById("signupEmail").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const password = document.getElementById("signupPassword").value.trim();
+        const confirmPassword = document
+          .getElementById("confirmPassword")
+          .value.trim();
+        const privacyCheckbox =
+          document.getElementById("privacyCheckbox1").checked;
+
+        const fullNameError = document.getElementById("fullNameError");
+        const emailError = document.getElementById("signupEmailError");
+        const phoneError = document.getElementById("phoneError");
+        const passwordError = document.getElementById("signupPasswordError");
+        const confirmPasswordError = document.getElementById(
+          "confirmPasswordError"
+        );
+        const privacyError = document.getElementById("privacyError");
+
+        clearError(fullNameError);
+        clearError(emailError);
+        clearError(phoneError);
+        clearError(passwordError);
+        clearError(confirmPasswordError);
+        clearError(privacyError);
+
+        let isValid = true;
+
+        if (!validateNotEmpty(fullName)) {
+          showError(fullNameError, "الرجاء إدخال الاسم الكامل");
+          isValid = false;
+        }
+
+        if (!validateEmail(email)) {
+          showError(emailError, "البريد الإلكتروني غير صحيح");
+          isValid = false;
+        }
+
+        if (!validatePhone(phone)) {
+          showError(phoneError, "رقم الهاتف غير صحيح (10-15 رقم)");
+          isValid = false;
+        }
+
+        if (!validatePassword(password)) {
+          showError(passwordError, "كلمة المرور يجب أن تكون 8 أحرف على الأقل");
+          isValid = false;
+        }
+
+        if (!validatePasswordsMatch(password, confirmPassword)) {
+          showError(confirmPasswordError, "كلمات المرور غير متطابقة");
+          isValid = false;
+        }
+
+        if (!privacyCheckbox) {
+          showError(privacyError, "يجب الموافقة على سياسة الخصوصية");
+          isValid = false;
+        }
+
+        if (isValid) {
+          localStorage.setItem(
+            "signupDataStep1",
+            JSON.stringify({
+              fullName,
+              email,
+              phone,
+              password,
+            })
+          );
+          window.location.href = "signup2.html";
+        }
+      });
+  }
+
+  // Signup Step 2
+  if (document.getElementById("loginbtn2")) {
+    document
+      .getElementById("loginbtn2")
+      .addEventListener("click", async function (e) {
+        e.preventDefault();
+
+        const specialization = document
+          .getElementById("specialization")
+          .value.trim();
+        const country = document.getElementById("country").value;
+        const experience = document.getElementById("experience").value;
+        const gender = document.getElementById("gender").value;
+        const aboutMe = document.getElementById("about_me").value.trim();
+        const privacyCheckbox =
+          document.getElementById("privacyCheckbox2").checked;
+
+        const specializationError = document.getElementById(
+          "specializationError"
+        );
+        const countryError = document.getElementById("countryError");
+        const experienceError = document.getElementById("experienceError");
+        const genderError = document.getElementById("genderError");
+        const aboutMeError = document.getElementById("aboutMeError");
+        const privacyError = document.getElementById("privacyError2");
+
+        clearError(specializationError);
+        clearError(countryError);
+        clearError(experienceError);
+        clearError(genderError);
+        clearError(aboutMeError);
+        clearError(privacyError);
+
+        let isValid = true;
+
+        if (!validateNotEmpty(specialization)) {
+          showError(specializationError, "الرجاء إدخال التخصص");
+          isValid = false;
+        }
+
+        if (!country) {
+          showError(countryError, "الرجاء اختيار البلد");
+          isValid = false;
+        }
+
+        if (!experience) {
+          showError(experienceError, "الرجاء اختيار سنوات الخبرة");
+          isValid = false;
+        }
+
+        if (!gender) {
+          showError(genderError, "الرجاء اختيار الجنس");
+          isValid = false;
+        }
+
+        if (!validateNotEmpty(aboutMe)) {
+          showError(aboutMeError, "الرجاء إدخال نبذة عنك");
+          isValid = false;
+        }
+
+        if (!privacyCheckbox) {
+          showError(privacyError, "يجب الموافقة على سياسة الخصوصية");
+          isValid = false;
+        }
+
+        if (isValid) {
+          const step1Data = JSON.parse(localStorage.getItem("signupDataStep1"));
+          const userData = {
+            fullName: step1Data.fullName,
+            email: step1Data.email,
+            phone: step1Data.phone,
+            password: step1Data.password,
+            specialization: document
+              .getElementById("specialization")
+              .value.trim(),
+            country: document.getElementById("country").value,
+            experience: document.getElementById("experience").value,
+            gender: document.getElementById("gender").value,
+            aboutMe: document.getElementById("about_me").value.trim(),
+          };
+
+          try {
+            const response = await window.auth.register(userData);
+            localStorage.setItem(
+              "tempUserId",
+              response.userId || response.tempId
+            );
+            localStorage.removeItem("signupDataStep1");
+            window.location.href = "signup3.html";
+          } catch (error) {
+            // Show specific validation errors if available
+            if (error.message.includes("Validation failed")) {
+              const errors = JSON.parse(
+                error.message.replace("طلب غير صحيح: Validation failed: ", "")
+              );
+              Object.keys(errors).forEach((field) => {
+                const errorElement = document.getElementById(`${field}Error`);
+                if (errorElement) {
+                  showError(errorElement, errors[field]);
+                }
+              });
             } else {
-                fullNameError.textContent = '';
+              alert(error.message);
             }
-        });
-    }
+          }
+        }
+      });
+  }
 
-    if (emailInput) {
-        // Live Validation للبريد الإلكتروني
-        emailInput.addEventListener('input', function () {
-            if (!validateEmail(emailInput.value)) {
-                emailError.textContent = 'البريد الإلكتروني غير صحيح';
-            } else {
-                emailError.textContent = '';
-            }
-        });
-    }
+  // Signup Step 3 (Phone Verification)
+  if (document.getElementById("loginbtn3")) {
+    document
+      .getElementById("loginbtn3")
+      .addEventListener("click", async function (e) {
+        e.preventDefault();
 
-    if (phoneInput) {
-        // Live Validation لرقم الهاتف
-        phoneInput.addEventListener('input', function () {
-            if (!validatePhone(phoneInput.value)) {
-                phoneError.textContent = 'رقم الهاتف يجب أن يكون 11 رقمًا';
-            } else {
-                phoneError.textContent = '';
-            }
-        });
-    }
+        const codeInputs = document.querySelectorAll(".resetCode");
+        const code = Array.from(codeInputs)
+          .map((input) => input.value)
+          .join("");
 
-    if (passwordInput) {
-        // Live Validation لكلمة المرور
-        passwordInput.addEventListener('input', function () {
-            if (!validatePassword(passwordInput.value)) {
-                passwordError.textContent = 'كلمة المرور يجب أن تحتوي على الأقل على 8 أحرف';
-            } else {
-                passwordError.textContent = '';
-            }
-        });
-    }
+        if (!validateCode(code)) {
+          alert("الرجاء إدخال الكود المكون من 4 أرقام");
+          return;
+        }
 
-    if (confirmPasswordInput) {
-        // Live Validation لتأكيد كلمة المرور
-        confirmPasswordInput.addEventListener('input', function () {
-            if (!validateConfirmPassword(passwordInput.value, confirmPasswordInput.value)) {
-                confirmPasswordError.textContent = 'كلمة المرور غير متطابقة';
-            } else {
-                confirmPasswordError.textContent = '';
-            }
-        });
-    }
+        const userId = localStorage.getItem("tempUserId");
 
-    if (signupBtn) {
-        signupBtn.addEventListener('click', function (event) {
-            if (
-                !validateFullName(fullNameInput.value) ||
-                !validateEmail(emailInput.value) ||
-                !validatePhone(phoneInput.value) ||
-                !validatePassword(passwordInput.value) ||
-                !validateConfirmPassword(passwordInput.value, confirmPasswordInput.value)
-            ) {
-                event.preventDefault();
-                alert('الرجاء إدخال بيانات صحيحة في جميع الحقول');
-            } else {
-                window.location.href = 'signup2.html';
-            }
-        });
-    }
+        try {
+          const response = await window.auth.verifyPhone(userId, code);
+          localStorage.removeItem("tempUserId");
+          localStorage.setItem("authToken", response.token);
+          window.location.href = "dashboard.html";
+        } catch (error) {
+          alert(error.message);
+        }
+      });
+  }
 
-    // ============================ أحداث التحقق للصفحة الثانية ============================
-    if (specializationInput) {
-        // Live Validation للتخصص
-        specializationInput.addEventListener('input', function () {
-            if (!validateSpecialization(specializationInput.value)) {
-                specializationError.textContent = 'التخصص مطلوب';
-            } else {
-                specializationError.textContent = '';
-            }
-        });
-    }
+  // Password Reset
+  if (document.getElementById("repassword")) {
+    document
+      .getElementById("repassword")
+      .addEventListener("click", async function (e) {
+        e.preventDefault();
 
-    if (countrySelect) {
-        // Live Validation للبلد
-        countrySelect.addEventListener('change', function () {
-            if (!validateSelect(countrySelect)) {
-                countryError.textContent = 'البلد مطلوب';
-            } else {
-                countryError.textContent = '';
-            }
-        });
-    }
+        const email = document.getElementById("resetEmail").value.trim();
+        const resetEmailError = document.getElementById("resetEmailError");
 
-    if (experienceSelect) {
-        // Live Validation لعدد سنوات الخبرة
-        experienceSelect.addEventListener('change', function () {
-            if (!validateSelect(experienceSelect)) {
-                experienceError.textContent = 'عدد سنوات الخبرة مطلوب';
-            } else {
-                experienceError.textContent = '';
-            }
-        });
-    }
+        clearError(resetEmailError);
 
-    if (genderSelect) {
-        // Live Validation للجنس
-        genderSelect.addEventListener('change', function () {
-            if (!validateSelect(genderSelect)) {
-                genderError.textContent = 'الجنس مطلوب';
-            } else {
-                genderError.textContent = '';
-            }
-        });
-    }
+        if (!validateEmail(email)) {
+          showError(resetEmailError, "البريد الإلكتروني غير صحيح");
+          return;
+        }
 
-    if (aboutMeTextarea) {
-        // Live Validation للنبذة عني
-        aboutMeTextarea.addEventListener('input', function () {
-            if (!validateAboutMe(aboutMeTextarea.value)) {
-                aboutMeError.textContent = 'نبذة عنك مطلوبة';
-            } else {
-                aboutMeError.textContent = '';
-            }
-        });
-    }
+        try {
+          await window.auth.requestPasswordReset(email);
+          localStorage.setItem("resetEmail", email);
+          window.location.href = "passwordScreen2.html";
+        } catch (error) {
+          showError(resetEmailError, error.message);
+        }
+      });
+  }
 
-    if (privacyCheckbox) {
-        // Live Validation لسياسة الخصوصية
-        privacyCheckbox.addEventListener('change', function () {
-            if (!validatePrivacy(privacyCheckbox)) {
-                privacyError.textContent = 'يجب الموافقة على سياسة الخصوصية';
-            } else {
-                privacyError.textContent = '';
-            }
-        });
-    }
+  // Complete Password Reset
+  if (document.getElementById("changePasswordBtn")) {
+    document
+      .getElementById("changePasswordBtn")
+      .addEventListener("click", async function (e) {
+        e.preventDefault();
 
-    if (document.getElementById('loginbtn2')) {
-        // التحقق عند النقر على زر "التالي" في الصفحة الثانية
-        document.getElementById('loginbtn2').addEventListener('click', function (event) {
-            if (
-                !validateSpecialization(specializationInput.value) ||
-                !validateSelect(countrySelect) ||
-                !validateSelect(experienceSelect) ||
-                !validateSelect(genderSelect) ||
-                !validateAboutMe(aboutMeTextarea.value) ||
-                !validatePrivacy(privacyCheckbox)
-            ) {
-                event.preventDefault();
-                alert('الرجاء إدخال بيانات صحيحة');
-            } else {
-                window.location.href = 'signup3.html';
-            }
-        });
-    }
+        const newPassword = document.getElementById("newPassword").value.trim();
+        const confirmPassword = document
+          .getElementById("confirmNewPassword")
+          .value.trim();
+        const newPasswordError = document.getElementById("newPasswordError");
+        const confirmPasswordError = document.getElementById(
+          "confirmNewPasswordError"
+        );
 
-    // ============================ أحداث التحقق لصفحة تغيير كلمة المرور ============================
-    if (newPasswordInput) {
-        // Live Validation لكلمة المرور الجديدة
-        newPasswordInput.addEventListener('input', function () {
-            if (!validatePassword(newPasswordInput.value)) {
-                newPasswordError.textContent = 'كلمة المرور يجب أن تحتوي على الأقل على 8 أحرف';
-            } else {
-                newPasswordError.textContent = '';
-            }
-        });
-    }
+        clearError(newPasswordError);
+        clearError(confirmPasswordError);
 
-    if (confirmNewPasswordInput) {
-        // Live Validation لتأكيد كلمة المرور الجديدة
-        confirmNewPasswordInput.addEventListener('input', function () {
-            if (!validateConfirmPassword(newPasswordInput.value, confirmNewPasswordInput.value)) {
-                confirmNewPasswordError.textContent = 'كلمة المرور غير متطابقة';
-            } else {
-                confirmNewPasswordError.textContent = '';
-            }
-        });
-    }
+        let isValid = true;
 
-    if (changePasswordBtn) {
-        // التحقق عند النقر على زر "تغيير كلمة المرور"
-        changePasswordBtn.addEventListener('click', function (event) {
-            if (
-                !validatePassword(newPasswordInput.value) ||
-                !validateConfirmPassword(newPasswordInput.value, confirmNewPasswordInput.value)
-            ) {
-                event.preventDefault();
-                alert('الرجاء إدخال كلمة مرور صحيحة وتأكيدها');
-            } else {
-                alert('تم تغيير كلمة المرور بنجاح');
-                // يمكنك هنا إضافة منطق إرسال البيانات إلى الخادم
-            }
-        });
-    }
+        if (!validatePassword(newPassword)) {
+          showError(
+            newPasswordError,
+            "كلمة المرور يجب أن تكون 8 أحرف على الأقل"
+          );
+          isValid = false;
+        }
+
+        if (!validatePasswordsMatch(newPassword, confirmPassword)) {
+          showError(confirmPasswordError, "كلمات المرور غير متطابقة");
+          isValid = false;
+        }
+
+        if (isValid) {
+          const email = localStorage.getItem("resetEmail");
+          const codeInputs = document.querySelectorAll(".resetCodePass1");
+          const code = Array.from(codeInputs)
+            .map((input) => input.value)
+            .join("");
+
+          try {
+            await window.auth.resetPassword(email, newPassword, code);
+            localStorage.removeItem("resetEmail");
+            alert("تم تغيير كلمة المرور بنجاح");
+            window.location.href = "index.html";
+          } catch (error) {
+            alert(error.message);
+          }
+        }
+      });
+  }
+
+  // Navigation Handlers
+  if (document.getElementById("arrowRightS1")) {
+    document
+      .getElementById("arrowRightS1")
+      .addEventListener("click", function () {
+        window.location.href = "signup1.html";
+      });
+  }
+
+  if (document.getElementById("arrowRightS2")) {
+    document
+      .getElementById("arrowRightS2")
+      .addEventListener("click", function () {
+        window.location.href = "signup2.html";
+      });
+  }
+
+  if (document.getElementById("registerBtn")) {
+    document
+      .getElementById("registerBtn")
+      .addEventListener("click", function () {
+        window.location.href = "index.html";
+      });
+  }
+
+  if (document.getElementById("forgetBtn")) {
+    document.getElementById("forgetBtn").addEventListener("click", function () {
+      window.location.href = "passwordScreen1.html";
+    });
+  }
+
+  if (document.getElementById("signupBtn1")) {
+    document
+      .getElementById("signupBtn1")
+      .addEventListener("click", function () {
+        window.location.href = "signup1.html";
+      });
+  }
 });

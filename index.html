@@ -1,70 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>login</title>
-    <link rel="stylesheet" href="./CSS/login.css">
-</head>
-<body>
-   
+    <link rel="stylesheet" href="./CSS/login.css" />
+  </head>
+  <body>
     <div class="main_contaner" id="login1">
-        <h1>تسجيل الدخول</h1>
-        <form action="/login" method="POST" class="form_contaner">
-            <div class="form_group">
-                <label class="label" for="email">البريد الإلكتروني</label>
-                <div class="wrapper">
-                    <input class="input" type="text" name="email" id="email" placeholder="Moatasmshabaan@gmail.com" oninput="checkInputDirection(this)">
-                    <span id="emailError" class="error"></span>
-                </div>
+      <h1>تسجيل الدخول</h1>
+      <form action="/login" method="POST" class="form_contaner">
+        <div class="form_group">
+          <label class="label" for="email">البريد الإلكتروني</label>
+          <div class="wrapper">
+            <input
+              class="input"
+              type="text"
+              name="email"
+              id="email"
+              placeholder="Moatasmshabaan@gmail.com"
+              oninput="checkInputDirection(this)"
+            />
+            <span id="emailError" class="error"></span>
+          </div>
+        </div>
+
+        <div class="secon_con">
+          <div class="form_group">
+            <label class="label" for="password">كلمة المرور</label>
+            <input
+              class="input"
+              type="password"
+              name="password"
+              id="password"
+              placeholder="************************"
+              oninput="checkInputDirection(this)"
+            />
+            <span id="passwordError" class="error"></span>
+          </div>
+          <div class="password_con form_group">
+            <h4 id="forgetBtn">هل نسيت كلمة المرور؟</h4>
+            <div class="check">
+              <label for="ch1">تذكرني</label>
+              <input class="checkbox" type="checkbox" id="ch1" />
             </div>
-           
-            <div class="secon_con">
-                <div class="form_group">
-                    <label class="label" for="password">كلمة المرور</label>
-                    <input class="input" type="password" name="password" id="password" placeholder="************************" oninput="checkInputDirection(this)">
-                    <span id="passwordError" class="error"></span>
-                </div>
-                <div class="password_con form_group">
-                   <h4 id="forgetBtn">هل نسيت كلمة المرور؟</h4>
-                    <div class="check">
-                        <label for="ch1">تذكرني</label>
-                        <input class="checkbox" type="checkbox" id="ch1">
-                    </div>
-                </div>
-                <div class="or form_group">
-                    <span></span>
-                    <p>أو</p>
-                    <span></span>
-                </div>
-                <div class="buttons_con form_group">
-                
-                        <button type="button" class="GoogleBtn">
-                        <img src="./images/Google.svg" alt="">
-                        </button>
-                   
-                    <button type="button" class="linkedinBtn" value="">
-                    <img src="./images/linkedin.svg" alt="">
-                    </button>
-                </div>
-            </div>
-            <div class="loginbtn_con">
-                <input type="button" class="loginbtn" id="loginButton" value="تسجيل الدخول">
-            </div>
-            <div class="signup_con form_group">
-                <h4 id="signupBtn1">انشاء حساب جديد</h4>
-                <p>هل ليس لديك حساب بعد؟</p>
-            </div>
-        </form>
+          </div>
+          <div class="or form_group">
+            <span></span>
+            <p>أو</p>
+            <span></span>
+          </div>
+          <div class="buttons_con form_group">
+            <button type="button" class="GoogleBtn" id="GoogleBtn" value="">
+              <img src="./images/Google.svg" alt="" />
+            </button>
+
+            <button type="button" class="linkedinBtn" value="" id="linkedinBtn">
+              <img src="./images/linkedin.svg" alt="" />
+            </button>
+          </div>
+        </div>
+        <div class="loginbtn_con">
+          <input
+            type="button"
+            class="loginbtn"
+            id="loginButton"
+            value="تسجيل الدخول"
+          />
+        </div>
+        <div class="signup_con form_group">
+          <h4 id="signupBtn1">انشاء حساب جديد</h4>
+          <p>هل ليس لديك حساب بعد؟</p>
+        </div>
+      </form>
     </div>
-    
-
-
-
-
-
-<script src="./JS/login.js"></script>
-<script src="./JS/validation.js"></script>
-<script src="./JS/APIs.js"></script>
-</body>
+    <script src="./JS/APIs.js"></script>
+    <script src="./JS/validation.js"></script>
+    <script src="./JS/login.js"></script>
+  </body>
 </html>
