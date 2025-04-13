@@ -5,1121 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mentor</title>
     <link rel="stylesheet" href="./mentor.css">
+
+
 </head>
 <body>
-    <div class="mainContaner" style="display: none;">
-        <div class="top_con">
-            <h3>تحديث تفاصيل ملفك الشخصي</h3>
-            <img src="./mentor-images/close-circle.svg" alt="">
-        </div>
-        <div class="infolist infolistEX">
-            <a href="">معلومات اساسية</a>
-            <a class="checked" href="">خبراتي</a>
-            <a href="">شهاداتي</a>
-            <a href="">التعليم</a>
-        </div>
-            
-        <div class="form_contaner">
-            <div class="form_group">
-                <label class="label" for="specialization">المسمى الوظيفي</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-           
-            
-           
-            <div class="form_group">
-                <label class="label" for="specialization">اسم الشركة او المؤسسة</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-            <div class="date_ConF" >
-                <div class="select-wrapper">
-                <div class="form_group form_groupD">
-                    <label class="label" for="specialization">تاريخ البدء</label>
-                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
-                    <span id="specializationError" class="error"></span>
-                </div>
-            </div>
-            <div class="select-wrapper">
-                <div class="form_group form_groupD">
-                    <label class="label" for="specialization">تاريخ الإنتهاء</label>
-                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
-                    <span id="specializationError" class="error"></span>
-                </div>
-            </div>
-            </div>
-            <div class="check">
-                <label for="privacyCheckbox">مازلت اعمل في الشركة</label>
-                <input class="checkbox" type="checkbox" id="privacyCheckbox">
-                <span id="privacyError" class="error"></span>
-            </div>
-            <div class="form_group">
-                <label class="label">اكتب ملخصًا عن مساهمتك</label>
-                <textarea name="about_me" id="about_me" placeholder="نبذه عني" required></textarea oninput="checkInputDirection(this)">
-                <span id="aboutMeError" class="error"></span>
-            </div>
-        </div>  
-           <div class="buttons_con">
-            <button class="updateBtn">
-                حفظ
-            </button>
-            <button class="removeBtn updateBtn">
-                إلغاء
-            </button>
-           </div>
+   
 
-    </div>
-<!-- DDFDS -->
-    <div class="mainContaner" style="display: none;">
-        <div class="top_con">
-            <h3>تحديث تفاصيل ملفك الشخصي</h3>
-            <img src="./mentor-images/close-circle.svg" alt="">
-        </div>
-        <div class="infolist infolistEX">
-            <a href="">معلومات اساسية</a>
-            <a class="checked" href="">خبراتي</a>
-            <a href="">شهاداتي</a>
-            <a href="">التعليم</a>
-        </div>
-            
-        <div class="second_con">
-            <div class="veiw_con">
-                <img src="./mentor-images/Frame 1171278344.svg" alt="">
-                <div class="text">
-            <h4>Product Designer</h4>
-            <p>Campus</p>
-                </div>
-            </div>
-            <div class="date2_con">
-                <div class="date2">
-                    <p>Jan 2025 - Present</p>
-                </div>
-                <img src="./mentor-images/edit-2.svg" alt="">
-            </div>
-        </div>
-
-        <div class="second_con">
-            <div class="veiw_con">
-                <img src="./mentor-images/Frame 1171278344.svg" alt="">
-                <div class="text">
-            <h4>Product Designer</h4>
-            <p>Campus</p>
-                </div>
-            </div>
-            <div class="date2_con">
-                <div class="date2">
-                    <p>Jan 2025 - Present</p>
-                </div>
-                <img src="./mentor-images/edit-2.svg" alt="">
-            </div>
-            
-        </div>
-       
-<button class="moreExBtn">
-    أضف خبرة <img src="./mentor-images/add-square.svg" alt="">
-</button>
-    </div>
-
-    <div class="mainContaner" style="display: none;">
-        <div class="top_con">
-            <h3>تحديث تفاصيل ملفك الشخصي</h3>
-            <img src="./mentor-images/close-circle.svg" alt="">
-        </div>
-        <div class="infolist">
-            <a class="checked" href="">معلومات اساسية</a>
-            <a href="">خبراتي</a>
-            <a href="">شهاداتي</a>
-            <a href="">التعليم</a>
-        </div>
-            <h1>تحميل صورة الملف الشخصي</h1>
-        <div class="uplodimage">
-            <div class="image">
-                <img src="./mentor-images/personal_image.png" alt="">
-                <img src="./mentor-images/trash.svg" alt="">
-            </div>
-            <div class="text">
-                <h4>تحميل صورة</h4>
-                <p>تأكد من أن حجم الملف أقل من 2 ميجا بايت</p>
-            </div>
-        </div>
-        <div class="form_contaner">
-            <div class="form_group">
-                <label class="label" for="specialization">التخصص</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-            <div class="form_group">
-                <label class="label">عدد سنوات الخبرة</label>
-                <div class="select-wrapper">
-                    <select name="experience" id="experience" required>
-                        <option value="">اختر عدد السنوات</option>
-                        <option value="zero-one">0-1 سنين خبرة</option>
-                        <option value="one-three">1-3 سنين خبرة</option>
-                        <option value="three-five">3-5 سنين خبرة</option>
-                        <option value="PlusFive">أكثر من 5 سنوات</option>
-                    </select>
-                    <img src="./mentor-images/arrow-down.svg" alt="" class="select-icon arrowDown">
-                </div>
-                <span id="experienceError" class="error"></span>
-            </div>
-            <div class="form_group">
-                <label class="label">الجنس</label>
-                <div class="select-wrapper">
-                    <select name="gender" id="gender" required>
-                        <option value="">اختر الجنس</option>
-                        <option value="male">ذكر</option>
-                        <option value="female">أنثى</option>
-                        <option value="other">غير محدد</option>
-                    </select>
-                    <img src="./mentor-images/arrow-down.svg" alt="" class="select-icon arrowDown">
-                </div>
-                <span id="genderError" class="error"></span>
-            </div>
-            <div class="form_group">
-                <label class="label">نبذة عني:</label>
-                <textarea name="about_me" id="about_me" placeholder="نبذه عني" required></textarea oninput="checkInputDirection(this)">
-                <span id="aboutMeError" class="error"></span>
-            </div>
-        </div>
-
-
-        <div class="form_contaner">
-            <h2>الروابط الاجتماعية</h2>
-
-            <div class="form_group">
-                <label class="label" for="specialization">التخصص</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-            <div class="form_group">
-                <label class="label" for="specialization">التخصص</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-            <div class="form_group">
-                <label class="label" for="specialization">التخصص</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-            <div class="form_group">
-                <label class="label" for="specialization">التخصص</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-            <div class="form_group">
-                <label class="label" for="specialization">التخصص</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-    </div>
-<button class="updateBtn">
-    تحديث
-</button>
-    </div>
-    <!-- 44444444444444444444444 -->
-    <div class="mainContaner" style="display: none;">
-        <div class="top_con">
-            <h3>تحديث تفاصيل ملفك الشخصي</h3>
-            <img src="./mentor-images/close-circle.svg" alt="">
-        </div>
-        <div class="infolist infolistEX">
-            <a href="">معلومات اساسية</a>
-            <a class="checked" href="">خبراتي</a>
-            <a href="">شهاداتي</a>
-            <a href="">التعليم</a>
-        </div>
-        <div class="second_con">
-            <div class="veiw_con">
-                <img src="./mentor-images/Frame 1171278344.svg" alt="">
-                <div class="text">
-            <h4>Product Designer</h4>
-            <p>Campus</p>
-                </div>
-            </div>
-            <div class="date2_con">
-                <div class="date2">
-                    <p>Jan 2025 - Present</p>
-                </div>
-                <img src="./mentor-images/edit-2.svg" alt="">
-            </div>
-        </div>
-        <div class="second_con">
-            <div class="veiw_con">
-                <img src="./mentor-images/Frame 1171278344.svg" alt="">
-                <div class="text">
-            <h4>Product Designer</h4>
-            <p>Campus</p>
-                </div>
-            </div>
-            <div class="date2_con">
-                <div class="date2">
-                    <p>Jan 2025 - Present</p>
-                </div>
-                <img src="./mentor-images/edit-2.svg" alt="">
-            </div>
-        </div>
-        <div class="form_contaner">
-            <div class="form_group">
-                <label class="label" for="specialization">المسمى الوظيفي</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-           
-            
-           
-            <div class="form_group">
-                <label class="label" for="specialization">اسم الشركة او المؤسسة</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-            <div class="date_ConF" >
-                <div class="select-wrapper">
-                <div class="form_group form_groupD">
-                    <label class="label" for="specialization">تاريخ البدء</label>
-                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
-                    <span id="specializationError" class="error"></span>
-                </div>
-            </div>
-            <div class="select-wrapper">
-                <div class="form_group form_groupD">
-                    <label class="label" for="specialization">تاريخ الإنتهاء</label>
-                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
-                    <span id="specializationError" class="error"></span>
-                </div>
-            </div>
-            </div>
-            <div class="check">
-                <label for="privacyCheckbox">مازلت اعمل في الشركة</label>
-                <input class="checkbox" type="checkbox" id="privacyCheckbox">
-                <span id="privacyError" class="error"></span>
-            </div>
-            <div class="form_group">
-                <label class="label">اكتب ملخصًا عن مساهمتك</label>
-                <textarea name="about_me" id="about_me" placeholder="نبذه عني" required></textarea oninput="checkInputDirection(this)">
-                <span id="aboutMeError" class="error"></span>
-            </div>
-        </div>  
-           <div class="buttons_con">
-            <button class="updateBtn">
-                حفظ
-            </button>
-            <button class="removeBtn updateBtn">
-                إلغاء
-            </button>
-           </div>
-
-    </div>
-
-    <!-- 5555555555555 -->
-
-    <div class="mainContaner" style="display: none;" >
-        <div class="top_con">
-            <h3>تحديث تفاصيل ملفك الشخصي</h3>
-            <img src="./mentor-images/close-circle.svg" alt="">
-        </div>
-        <div class="infolist infolistEX">
-            <a href="">معلومات اساسية</a>
-            <a  href="">خبراتي</a>
-            <a class="checked" href="">شهاداتي</a>
-            <a href="">التعليم</a>
-        </div>
-            
-        <div class="form_contaner">
-            <div class="form_group">
-                <label class="label" for="specialization">اسم الشهادة</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-           
-            
-           
-            <div class="form_group">
-                <label class="label" for="specialization">الجهة المانحة للشهادة</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-            <div class="date_ConF" >
-                <div class="select-wrapper">
-                <div class="form_group form_groupD">
-                    <label class="label" for="specialization">تاريخ الإصدار</label>
-                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
-                    <span id="specializationError" class="error"></span>
-                </div>
-            </div>
-            <div class="select-wrapper">
-                <div class="form_group form_groupD">
-                    <label class="label" for="specialization">تاريخ الإنتهاء</label>
-                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
-                    <span id="specializationError" class="error"></span>
-                </div>
-            </div>
-            </div>
-            <div class="form_group">
-                <label class="label" for="specialization">رقم الشهادة</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-            <div class="form_group">
-                <label class="label" for="specialization"> رابط الشهادة </label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-        </div>  
-           <div class="buttons_con">
-            <button class="updateBtn">
-                حفظ
-            </button>
-            <button class="removeBtn updateBtn">
-                إلغاء
-            </button>
-           </div>
-
-    </div>
-
-    <!-- 6666666 -->
-    <div class="mainContaner" style="display: none;">
-        <div class="top_con">
-            <h3>تحديث تفاصيل ملفك الشخصي</h3>
-            <img src="./mentor-images/close-circle.svg" alt="">
-        </div>
-        <div class="infolist infolistEX">
-            <a href="">معلومات اساسية</a>
-            <a  href="">خبراتي</a>
-            <a  href="">شهاداتي</a>
-            <a class="checked" href="">التعليم</a>
-        </div>
-            
-        <div class="form_contaner">
-            <div class="form_group">
-                <label class="label" for="specialization">جامعة، كلية، مدرسة</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-           
-            
-           
-            <div class="form_group">
-                <label class="label" for="specialization">الدرجة العلمية و التخصص</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-            <div class="date_ConF" >
-                <div class="select-wrapper">
-                <div class="form_group form_groupD">
-                    <label class="label" for="specialization">تاريخ البدء</label>
-                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
-                    <span id="specializationError" class="error"></span>
-                </div>
-            </div>
-            <div class="select-wrapper">
-                <div class="form_group form_groupD">
-                    <label class="label" for="specialization">تاريخ الإنتهاء</label>
-                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
-                    <span id="specializationError" class="error"></span>
-                </div>
-            </div>
-            </div>
-            
-        </div>  
-           <div class="buttons_con">
-            <button class="updateBtn">
-                حفظ
-            </button>
-            <button class="removeBtn updateBtn">
-                إلغاء
-            </button>
-           </div>
-
-    </div>
-
-    <!-- 777777777777 -->
-
-    <div class="mainContaner" style="display: none;">
-        <div class="top_con">
-            <h3>تحديث تفاصيل ملفك الشخصي</h3>
-            <img src="./mentor-images/close-circle.svg" alt="">
-        </div>
-        <div class="infolist infolistEX">
-            <a href="">معلومات اساسية</a>
-            <a  href="">خبراتي</a>
-            <a href="">شهاداتي</a>
-            <a class="checked" href="">التعليم</a>
-        </div>
-            
-       
-
-        <div class="second_con">
-            <div class="veiw_con">
-                <img src="./mentor-images/Frame 1171278344.svg" alt="">
-                <div class="text">
-            <h4>Scholarship UX UI Design Track</h4>
-            <p>Information Technology institute (ITI)</p>
-                </div>
-            </div>
-            <div class="date2_con">
-                <div class="date2">
-                    <p>Jan 2025 - Present</p>
-                </div>
-                <img src="./mentor-images/edit-2.svg" alt="">
-            </div>
-        </div>
-        <div class="second_con">
-            <div class="veiw_con">
-                <img src="./mentor-images/Frame 1171278344.svg" alt="">
-                <div class="text">
-            <h4>Education Technology</h4>
-            <p>Minya University</p>
-                </div>
-            </div>
-            <div class="date2_con">
-                <div class="date2">
-                    <p>Jan 2025 - Present</p>
-                </div>
-                <img src="./mentor-images/edit-2.svg" alt="">
-            </div>
-        </div>
-    
-       
-<button class="moreExBtn">
-    أضف درجة علمية <img src="./mentor-images/add-square.svg" alt="">
-</button>
-    </div>
-<!-- 8888888888888 -->
-    <div class="mainContaner" style="display: none;">
-        <div class="top_con">
-            <h3>تحديث تفاصيل ملفك الشخصي</h3>
-            <img src="./mentor-images/close-circle.svg" alt="">
-        </div>
-        <div class="infolist infolistEX">
-            <a href="">معلومات اساسية</a>
-            <a  href="">خبراتي</a>
-            <a  href="">شهاداتي</a>
-            <a class="checked" href="">التعليم</a>
-        </div>
-        <div class="second_con">
-            <div class="veiw_con">
-                <img src="./mentor-images/Frame 1171278344.svg" alt="">
-                <div class="text">
-            <h4>Scholarship UX UI Design Track</h4>
-            <p>Information Technology institute (ITI)</p>
-                </div>
-            </div>
-            <div class="date2_con">
-                <div class="date2">
-                    <p>Jan 2025 - Present</p>
-                </div>
-                <img src="./mentor-images/edit-2.svg" alt="">
-            </div>
-        </div>
-        <div class="second_con">
-            <div class="veiw_con">
-                <img src="./mentor-images/Frame 1171278344.svg" alt="">
-                <div class="text">
-            <h4>Education Technology</h4>
-            <p>Minya University</p>
-                </div>
-            </div>
-            <div class="date2_con">
-                <div class="date2">
-                    <p>Jan 2025 - Present</p>
-                </div>
-                <img src="./mentor-images/edit-2.svg" alt="">
-            </div>
-        </div>
-    
-        <div class="form_contaner">
-            <div class="form_group">
-                <label class="label" for="specialization">جامعة، كلية، مدرسة</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-           
-            
-           
-            <div class="form_group">
-                <label class="label" for="specialization">الدرجة العلمية و التخصص</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-            <div class="date_ConF" >
-                <div class="select-wrapper">
-                <div class="form_group form_groupD">
-                    <label class="label" for="specialization">تاريخ البدء</label>
-                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
-                    <span id="specializationError" class="error"></span>
-                </div>
-            </div>
-            <div class="select-wrapper">
-                <div class="form_group form_groupD">
-                    <label class="label" for="specialization">تاريخ الإنتهاء</label>
-                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
-                    <span id="specializationError" class="error"></span>
-                </div>
-            </div>
-            </div>
-            
-        </div>  
-           <div class="buttons_con">
-            <button class="updateBtn">
-                حفظ
-            </button>
-            <button class="removeBtn updateBtn">
-                إلغاء
-            </button>
-           </div>
-
-    </div>
-    <!-- 99999999 -->
-    <div class="mainContaner" style="display: none;" >
-        <div class="top_con">
-            <h3>تحديث تفاصيل ملفك الشخصي</h3>
-            <img src="./mentor-images/close-circle.svg" alt="">
-        </div>
-        <div class="infolist infolistEX">
-            <a href="">معلومات اساسية</a>
-            <a  href="">خبراتي</a>
-            <a class="checked" href="">شهاداتي</a>
-            <a  href="">التعليم</a>
-        </div>
-            
-       
-
-        <div class="second_con">
-            <div class="veiw_con">
-                <img src="./mentor-images/Frame 1171278344.svg" alt="">
-                <div class="text">
-            <h4>AI in UX / UI Design</h4>
-            <p>Uxcel</p>
-            <p>Nov 2024</p>
-                </div>
-            </div>
-            
-            <div class="education">
-                <div class="edu_con">
-                    <p>عرض الشهادة</p>
-                    <img src="./mentor-images/export.svg" alt="">
-                </div>
-            </div>
-        </div>
-    
-        <div class="second_con">
-            <div class="veiw_con">
-                <img src="./mentor-images/Frame 1171278344.svg" alt="">
-                <div class="text">
-            <h4>AI in UX / UI Design</h4>
-            <p>Uxcel</p>
-            <p>Nov 2024</p>
-                </div>
-            </div>
-            
-            <div class="education">
-                <div class="edu_con">
-                    <p>عرض الشهادة</p>
-                    <img src="./mentor-images/export.svg" alt="">
-                </div>
-            </div>
-        </div>
-       
-<button class="moreExBtn">
-    أضف شهادة <img src="./mentor-images/add-square.svg" alt="">
-</button>
-    </div>
-    <!-- 10 10 10 -->
-    <div class="mainContaner"   >
-        <div class="top_con">
-            <h3>تحديث تفاصيل ملفك الشخصي</h3>
-            <img src="./mentor-images/close-circle.svg" alt="">
-        </div>
-        <div class="infolist infolistEX">
-            <a href="">معلومات اساسية</a>
-            <a  href="">خبراتي</a>
-            <a class="checked" href="">شهاداتي</a>
-            <a href="">التعليم</a>
-        </div>
-            
-        <div class="second_con">
-            <div class="veiw_con">
-                <img src="./mentor-images/Frame 1171278344.svg" alt="">
-                <div class="text">
-            <h4>AI in UX / UI Design</h4>
-            <p>Uxcel</p>
-            <p>Nov 2024</p>
-                </div>
-            </div>
-            
-            <div class="education">
-                <div class="edu_con">
-                    <p>عرض الشهادة</p>
-                    <img src="./mentor-images/export.svg" alt="">
-                </div>
-            </div>
-        </div>
-    
-        <div class="second_con">
-            <div class="veiw_con">
-                <img src="./mentor-images/Frame 1171278344.svg" alt="">
-                <div class="text">
-            <h4>AI in UX / UI Design</h4>
-            <p>Uxcel</p>
-            <p>Nov 2024</p>
-                </div>
-            </div>
-            
-            <div class="education">
-                <div class="edu_con">
-                    <p>عرض الشهادة</p>
-                    <img src="./mentor-images/export.svg" alt="">
-                </div>
-            </div>
-        </div>
-       
-
-        <div class="form_contaner">
-            <div class="form_group">
-                <label class="label" for="specialization">اسم الشهادة</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-           
-            
-           
-            <div class="form_group">
-                <label class="label" for="specialization">الجهة المانحة للشهادة</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-            <div class="date_ConF" >
-                <div class="select-wrapper">
-                <div class="form_group form_groupD">
-                    <label class="label" for="specialization">تاريخ الإصدار</label>
-                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
-                    <span id="specializationError" class="error"></span>
-                </div>
-            </div>
-            <div class="select-wrapper">
-                <div class="form_group form_groupD">
-                    <label class="label" for="specialization">تاريخ الإنتهاء</label>
-                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
-                    <span id="specializationError" class="error"></span>
-                </div>
-            </div>
-            </div>
-            <div class="form_group">
-                <label class="label" for="specialization">رقم الشهادة</label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-            <div class="form_group">
-                <label class="label" for="specialization"> رابط الشهادة </label>
-                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
-                <span id="specializationError" class="error"></span>
-            </div>
-        </div>  
-           <div class="buttons_con">
-            <button class="updateBtn">
-                حفظ
-            </button>
-            <button class="removeBtn updateBtn">
-                إلغاء
-            </button>
-           </div>
-
-    </div>
-
-    <style>
-        .mainContaner{
-            position: absolute; 
-    top: 100%; 
-    left: 50%; 
-    transform: translate(-50%, -50%); 
-    display: flex;
-padding: 24px;
-flex-direction: column;
-border-radius: 16px;
-background: #FFF;
-border: 1px solid #D2D2D2;
-z-index: 1;
-
-        }
-        
-
-    .top_con{
-        display: flex;
-justify-content: space-between;
-align-items: flex-start;
-align-self: stretch;
-    }
-    .top_con h3{
-        color: #000;
-text-align: right;
-font-family: "Baloo Bhaijaan 2";
-font-size: 32px;
-font-style: normal;
-font-weight: 600;
-line-height: 48px; /* 150% */
-margin: 0 !important;
-    }
-    .infolist{
-        display: flex;
-align-items: center;
-gap: 16px;
-align-self: stretch;
-border-bottom: 1px solid var(--Colors-Neutral-200, #E8E8E8);
-flex-direction: row-reverse;
-    }
-    .infolist a{
-        text-decoration: none;
-        display: block;
-        color: var(--Colors-Neutral-700, #777);
-text-align: right;
-font-family: "Baloo Bhaijaan 2";
-font-size: 24px;
-font-style: normal;
-font-weight: 500;
-line-height: 27px; /* 112.5% */
-padding: 8px;
-    }
-    .infolist .checked{
-        display: flex;
-padding: 8px;
-justify-content: center;
-align-items: center;
-gap: 8px;
-border-bottom: 3px solid var(--Colors-Neutral-800, #606060);
-    }
-.mainContaner h1{
-    color: var(--Colors-Neutral-1000, #333);
-text-align: end;
-font-family: "Baloo Bhaijaan 2";
-font-size: 20px;
-font-style: normal;
-font-weight: 500;
-line-height: 27px; /* 135% */
-margin-top: 40px;
-margin-bottom: 16px;
-}
-.uplodimage{
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    align-self: stretch;
-    justify-content: end;
-    flex-direction: row-reverse;
-    margin-bottom: 24px;
-
-}
-.image{
-    display: flex;
-}
-.image img:last-child{
-    position: absolute;
-    top: 16.3%;
-    right: 6.5%;
-}
- 
-.uplodimage .text{
-    display: flex;
-flex-direction: column;
-align-items: flex-end;
-gap: 7px;
-}
-.uplodimage .text h4{
-    color: var(--Colors-Primary-500, #F82548);
-text-align: right;
-font-family: "Baloo Bhaijaan 2";
-font-size: 20px;
-font-style: normal;
-font-weight: 600;
-line-height: 27px; /* 135% */
-}
-.uplodimage .text p{
-    color: var(--Colors-Neutral-600, #8E8E8E);
-text-align: right;
-font-family: "Baloo Bhaijaan 2";
-font-size: 16px;
-font-style: normal;
-font-weight: 500;
-line-height: 27px; /* 168.75% */
-}
-
-
-.form_contaner{
-    display: flex;
-flex-direction: column;
-gap: 16px;
-align-self: stretch;
-  }
-  .form_contaner h2{
-    color: var(--Colors-Neutral-1000, #333);
-text-align: right;
-font-family: "Baloo Bhaijaan 2";
-font-size: 20px;
-font-style: normal;
-font-weight: 600;
-line-height: 33px; /* 165% */
-margin-top: 24px;
-  }
-  
-  .form_group{
-    display: flex;
-    flex-direction: column;
-    text-align: end;
-color: var(--mainColor);
-gap: 1px;
-
-  }
-  .form_group .label{
-    font-size: 18px;
-font-style: normal;
-font-weight: 500;
-  }
-  .form_group .input{
-    padding-block: 12px;
-    border-radius: 0.25rem;
-    border: 1.5px solid var(--Colors-Neutral-300, #D2D2D2);
-    width: 100%;
-    gap: 8px;
-    direction: ltr;
-  }
-  
-  
-  .input::placeholder{
-    font-size: 14px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-color: var(--second-color);
-font-family: "Baloo Bhaijaan 2";
-/* text-align: end; */
-position: relative;
-right: 1.11vw;
-text-align: right;
-  }
-
-  select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    width: 100%;
-    padding-block: 12px;
-    padding-right: 12px;
-    border: 1.5px solid var(--Colors-Neutral-300, #D2D2D2);
-    border-radius: 0.25rem;
-    background-color: var(--white);
-    font-size: 14px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-color: var(--second-color);
-font-family: "Baloo Bhaijaan 2";
-text-align: end;
-position: relative;
-    outline: none;
-    cursor: pointer;
-  }
-  select:focus {
-    border-color:var(--Colors-Neutral-300);
-  }
-  
-  select::-ms-expand {
-    display: none;
-  }
-  
-  .select-wrapper {
-    position: relative;
-    width: 100%;
-  }
-  
- 
-  .select-wrapper::after {
-    display: none;
-  }
-  
-  .select-icon {
-    position: absolute;
-    left: 1rem; 
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1.2rem;
-    height: 1.2rem;
-    pointer-events: none; 
-  }
-
-  .select-icon {
-    transition: transform 0.3s ease; 
-}
-
-.select-icon.rotate {
-    transform: rotate(180deg); 
-}
-
-
-  
-  
-
-  textarea {
-    width: 100%;
-    border: 1.5px solid var(--Colors-Neutral-300, #D2D2D2);
-    border-radius: 0.25rem;
-    background-color: var(--white);
-    color: var(--second-color);
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    color: var(--second-color);
-    font-family: "Baloo Bhaijaan 2";
-text-align: end;
-    outline: none;
-    height: 6rem;
-    resize: none;
-  }
-  textarea::placeholder{
-    position: relative;
-    right: 12px;
-    top:8px;
-  } 
-
-  .updateBtn{
-    display: flex;
-padding: var(--2, 8px) var(--3, 12px);
-justify-content: center;
-align-items: center;
-gap: var(--2, 8px);
-border-radius: 0.25rem;
-background: var(--Colors-Primary-500, #F82548);
-color: #FFF;
-border: 1px solid transparent;
-/* Global Tokens/Body/B-1 */
-font-family: "Baloo Bhaijaan 2";
-font-size: 18px;
-font-style: normal;
-font-weight: 500;
-line-height: 27px; /* 150% */
-margin-top: 24px;
-width: 100%;
-  }
-
-  /* 55555555555555555555554 */
-
-  .infolistEX{
-margin-bottom: 16px;
-  }
-  .date_ConF{
-    display: flex;
-    gap: 16px;
-    flex-direction: row-reverse;
-  }
-  .form_groupD{
-    width: 100%;
-  }
-  .calendar{
-    top: 70%;
-  }
-  .buttons_con{
-    display: flex;
-    flex-direction: row-reverse;
-padding: var(--2, 8px) var(--3, 12px);
-justify-content: center;
-align-items: center;
-gap: 16px;
-flex: 1 0 0;
-  }
-.removeBtn{
-    color: var(--Colors-Neutral-600, #8E8E8E);
-
-/* Global Tokens/Headings/H-10 */
-font-family: "Baloo Bhaijaan 2";
-font-size: 20px;
-font-style: normal;
-font-weight: 700;
-background: #fff !important;
-border-radius: 0.25rem;
-border: 1px solid var(--Colors-Neutral-400, #BBB);
-}
-
-.check{
-    display: flex;
-    gap: 8px;
-    justify-content: end;
-  }
-  .check label{
-    line-height: 24px;
-    font-weight: 400;
-    cursor: pointer;
-  }
-  .password_con{
-flex-direction: row;
-justify-content: space-between;
-cursor: pointer;
-  }
-  
-  
-  .check input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-  }
-
-  
-  
-  .check input[type="checkbox"]:checked{
-    
-    accent-color: var(--praimary-color);
-
-  }
-  
-  
-
-  /* sdds */
-  .date2_con{
-    display: flex;
-flex-direction: column-reverse;
-justify-content: center;
-align-items: flex-start;
-gap: 12px;
-align-self: stretch;
-  }
-
-  .moreExBtn{
-    display: flex;
-width: 500px;
-padding: 8px 16px;
-justify-content: center;
-align-items: center;
-gap: 19px;
-border-radius: 8px;
-border: 1px solid var(--Colors-Neutral-300, #D2D2D2);
-background: var(--Colors-Neutral-100, #FFF);
-color: var(--Colors-Neutral-1000, #333);
-text-align: right;
-font-family: "Baloo Bhaijaan 2";
-font-size: 20px;
-font-style: normal;
-font-weight: 500;
-line-height: 27px; /* 135% */
-  }
-  
-    </style>
-   <header>
+<header>
     <nav>
         <div class="left_Sec">
             <div class="titel">
-                <img src="./mentor-images/personal_image.png" alt="">
-                <p>معتصم شعبان</p>
+                <img id="image2" src="./mentor-images/freepik__adjust__7471.svg" alt="">
+                <p class="mentor_name"></p>
             </div>
             <div class="buttonsNav">
                 <button class="notBtn"><img src="./mentor-images/notification.svg" alt=""></button>
@@ -1134,29 +31,36 @@ line-height: 27px; /* 135% */
 
    <section id="profile-hero" class="container">
     <figure class="bg-img">
-        <img src="./mentor-images/info-image.jpg" alt="background-image" />
+       
+        <img  id="background_image" src="./mentor-images/1080x1920-light-gray-solid-color-background.jpg" alt="background-image" />
       </figure>
       <div class="mentor_con mentor_con_rate">
         <div class="mentorinfo">
             <div class="personal-image">
-                <img src="./mentor-images/personal_image.2.png" alt="">
-                <span><img src="./mentor-images/edit-2.svg" alt=""></span>
+                <img id="image1" src="./mentor-images/freepik__adjust__7471.svg" alt="">
             </div>
             <div class="mentor_titele">
-                <h4> EG معتصم شعبان</h4>
-            <p>Product Designer at Campus</p>
+                <h4 class="mentor_name"></h4>
+            <p id="mentor_jop"></p>
             <div class="contact">
-                <img src="./mentor-images/instagram.svg" alt="">
-                <img src="./mentor-images/dribbble.svg" alt="">
-                <img src="./mentor-images/behance.svg" alt="">
-                <img src="./mentor-images/linkedin.svg" alt="">
-                <img src="./mentor-images/github.svg" alt="">
+                <a href=""><img src="./mentor-images/instagram.svg" alt=""></a>
+                <a href=""><img src="./mentor-images/dribbble.svg" alt=""></a>
+                <a href=""><img src="./mentor-images/behance.svg" alt=""></a>
+                <a href=""><img src="./mentor-images/linkedin.svg" alt=""></a>
+                <a href=""><img src="./mentor-images/github.svg" alt=""></a>
+                
+                
+                
+                
+                
             </div>
             </div>
         </div>
-        <div class="mentorButons mentorButonsV">
+        
+       
+        <div class="mentee_bookinkg_Btn">
             <button class="timeBtn">احجز جلسة الان</button>
-            <div class="buttons_conV">
+            <div class="buttons_con_mentee_book">
                 <button class="buttonnFormat"><img src="./mentor-images/more.svg" alt=""></button>
                 <button class="buttonnFormat"><img src="./mentor-images/messages-2.svg" alt=""></button>
                 <button class="buttonnFormat"><img src="./mentor-images/heart.svg" alt=""></button>
@@ -1164,25 +68,84 @@ line-height: 27px; /* 135% */
             
         </div>
       </div>
+
+      <style>
+        .mentee_bookinkg_Btn{
+            display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 16px;
+flex-direction: column-reverse;
+        }
+        .timeBtn{
+            display: flex;
+height: 40px;
+padding: var(--2, 8px) var(--3, 12px);
+justify-content: center;
+align-items: center;
+gap: var(--2, 8px);
+align-self: stretch;
+border-radius: 0.25rem;
+background: var(--Colors-Primary-500, #F82548);
+color: var(--Colors-Neutral-100, #FFF);
+
+/* Global Tokens/Body/B-1 */
+font-family: "Baloo Bhaijaan 2";
+font-size: 18px;
+font-style: normal;
+font-weight: 500;
+line-height: 27px; /* 150% */
+        }
+        .buttonnFormat{
+            display: flex;
+padding: 8px;
+align-items: center;
+gap: 8px;
+border-radius: 8px;
+background: #FFF;
+box-shadow: 0px 4px 18px 0px rgba(0, 0, 0, 0.12);
+        }
+        .buttons_con_mentee_book{
+            display: flex;
+align-items: center;
+gap: 16px;
+align-self: stretch;
+        }
+      </style>
      
   </section>
   <section class="veiwMentor">
     <div class="mentor_sec2">
-        <p >إنجازاتي</p>
-        <p id="rate">تقييماتي</p>
-        <p class="checked">نظرة عامة</p>
+        <p id="progres" >الانجازات</p>
+        <p id ="rate" >التقييمات</p>
+        <p id="veiw" class="checked">نظرة عامة</p>
       </div>
-      <h5>أنا معتصم، مصمم UI/UX شغوف بإنشاء تجارب مستخدم سلسة وواجهات جذابة تلبي احتياجات المستخدمين. لدي خبرة في تصميم تطبيقات الويب والموبايل، وأمتلك معرفة قوية بمبادئ التصميم والتفكير التصميمي. أحب البحث عن حلول مبتكرة لتحسين تجربة المستخدم، وأمتلك خلفية في التصوير والمونتاج، مما يعزز فهمي للعناصر البصرية والتفاعل. كما أن لدي معرفة بأساسيات الـ Front-End وFlutter، مما يساعدني على التعاون الفعّال مع المطورين.</h5>
+      <script>
+        let rate = document.getElementById('rate')
+let progres = document.getElementById('progres')
+let veiw = document.getElementById('veiw')
+rate.addEventListener('click', function(){
+    window.location.href = 'mentee_view_rate.html';
+})
+progres.addEventListener('click', function(){
+    window.location.href = 'mentee_view_progress.html';
+})
+veiw.addEventListener('click', function(){
+    window.location.href = 'mentee.html';
+})
+
+      </script>
+      
     
     <div class="main">
         <div class="mentor_veiw_con">
+      <h5>أنا معتصم، مصمم UI/UX شغوف بإنشاء تجارب مستخدم سلسة وواجهات جذابة تلبي احتياجات المستخدمين. لدي خبرة في تصميم تطبيقات الويب والموبايل، وأمتلك معرفة قوية بمبادئ التصميم والتفكير التصميمي. أحب البحث عن حلول مبتكرة لتحسين تجربة المستخدم، وأمتلك خلفية في التصوير والمونتاج، مما يعزز فهمي للعناصر البصرية والتفاعل. كما أن لدي معرفة بأساسيات الـ Front-End وFlutter، مما يساعدني على التعاون الفعّال مع المطورين.</h5>
+
             <div class="veiw_mentor1 veiw_mentorFormat">
                 <div class="top_con">
-                    <h1>خبراتي</h1>
-            <div class="editIcons">
-                <img src="./mentor-images/edit-2.svg" alt="">
-                <img src="./mentor-images/add-square.svg" alt="">
-            </div>
+                    <h1>الخبرات</h1>
+           
                 </div>
                 <div class="second_con">
                     <div class="veiw_con">
@@ -1214,11 +177,8 @@ line-height: 27px; /* 135% */
             </div>
             <div class="veiw_mentor2 veiw_mentorFormat">
                 <div class="top_con">
-                    <h1>شهاداتي</h1>
-            <div class="editIcons">
-                <img src="./mentor-images/edit-2.svg" alt="">
-                <img src="./mentor-images/add-square.svg" alt="">
-            </div>
+                    <h1>الشهادات</h1>
+           
                 </div>
                 <div class="second_con">
                     <div class="veiw_con">
@@ -1257,17 +217,14 @@ line-height: 27px; /* 135% */
                 </div>
                   <button id="moreBtn">
                     عرض المزيد +3
-                    <img src="./mentor-images/arrow-down.svg" alt="">
+                    <img src="./mentor-images/chevron-down.svg" alt="">
                   </button>
                 
             </div>
             <div class="veiw_mentor3 veiw_mentorFormat">
                 <div class="top_con">
                     <h1>التعليم</h1>
-            <div class="editIcons">
-                <img src="./mentor-images/edit-2.svg" alt="">
-                <img src="./mentor-images/add-square.svg" alt="">
-            </div>
+            
                 </div>
                 <div class="second_con">
                     <div class="veiw_con">
@@ -1302,42 +259,140 @@ line-height: 27px; /* 135% */
                       </div>  
 
                       <aside class="left_section">
-                        <div class="video">
-                            <h1>فيديو تعريفي</h1>
-                            <div class="video_con" id="videoContainer">
-                                <img src="./mentor-images/upload-cloud-02.svg" alt="" id="uploadIcon">
-                                <h4 id="uploadText">إضغظ لتحميل ملف الفيديو</h4>
-                                <p id="fileInfo">MP4, 4:3 (حد اقصى 25 ميجا)</p>
-                                <input type="file" id="videoUpload" accept="video/mp4" style="display: none;">
-                                <video id="videoPreview" controls style="display: none; width: 100%; max-width: 400px;"></video>
-                            </div>
-                            <script>
-                                document.getElementById('videoContainer').addEventListener('click', function() {
-    document.getElementById('videoUpload').click();
-});
-
-document.getElementById('videoUpload').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const videoPreview = document.getElementById('videoPreview');
-        const uploadIcon = document.getElementById('uploadIcon');
-        const uploadText = document.getElementById('uploadText');
-        const fileInfo = document.getElementById('fileInfo');
-
-        // إخفاء العناصر القديمة
-        uploadIcon.style.display = 'none';
-        uploadText.style.display = 'none';
-        fileInfo.style.display = 'none';
-
-        // عرض الفيديو
-        videoPreview.src = URL.createObjectURL(file);
-        videoPreview.style.display = 'block';
-    }
-});
-                            </script>
-                        </div>
+                       
+                       
+                        <style>
+                            .suggestMentor{
+                                width: 429px;
+                            }
+                       
+                        .top_contenrS{
+                            display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    flex-direction: row-reverse;
+                        }
+                        .top_contenr h1{
+                            color: var(--Gray-900, #101828);
+                    text-align: right;
+                    font-size: 20px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: normal;
+                        }
+                        .top_contenr .arrows{
+                            display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    flex-shrink: 0;
+                        }
+                        .cards_container {
+                        display: flex;
+                        flex-direction: row-reverse;
+                        overflow-x: hidden; /* إخفاء التمرير التلقائي */
+                        gap: 16px; /* المسافة بين البطاقات */
+                        padding: 16px;
+                        scroll-behavior: smooth; /* التمرير السلس */
+                    
+                    }
+                    
+                    .cardFormat {
+                        flex: 0 0 auto;
+                        width: 205.659px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                        border-radius: 8px;
+                        overflow: hidden;
+                        background: #fff;
+                    }
+                       .cardFormat .ratteM{
+                        display: flex;
+                    align-items: center;
+                       }
+                       .cardFormat figure img{
+                        width: 100%;
+                        border-top-left-radius: 5.448px;
+                        border-top-right-radius: 5.448px;
+                    
+                    
+                       }
+                       .cardFormat .ratte p{
+                        color: var(--Warm-black, #333);
+                    text-align: right;
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: normal;
+                       }
+                       .titele_con{
+                        display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    align-self: stretch;
+                       }
+                       .M_titele{
+                        display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    gap: 4.086px;
+                       }
+                       .M_titele h4{
+                        color: var(--Gray-900, #101828);
+                    text-align: right;
+                    font-family: "Baloo Bhaijaan 2";
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 600;
+                    line-height: 120%; /* 16.8px */
+                       }
+                       .M_titele p{
+                        color: var(--gray-600, #4B5563);
+                    text-align: right;
+                    font-family: "Baloo Bhaijaan 2";
+                    font-size: 12px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: 120%; /* 14.4px */
+                    }
+                       .descrp p{
+                        color: var(--Gray-900, #101828);
+                    text-align: right;
+                    font-family: "Baloo Bhaijaan 2";
+                    font-size: 12px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: normal;
+                       }
+                       .card_content{
+                        display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    gap: 10.896px;
+                    margin-inline:8.17px ;
+                       }
+                       .bokBtn{
+                        display: flex;
+                    width: 189.316px;
+                    height: 27.921px;
+                    padding: 5.448px 10.896px;
+                    margin: 8.17px 8.17px 8.88px 8.17px;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 6.81px;
+                    flex-shrink: 0;
+                    border-radius: 2.724px;
+                    background: var(--red-color, #F82548);
+                    color: #F3FCFF;
+                    text-align: center;
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: normal;
+                    font-family: "Baloo Bhaijaan 2";
+                       }
+                      </style>
+                     
+                        
                         <div class="statistics">
-                            <div class="veiw_mentor1 veiw_mentorFormat">
                                 <div class="top_con">
                                     <h1>إحصائياتي</h1>
                             <div class="statisticsIcons">
@@ -1347,21 +402,21 @@ document.getElementById('videoUpload').addEventListener('change', function(event
                             </div>
                                 </div>
                                 <div class="statistics_con">
-                                    <div class="veiw_con">
+                                    
+                                    <div class="veiw_conS">
                                         <img src="./mentor-images/Frame 1171278344.svg" alt="">
                                         <div class="text">
                                     <h4>2,200 دقيقة</h4>
                                     <p>إجمالي وقت الإرشاد</p>
                                         </div>
                                     </div>
-                                    <div class="veiw_con">
+                                    <div class="veiw_conS">
                                         <img src="./mentor-images/Frame 1171278344.svg" alt="">
                                         <div class="text">
                                     <h4>70</h4>
                                     <p>الجلسات المكتملة</p>
                                         </div>
                                     </div>
-                                </div>
                                   
                                
                                   
@@ -1480,181 +535,36 @@ document.getElementById('videoUpload').addEventListener('change', function(event
                                 </div>
                             </div>
                         </div>
-
+                        
                       </aside>
                     </div>      
 
   </section>
-  <style>
-    .mentorButonsV{
-        display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-gap: 16px;
-flex-direction: column-reverse;
-    }
-    .buttons_conV{
-        display: flex;
-align-items: center;
-gap: 16px;
-align-self: stretch;
-    }
-    .buttonnFormat{
-        display: flex;
-padding: 8px;
-align-items: center;
-gap: 8px;
-border-radius: 8px;
-background: #FFF;
-box-shadow: 0px 4px 18px 0px rgba(0, 0, 0, 0.12);
-    }
-    .top_contenrS{
-        display: flex;
-justify-content: space-between;
-align-items: center;
-flex-direction: row-reverse;
-    }
-    .top_contenr h1{
-        color: var(--Gray-900, #101828);
-text-align: right;
-font-size: 20px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-    }
-    .top_contenr .arrows{
-        display: flex;
-align-items: center;
-gap: 8px;
-flex-shrink: 0;
-    }
-    .cards_container {
-    display: flex;
-    flex-direction: row-reverse;
-    overflow-x: hidden; /* إخفاء التمرير التلقائي */
-    gap: 16px; /* المسافة بين البطاقات */
-    padding: 16px;
-    scroll-behavior: smooth; /* التمرير السلس */
-    width: 80%;
-
-}
-
-.cardFormat {
-    flex: 0 0 auto;
-    width: 205.659px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
-    background: #fff;
-}
-   .cardFormat .ratteM{
-    display: flex;
-align-items: center;
-   }
-   .cardFormat figure img{
-    width: 100%;
-    border-top-left-radius: 5.448px;
-    border-top-right-radius: 5.448px;
-
-
-   }
-   .cardFormat .ratte p{
-    color: var(--Warm-black, #333);
-text-align: right;
-font-size: 14px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-   }
-   .titele_con{
-    display: flex;
-justify-content: space-between;
-align-items: flex-start;
-align-self: stretch;
-   }
-   .M_titele{
-    display: flex;
-flex-direction: column;
-align-items: flex-end;
-gap: 4.086px;
-   }
-   .M_titele h4{
-    color: var(--Gray-900, #101828);
-text-align: right;
-font-family: "Baloo Bhaijaan 2";
-font-size: 14px;
-font-style: normal;
-font-weight: 600;
-line-height: 120%; /* 16.8px */
-   }
-   .M_titele p{
-    color: var(--gray-600, #4B5563);
-text-align: right;
-font-family: "Baloo Bhaijaan 2";
-font-size: 12px;
-font-style: normal;
-font-weight: 500;
-line-height: 120%; /* 14.4px */
-}
-   .descrp p{
-    color: var(--Gray-900, #101828);
-text-align: right;
-font-family: "Baloo Bhaijaan 2";
-font-size: 12px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-   }
-   .card_content{
-    display: flex;
-flex-direction: column;
-align-items: flex-end;
-gap: 10.896px;
-margin-inline:8.17px ;
-   }
-   .bokBtn{
-    display: flex;
-width: 189.316px;
-height: 27.921px;
-padding: 5.448px 10.896px;
-margin: 8.17px 8.17px 8.88px 8.17px;
-justify-content: center;
-align-items: center;
-gap: 6.81px;
-flex-shrink: 0;
-border-radius: 2.724px;
-background: var(--red-color, #F82548);
-color: #F3FCFF;
-text-align: center;
-font-size: 14px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-font-family: "Baloo Bhaijaan 2";
-   }
-  </style>
   <script>
-  const container = document.querySelector('.cards_container');
-const leftButton = document.getElementById('left');
-const rightButton = document.getElementById('right');
+    const container = document.querySelector('.cards_container');
+  const leftButton = document.getElementById('left');
+  const rightButton = document.getElementById('right');
+  
+  const cardWidth = container.querySelector('.cardFormat').offsetWidth;
+  const gap = 16; // المسافة بين البطاقات
+  
+  leftButton.addEventListener('click', () => {
+      container.scrollBy({
+          left: -(cardWidth + gap), // التمرير لليسار
+          behavior: 'smooth'
+      });
+  });
+  
+  rightButton.addEventListener('click', () => {
+      container.scrollBy({
+          left: cardWidth + gap, // التمرير لليمين
+          behavior: 'smooth'
+      });
+  });
 
-const cardWidth = container.querySelector('.cardFormat').offsetWidth;
-const gap = 16; // المسافة بين البطاقات
-
-leftButton.addEventListener('click', () => {
-    container.scrollBy({
-        left: -(cardWidth + gap), // التمرير لليسار
-        behavior: 'smooth'
-    });
-});
-
-rightButton.addEventListener('click', () => {
-    container.scrollBy({
-        left: cardWidth + gap, // التمرير لليمين
-        behavior: 'smooth'
-    });
-});
   </script>
+  <script src="mentor.js"></script>
+  
+  
 </body>
 </html>

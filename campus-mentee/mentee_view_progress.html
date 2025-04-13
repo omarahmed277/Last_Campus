@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mentor</title>
+    <link rel="stylesheet" href="./mentor.css">
+    <link rel="stylesheet" href="editProfile.css">
+</head>
+<body>
+
+    
+
+    <header>
+        <nav>
+            <div class="left_Sec">
+                <div class="titel">
+                    <img id="image2" src="./mentor-images/freepik__adjust__7471.svg" alt="">
+                    <p class="mentor_name"></p>
+                </div>
+                <div class="buttonsNav">
+                    <button class="notBtn"><img src="./mentor-images/notification.svg" alt=""></button>
+                    <button class="messageBtn"><img src="./mentor-images/messages-2.svg" alt=""></button>
+                </div>
+            </div>
+            <div class="logo">
+                <img src="./mentor-images/logo_campus.svg" alt="">
+            </div>
+        </nav>
+       </header>
+    
+       <section id="profile-hero" class="container">
+        <figure class="bg-img">
+            <img  id="background_image" src="./mentor-images/1080x1920-light-gray-solid-color-background.jpg" alt="background-image" />
+            
+          </figure>
+          <div class="mentor_con mentor_con_rate">
+            <div class="mentorinfo">
+                <div class="personal-image">
+                    <img id="image1" src="./mentor-images/freepik__adjust__7471.svg" alt="">
+                   
+                </div>
+                <div class="mentor_titele">
+                    <h4 class="mentor_name"></h4>
+                <p id="mentor_jop"></p>
+                <div class="contact">
+                    <img src="./mentor-images/instagram.svg" alt="">
+                    <img src="./mentor-images/dribbble.svg" alt="">
+                    <img src="./mentor-images/behance.svg" alt="">
+                    <img src="./mentor-images/linkedin.svg" alt="">
+                    <img src="./mentor-images/github.svg" alt="">
+                </div>
+                </div>
+            </div>
+            
+           
+            <div class="mentee_bookinkg_Btn">
+                <button class="timeBtn">احجز جلسة الان</button>
+                <div class="buttons_con_mentee_book">
+                    <button class="buttonnFormat"><img src="./mentor-images/more.svg" alt=""></button>
+                    <button class="buttonnFormat"><img src="./mentor-images/messages-2.svg" alt=""></button>
+                    <button class="buttonnFormat"><img src="./mentor-images/heart.svg" alt=""></button>
+                </div>
+                
+            </div>
+          </div>
+         
+      </section>
+
+      <style>
+        .mentee_bookinkg_Btn{
+            display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 16px;
+flex-direction: column-reverse;
+        }
+        .timeBtn{
+            display: flex;
+height: 40px;
+padding: var(--2, 8px) var(--3, 12px);
+justify-content: center;
+align-items: center;
+gap: var(--2, 8px);
+align-self: stretch;
+border-radius: 0.25rem;
+background: var(--Colors-Primary-500, #F82548);
+color: var(--Colors-Neutral-100, #FFF);
+
+/* Global Tokens/Body/B-1 */
+font-family: "Baloo Bhaijaan 2";
+font-size: 18px;
+font-style: normal;
+font-weight: 500;
+line-height: 27px; /* 150% */
+        }
+        .buttonnFormat{
+            display: flex;
+padding: 8px;
+align-items: center;
+gap: 8px;
+border-radius: 8px;
+background: #FFF;
+box-shadow: 0px 4px 18px 0px rgba(0, 0, 0, 0.12);
+        }
+        .buttons_con_mentee_book{
+            display: flex;
+align-items: center;
+gap: 16px;
+align-self: stretch;
+        }
+      </style>
+  
+  <section class="sessionSuccess">
+    <div class="mentor_sec2">
+        <p id="progres" class="checked">الانجازات</p>
+        <p id="rate">التقييمات</p>
+        <p id="veiw">نظرة عامة</p>
+      </div> 
+      <script>
+        let rate = document.getElementById('rate')
+let progres = document.getElementById('progres')
+let veiw = document.getElementById('veiw')
+rate.addEventListener('click', function(){
+    window.location.href = 'mentee_view_rate.html';
+})
+progres.addEventListener('click', function(){
+    window.location.href = 'mentee_view_progress.html';
+})
+veiw.addEventListener('click', function(){
+    window.location.href = 'mentee.html';
+})
+
+      </script>
+    <h1>مؤشرات نجاح الجلسه</h1>
+    <div class="sessionSuccess_con">
+
+    <div class="session1 sessionsFormat">
+        <div class="session_con">
+            <img src="./mentor-images/sessionRate-image.png" alt="">
+            <div class="time">
+                <h4>1000 دقيقة توجيه</h4>
+                <p>Online</p>
+            </div>
+            
+        </div>
+        <div class="date">
+            <p>20 Jan, 2025</p>
+        </div>
+        
+</div>
+<div class="session2 sessionsFormat">
+    <div class="session_con">
+        <img src="./mentor-images/sessionRate-image.png" alt="">
+        <div class="time">
+            <h4>1000 دقيقة توجيه</h4>
+            <p>Online</p>
+        </div>
+        
+    </div>
+    <div class="date">
+        <p>20 Jan, 2025</p>
+    </div>
+    
+</div>
+<div class="session3 sessionsFormat">
+    <div class="session_con">
+        <img src="./mentor-images/sessionRate-image.png" alt="">
+        <div class="time">
+            <h4>1000 دقيقة توجيه</h4>
+            <p>Online</p>
+        </div>
+    </div>
+
+    <div class="date">
+        <p>20 Jan, 2025</p>
+    </div>
+    
+</div>
+<div class="session4 sessionsFormat">
+    <div class="session_con">
+        <img src="./mentor-images/sessionRate-image.png" alt="">
+        <div class="time">
+            <h4>1000 دقيقة توجيه</h4>
+            <p>Online</p>
+        </div>
+        
+    </div>
+    
+    <div class="date">
+        <p>20 Jan, 2025</p>
+    </div>
+
+</div>
+<div class="session5 sessionsFormat">
+    <div class="session_con">
+        <img src="./mentor-images/sessionRate-image.png" alt="">
+        <div class="time">
+            <h4>1000 دقيقة توجيه</h4>
+            <p>Online</p>
+        </div>
+      
+    </div>
+    <div class="date">
+        <p>20 Jan, 2025</p>
+    </div>
+</div>
+    </div>
+
+  </section>
+<div class="overlay" id="mainContanerRarte">
+    <div class="mainContanerRarte">
+    <h1>اخبرنا عن مدى رضاك بخدمتنا !</h1>
+    <div class="rating">
+        <div class="exlant imoge">
+            <img src="./mentor-images/Group 481714.svg" alt="">
+            <p>ممتاز</p>
+
+        </div>
+        <div class="verygood imoge">
+            <img src="./mentor-images/Group 481715.svg" alt="">
+            <p>جيد جداً</p>
+        </div>
+        
+        <div class="stesfy imoge">
+            <img src="./mentor-images/Group 481715.svg" alt="">
+            <p>راض</p>
+        </div>
+        <div class="good imoge">
+            <img src="./mentor-images/Group 481715.svg" alt="">
+            <p>جيد</p>
+        </div>
+        <div class="bad imoge">
+            <img src="./mentor-images/Group 481715.svg" alt="">
+            <p>سيئ</p>
+        </div>
+    </div>
+    </div>
+</div>
+<div class="overlay" id="mainContanerThank">
+    <div class="mainContanerThank">
+    <div class="thank">
+    <h1>شكراً على تقيميك</h1>
+    <p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى</p>
+    </div>
+    <button id="nextBtnThank" class="nextBtn">انهاء</button>
+    </div>
+</div>
+
+<div class="overlay" id="mainContanerThankList">
+    <div class="mainContanerThankList mainContaner_Info scrollableContent">
+        <div class="thank">
+            <h1>شكراً على تقيميك</h1>
+            <p>نرجوا منك وصف تجربتك لمساعد غيرك.</p>
+            </div>
+
+            <div class="imoges_contaner">
+                <div class="imoge">
+                    <p>ما مدى فاعلية الجلسة في حل مشكلتك</p>
+                    <div class="imoges">
+                        <img src="./mentor-images/Group 481714.svg" alt="">
+                        <img src="./mentor-images/Group 481715.svg" alt="">
+                        <img src="./mentor-images/Group 481715.svg" alt="">
+                        <img src="./mentor-images/Group 481715.svg" alt="">
+                        <img src="./mentor-images/Group 481715.svg" alt="">
+                    </div>
+                </div>
+
+                <div class="imoge">
+                    <p>ما مدى احتمالية ان توصي بهذه الخدمة لاصدقائك او زملائلك</p>
+                    <div class="imoges">
+                        <img src="./mentor-images/Group 481714.svg" alt="">
+                        <img src="./mentor-images/Group 481715.svg" alt="">
+                        <img src="./mentor-images/Group 481715.svg" alt="">
+                        <img src="./mentor-images/Group 481715.svg" alt="">
+                        <img src="./mentor-images/Group 481715.svg" alt="">
+                    </div>
+                </div>
+
+                <div class="imoge">
+                    <p>ما هو رايك ف الجلسة بشكل عام</p>
+                    <div class="imoges">
+                        <img src="./mentor-images/Group 481714.svg" alt="">
+                        <img src="./mentor-images/Group 481715.svg" alt="">
+                        <img src="./mentor-images/Group 481715.svg" alt="">
+                        <img src="./mentor-images/Group 481715.svg" alt="">
+                        <img src="./mentor-images/Group 481715.svg" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="form_group_Rate">
+                <label class="labelRate">اكتب رأيك ف الموجه</label>
+                <textarea class="textareaRate" name="about_me"  placeholder="هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق" required></textarea oninput="checkInputDirection(this)">
+                <span id="aboutMeError" class="error"></span>
+            </div>
+    <button id="nextBtnThankList" class="nextBtn">انهاء</button>
+
+    </div>
+</div>
+
+<style>
+    .mainContanerRarte{
+         position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+        display: inline-flex;
+padding: 32px 48px 80px 48px;
+flex-direction: column;
+align-items: center;
+gap: 40px;
+border-radius: 32px;
+background: #FFF;
+
+/* RATING */
+box-shadow: 4px 2px 10px 0px rgba(166, 171, 189, 0.50);
+    }
+    .mainContanerRarte h1{
+        color: var(--Text-Color, #101828);
+text-align: center;
+font-family: "Baloo Bhaijaan 2";
+font-size: 32px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+direction: rtl;
+    }
+    .rating{
+        display: flex;
+justify-content: center;
+align-items: center;
+gap: 40px;
+align-self: stretch;
+flex-direction: row-reverse;
+    }
+.imoge{
+    display: flex;
+flex-direction: column;
+align-items: center;
+gap: 24px;
+}
+.imoge p{
+    color: var(--Text-Color, #101828);
+text-align: center;
+font-family: "Baloo Bhaijaan 2";
+font-size: 25px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+}
+
+.mainContanerThank{
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    display: flex;
+padding: 48px 31px;
+flex-direction: column;
+align-items: center;
+gap: 70px;
+border-radius: 16px;
+background: #FFF;
+
+}
+.thank{
+    display: flex;
+flex-direction: column;
+align-items: center;
+gap: 8px;
+}
+.thank h1{
+    color: #000;
+text-align: center;
+font-family: "Baloo Bhaijaan 2";
+font-size: 32px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+.thank p{
+    color: var(--Color-Grey, #9098A3);
+text-align: center;
+font-feature-settings: 'liga' off, 'clig' off;
+font-family: "Baloo Bhaijaan 2";
+font-size: 24px;
+font-style: normal;
+font-weight: 500;
+line-height: 140%; /* 33.6px */
+letter-spacing: -0.682px;
+}
+.nextBtn{
+    display: flex;
+height: 48px;
+padding: var(--2, 8px) var(--3, 12px);
+justify-content: center;
+align-items: center;
+gap: var(--2, 8px);
+align-self: stretch;
+border-radius: 0.25rem;
+background: var(--Colors-Primary-500, #F82548);
+color: #fff;
+font-family: "Baloo Bhaijaan 2";
+font-size: 20px;
+font-style: normal;
+font-weight: 600;
+line-height: 24px; /* 120% */
+}
+
+
+.mainContanerThankList{
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    display: flex;
+padding: 24px;
+flex-direction: column;
+gap: 8px;
+border-radius: 32px;
+background: #FFF;
+
+}
+
+.imoges_contaner{
+    display: flex;
+flex-direction: column;
+align-items: flex-end;
+gap: 40px;
+align-self: stretch;
+}
+
+.imoges_contaner .imoges{
+    display: flex;
+justify-content: flex-end;
+align-items: center;
+gap: 24px;
+align-self: stretch;
+}
+.imoges_contaner .imoges img{
+width: 40px;
+height: 40px;
+}
+
+.form_group_Rate{
+    display: flex;
+flex-direction: column;
+justify-content: flex-end;
+gap: 12px;
+flex-shrink: 0;
+align-self: stretch;
+}
+.form_group_Rate .labelRate{
+    color: var(--Warm-black, #333);
+text-align: right;
+font-family: "Baloo Bhaijaan 2";
+font-size: 24px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+}
+
+.textareaRate{
+    display: flex;
+height: 114px;
+padding: 8px 16px;
+justify-content: flex-end;
+align-items: flex-start;
+gap: 10px;
+flex-shrink: 0;
+align-self: stretch;
+border-radius: 8px;
+border: 1px solid var(--Gray400, #98A2B3);
+background: #FFF;
+}
+
+
+</style>
+ <script>encodeURIComponent
+    let mainContanerRarte = document.getElementById('mainContanerRarte')
+    let mainContanerThank = document.getElementById('mainContanerThank')
+    let mainContanerThankList = document.getElementById('mainContanerThankList')
+    let nextBtnThankList = document.getElementById('nextBtnThankList')
+    let nextBtnThank = document.getElementById('nextBtnThank')
+    let imoges = document.querySelectorAll('.imoge')
+    mainContanerThank.style.display = 'none'
+    mainContanerThankList.style.display = 'none'
+    imoges.forEach(imoge => {
+        imoge.addEventListener('click', function(){
+            mainContanerRarte.style.display = 'none'
+            mainContanerThankList.style.display = 'block'
+        })
+    })
+
+    nextBtnThankList.addEventListener('click', function(){
+        mainContanerThankList.style.display = 'none'
+            mainContanerThank.style.display = 'block'
+        })
+        nextBtnThank.addEventListener('click', function(){
+            mainContanerThank.style.display = 'none'
+        })
+    
+ </script>
+  <script src="mentor.js"></script>
+  
+</body>
+</html>

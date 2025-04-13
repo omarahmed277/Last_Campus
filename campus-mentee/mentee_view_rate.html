@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mentor</title>
+    <link rel="stylesheet" href="./mentor.css">
+</head>
+<body>
+
+    
+    <header>
+        <nav>
+            <div class="left_Sec">
+                <div class="titel">
+                    <img id="image2" src="./mentor-images/freepik__adjust__7471.svg" alt="">
+                    <p class="mentor_name"></p>
+                </div>
+                <div class="buttonsNav">
+                    <button class="notBtn"><img src="./mentor-images/notification.svg" alt=""></button>
+                    <button class="messageBtn"><img src="./mentor-images/messages-2.svg" alt=""></button>
+                </div>
+            </div>
+            <div class="logo">
+                <img src="./mentor-images/logo_campus.svg" alt="">
+            </div>
+        </nav>
+       </header>
+    
+       <section id="profile-hero" class="container">
+        <figure class="bg-img">
+           
+            <img  id="background_image" src="./mentor-images/1080x1920-light-gray-solid-color-background.jpg" alt="background-image" />
+            
+          </figure>
+          <div class="mentor_con mentor_con_rate">
+            <div class="mentorinfo">
+                <div class="personal-image">
+                    <img id="image1" src="./mentor-images/freepik__adjust__7471.svg" alt="">
+                </div>
+                <div class="mentor_titele">
+                    <h4 class="mentor_name"></h4>
+                <p id="mentor_jop"></p>
+                <div class="contact">
+                    <img src="./mentor-images/instagram.svg" alt="">
+                    <img src="./mentor-images/dribbble.svg" alt="">
+                    <img src="./mentor-images/behance.svg" alt="">
+                    <img src="./mentor-images/linkedin.svg" alt="">
+                    <img src="./mentor-images/github.svg" alt="">
+                </div>
+                </div>
+            </div>
+            
+           
+            <div class="mentee_bookinkg_Btn">
+                <button class="timeBtn">احجز جلسة الان</button>
+                <div class="buttons_con_mentee_book">
+                    <button class="buttonnFormat"><img src="./mentor-images/more.svg" alt=""></button>
+                    <button class="buttonnFormat"><img src="./mentor-images/messages-2.svg" alt=""></button>
+                    <button class="buttonnFormat"><img src="./mentor-images/heart.svg" alt=""></button>
+                </div>
+                
+            </div>
+          </div>
+          <style>
+            .mentee_bookinkg_Btn{
+                display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-direction: column-reverse;
+            }
+            .timeBtn{
+                display: flex;
+    height: 40px;
+    padding: var(--2, 8px) var(--3, 12px);
+    justify-content: center;
+    align-items: center;
+    gap: var(--2, 8px);
+    align-self: stretch;
+    border-radius: 0.25rem;
+    background: var(--Colors-Primary-500, #F82548);
+    color: var(--Colors-Neutral-100, #FFF);
+    
+    /* Global Tokens/Body/B-1 */
+    font-family: "Baloo Bhaijaan 2";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 27px; /* 150% */
+            }
+            .buttonnFormat{
+                display: flex;
+    padding: 8px;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    background: #FFF;
+    box-shadow: 0px 4px 18px 0px rgba(0, 0, 0, 0.12);
+            }
+            .buttons_con_mentee_book{
+                display: flex;
+    align-items: center;
+    gap: 16px;
+    align-self: stretch;
+            }
+          </style>
+      </section>
+      
+  <section class="sessionSuccess">
+    <div class="mentor_sec2">
+        <p id="progres" >الانجازات</p>
+        <p id="rate" class="checked">التقييمات</p>
+        <p id="veiw">نظرة عامة</p>
+      </div>
+      <script>
+        let rate = document.getElementById('rate')
+let progres = document.getElementById('progres')
+let veiw = document.getElementById('veiw')
+rate.addEventListener('click', function(){
+    window.location.href = 'mentee_view_rate.html';
+})
+progres.addEventListener('click', function(){
+    window.location.href = 'mentee_view_progress.html';
+})
+veiw.addEventListener('click', function(){
+    window.location.href = 'mentee.html';
+})
+
+      </script>
+    <div class="sessionSuccess_con">
+
+        <div class="session1 sessionsFormat">
+            <div class="session_con">
+                <img src="./mentor-images/Frame 1171278255.png" alt="">
+                <div class="time timeR">
+                    <h4>نهال سراج الدين</h4>
+                    <p>ذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</p>
+                    <div class="stars_con">
+
+                        <p>4.3</p>
+                        <div class="stars" >
+                            <img src="./mentor-images/ic_baseline-star (1).svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                                        </div>
+                    </div>
+                
+
+                </div>
+        
+              
+        
+                  <div class="rette-con">
+                    <div class="ratte">
+                        <span><p>0.9</p><img src="./mentor-images/hand-thumb-up.svg" alt=""></span>
+                        <span><p>Reply</p><img src="./mentor-images/chat-bubble-oval-left-ellipsis.svg" alt=""></span>
+                        </div>
+                        <div class="date dateR">
+                            <p>20 Jan, 2025</p>
+                        </div> 
+                            </div>
+                            
+                        </div>
+                            </div>
+                        
+<div class="session2 sessionsFormat">
+    <div class="session_con">
+        <img src="./mentor-images/Frame 1171278255.png" alt="">
+        <div class="time timeR">
+            <h4>نهال سراج الدين</h4>
+            <p>ذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</p>
+            <div class="stars_con">
+
+                <p>4.3</p>
+                <div class="stars" >
+                    <img src="./mentor-images/ic_baseline-star (1).svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                                </div>
+            </div>
+        
+        </div>
+
+      
+
+          <div class="rette-con">
+            <div class="ratte">
+                <span><p>0.9</p><img src="./mentor-images/hand-thumb-up.svg" alt=""></span>
+                <span><p>Reply</p><img src="./mentor-images/chat-bubble-oval-left-ellipsis.svg" alt=""></span>
+                </div>
+                <div class="date dateR">
+                    <p>20 Jan, 2025</p>
+                </div> 
+                    </div>
+                    
+                </div>
+                    </div>
+                
+<div class="session3 sessionsFormat">
+    <div class="session_con">
+        <img src="./mentor-images/Frame 1171278255.png" alt="">
+        <div class="time timeR">
+            <h4>نهال سراج الدين</h4>
+            <p>ذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</p>
+            <div class="stars_con">
+
+                <p>4.3</p>
+                <div class="stars" >
+                    <img src="./mentor-images/ic_baseline-star (1).svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                                </div>
+            </div>
+        
+        </div>
+
+      
+
+          <div class="rette-con">
+            <div class="ratte">
+                <span><p>0.9</p><img src="./mentor-images/hand-thumb-up.svg" alt=""></span>
+                <span><p>Reply</p><img src="./mentor-images/chat-bubble-oval-left-ellipsis.svg" alt=""></span>
+                </div>
+                <div class="date dateR">
+                    <p>20 Jan, 2025</p>
+                </div> 
+                    </div>
+                    
+                </div>
+                    </div>
+                
+<div class="session4 sessionsFormat">
+    <div class="session_con">
+        <img src="./mentor-images/Frame 1171278255.png" alt="">
+        <div class="time timeR">
+            <h4>نهال سراج الدين</h4>
+            <p>ذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</p>
+            <div class="stars_con">
+
+                <p>4.3</p>
+                <div class="stars" >
+                    <img src="./mentor-images/ic_baseline-star (1).svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                                </div>
+            </div>
+        
+        </div>
+
+      
+
+          <div class="rette-con">
+            <div class="ratte">
+                <span><p>0.9</p><img src="./mentor-images/hand-thumb-up.svg" alt=""></span>
+                <span><p>Reply</p><img src="./mentor-images/chat-bubble-oval-left-ellipsis.svg" alt=""></span>
+                </div>
+                <div class="date dateR">
+                    <p>20 Jan, 2025</p>
+                </div> 
+                    </div>
+                    
+                </div>
+                    </div>
+                
+<div class="session5 sessionsFormat">
+    <div class="session_con">
+        <img src="./mentor-images/Frame 1171278255.png" alt="">
+        <div class="time timeR">
+            <h4>نهال سراج الدين</h4>
+            <p>ذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</p>
+            <div class="stars_con">
+
+                <p>4.3</p>
+                <div class="stars" >
+                    <img src="./mentor-images/ic_baseline-star (1).svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                                </div>
+            </div>
+        
+        </div>
+
+      
+
+          <div class="rette-con">
+            <div class="ratte">
+                <span><p>0.9</p><img src="./mentor-images/hand-thumb-up.svg" alt=""></span>
+                <span><p>Reply</p><img src="./mentor-images/chat-bubble-oval-left-ellipsis.svg" alt=""></span>
+                </div>
+                <div class="date dateR">
+                    <p>20 Jan, 2025</p>
+                </div> 
+                    </div>
+                    
+                </div>
+                    </div>
+                
+          </div>  
+
+  </section>
+  <script src="mentor.js"></script>
+
+  
+</body>
+</html>
