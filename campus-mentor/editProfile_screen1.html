@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="editProfile.css">
+    <link rel="stylesheet" href="./mentor.css">
+
+</head>
+<body>
+    <div class="mainContaner">
+        <div class="top_con">
+            <h3>تحديث تفاصيل ملفك الشخصي</h3>
+            <img id="closeBtn1" src="./mentor-images/close-circle.svg" alt="">
+        </div>
+        <div class="infolist">
+            <a class="checked" href="">معلومات اساسية</a>
+            <a href="">خبراتي</a>
+            <a href="">شهاداتي</a>
+            <a href="">التعليم</a>
+        </div>
+            <h1>تحميل صورة الملف الشخصي</h1>
+        <div class="uplodimage">
+            <div class="image">
+                <img src="./mentor-images/personal_image.png" alt="">
+                <img src="./mentor-images/trash.svg" alt="">
+            </div>
+            <div class="text">
+                <h4>تحميل صورة</h4>
+                <p>تأكد من أن حجم الملف أقل من 2 ميجا بايت</p>
+            </div>
+        </div>
+        <div class="form_contaner">
+            <div class="form_group">
+                <label class="label" for="specialization">التخصص</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label">عدد سنوات الخبرة</label>
+                <div class="select-wrapper">
+                    <select name="experience" id="experience" required>
+                        <option value="">اختر عدد السنوات</option>
+                        <option value="zero-one">0-1 سنين خبرة</option>
+                        <option value="one-three">1-3 سنين خبرة</option>
+                        <option value="three-five">3-5 سنين خبرة</option>
+                        <option value="PlusFive">أكثر من 5 سنوات</option>
+                    </select>
+                    <img src="./mentor-images/arrow-down.svg" alt="" class="select-icon arrowDown">
+                </div>
+                <span id="experienceError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label">الجنس</label>
+                <div class="select-wrapper">
+                    <select name="gender" id="gender" required>
+                        <option value="">اختر الجنس</option>
+                        <option value="male">ذكر</option>
+                        <option value="female">أنثى</option>
+                        <option value="other">غير محدد</option>
+                    </select>
+                    <img src="./mentor-images/arrow-down.svg" alt="" class="select-icon arrowDown">
+                </div>
+                <span id="genderError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label">نبذة عني:</label>
+                <textarea name="about_me" id="about_me" placeholder="نبذه عني" required></textarea oninput="checkInputDirection(this)">
+                <span id="aboutMeError" class="error"></span>
+            </div>
+        </div>
+
+
+        <div class="form_contaner">
+            <h2>الروابط الاجتماعية</h2>
+
+            <div class="form_group">
+                <label class="label" for="specialization">التخصص</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label" for="specialization">التخصص</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label" for="specialization">التخصص</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label" for="specialization">التخصص</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label" for="specialization">التخصص</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+    </div>
+<button class="updateBtn">
+    تحديث
+</button>
+    </div>
+
+    <script src="./mentor.js"></script>
+</body>
+</html>

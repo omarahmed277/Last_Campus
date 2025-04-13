@@ -1,0 +1,394 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --mainColor: #101828;
+    --second-color: #A4A4A4;
+    --praimary-color: #F82548;
+    --Colors-Neutral-300: #D2D2D2;
+  }
+
+
+@font-face {
+    font-family: "Baloo Bhaijaan 2";
+    src: url("/font/BalooBhaijaan2-VariableFont_wght.ttf") format("truetype");
+  }
+  body{
+    font-family: "Baloo Bhaijaan 2";
+    margin-inline: 62px;
+    margin-block: 32px;
+    margin-bottom: 456px;
+}
+  nav{
+    display: flex;
+    justify-content: space-between;
+align-items: center;
+align-self: stretch;
+    padding-inline: 24px;
+    padding-block: 8px;
+    border-radius: 16px;
+border: 1px solid var(--Colors-Neutral-200, #E8E8E8);
+background: #FFF;
+box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.12);
+margin-bottom: 19px;
+}
+.left_Sec{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+}
+.titel{
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 13px;
+    align-items: center;
+}
+.titel p{
+    color: var(--Colors-Neutral-1000, #333);
+text-align: right;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+
+}
+.titel .name{
+    display: flex;
+align-items: center;
+gap: 4px;
+flex-direction: row-reverse;
+}
+.buttonsNav{
+    display: flex;
+    gap: 8px;
+}
+.buttonsNav .notBtn,.messageBtn{
+padding: 8px;
+gap: 8px;
+border-radius: 8px;
+border: 1px solid var(--Colors-Neutral-200, #E8E8E8);
+background-color: #fff;
+display: flex;
+    align-items: center;
+}
+.logo{
+    display: flex;
+align-items: center;
+}
+
+
+.sessions{
+    display: flex;
+flex-direction: column;
+align-items: flex-end;
+gap: 24px;
+}
+.sessions .session_con{
+   display: flex;
+   justify-content: flex-end;
+   flex-direction: column;
+}
+.sessions .session_con h1{
+    color: var(--Colors-Neutral-1000, #333);
+text-align: right;
+font-family: "Baloo Bhaijaan 2";
+font-size: 32px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+
+}
+.sessions .session_con p{
+    color: var(--Colors-Neutral-600, #8E8E8E);
+text-align: right;
+font-family: "Baloo Bhaijaan 2";
+font-size: 20px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+
+.mentor_sec2{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    border-top: 1.7px solid var(--Colors-Neutral-200, #E8E8E8);
+    cursor: pointer;
+    width: 100%;
+  }
+  .mentor_sec2 p{
+    color: var(--Colors-Neutral-700, #777);
+    text-align: right;
+    font-family: "Baloo Bhaijaan 2";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 27px; /* 112.5% */
+    padding: 8px;
+  }
+  .mentor_sec2 .checked p{
+    color: var(--praimary-color);
+    border-bottom: 3px solid var(--Colors-Primary-500, #F82548);
+    display: flex;
+    align-items: center;
+gap: 8px;
+flex-direction: row-reverse;
+  }
+  .mentor_sec2 .checked .number{
+    display: flex;
+width: 30px;
+height: 30px;
+padding: 1.391px 11.13px;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+aspect-ratio: 1/1;
+border-radius: 100px;
+background: var(--Colors-Primary-500, #F82548);
+color: #FFF;
+  }
+  .mentor_sec2 .checked{
+    display: flex;
+    padding: 8px;
+    align-items: center;
+    gap: 8px;
+flex-direction: row-reverse;    
+  }
+
+
+  .session_card{
+    display: flex;
+padding-right: 1px;
+justify-content: center;
+align-items: center;
+align-self: stretch;
+border-radius: 8px;
+border: 1.7px solid var(--Colors-Neutral-300, #D2D2D2);
+background: #FFF;
+display: flex;
+padding: 16px 24px;
+justify-content: space-between;
+align-items: flex-start;
+border-radius: 8px;
+border-right: 6px solid var(--Colors-Neutral-300, #D2D2D2);
+flex-direction: row-reverse;
+  }
+
+  .penddingcard{
+border-right: 6px solid var(--Colors-Secondary-500, #FFD72A);
+  }
+  .Sucssescard{
+    border-right: 6px solid var(--Colors-Secondary-500, #1FC16B);
+      }
+      .feildcard{
+        border-right: 6px solid var(--Colors-Secondary-500, #F82548);
+          }
+  
+  .sessionInfo h1{
+    color: var(--Colors-Neutral-1000, #333);
+text-align: right;
+font-family: "Baloo Bhaijaan 2";
+font-size: 20px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+  }
+  .sessionInfo h1 span{
+font-weight: 700;
+  }
+  .sessionInfo{
+    display: flex;
+flex-direction: column;
+align-items: flex-end;
+gap: 8px;
+align-self: stretch;
+  }
+  .sessionInfo .sessionTime_con{
+    display: flex;
+justify-content: flex-end;
+align-items: center;
+gap: 24px;
+flex-direction: row-reverse;
+  }
+  .sessionInfo .sessionTime_con .sessionDay,.sessionTime{
+    display: flex;
+align-items: center;
+gap: 8px;
+flex-direction: row-reverse;
+  }
+  .sessionInfo .sessionTime_con .sessionDay p{
+    color: var(--Warm-black, #333);
+    text-align: right;
+    font-family: "Baloo Bhaijaan 2";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  .details{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-direction: row-reverse;
+    
+  }
+  .details p{
+    color: var(--Gray500, #667085);
+text-align: right;
+font-family: "Baloo Bhaijaan 2";
+font-size: 20px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+  }
+
+  .sessionPropelty{
+    display: flex;
+align-items: center;
+gap: 8px;
+flex-direction: row-reverse;
+  }
+  .sessionPropelty .card{
+    display: flex;
+padding: 8px 12px; 
+align-items: center;
+gap: 8px;
+border-radius: 6px;
+border: 1.5px solid var(--Colors-Neutral-300, #D2D2D2);
+  }
+  .sessionPropelty .card p{
+    color: var(--Colors-Neutral-1000, #333);
+    font-family: "Baloo Bhaijaan 2";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px; /* 150% */
+  }
+  
+  .sessionPropelty .checkedCard{
+background: var(--Colors-Primary-500, #F82548);
+color: #FFF;
+border-color: transparent;
+  }
+  .sessionPropelty .checkedCard p{
+    color: #FFF !important;
+  }
+
+  .sessionPropelty .cancelSession{
+    color: var(--Colors-Neutral-500, #A4A4A4);
+    font-family: "Baloo Bhaijaan 2";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px; /* 150% */
+    display: flex;
+padding: var(--2, 8px) var(--3, 12px);
+align-items: center;
+gap: var(--2, 8px);
+  }
+  .sessionInfo_con{
+    display: flex;
+flex-direction: column;
+align-items: flex-end;
+gap: 17px;
+flex-shrink: 0;
+  }
+
+
+  .mentorsection{
+    display: flex;
+flex-direction: column;
+align-items: flex-end;
+gap: 8px;
+align-self: stretch;
+  }
+  .mentorsection h1 , .mentorComments h1 , .sessionName h1{
+    color: var(--Colors-Neutral-1000, #333);
+text-align: right;
+font-family: "Baloo Bhaijaan 2";
+font-size: 24px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+direction: rtl;
+  }
+  .mentorsection .mentor{
+    display: flex;
+align-items: center;
+gap: 24px;
+flex-direction: row-reverse;
+  }
+  .mentorsection .mentor img{
+    width: 70px;
+    height: 70px;
+    border-radius: 100px;
+  }
+  .mentorsection .mentor .mentor_titele{
+    display: flex;
+flex-direction: column;
+align-items: flex-end;
+gap: 2px;
+  }
+  .mentorsection .mentor .mentor_titele p , .sessionName p{
+    color: var(--Colors-Neutral-600, #8E8E8E);
+text-align: right;
+font-family: "Baloo Bhaijaan 2";
+font-size: 18px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+  }
+  .mentorsection .mentor .mentor_titele h4{
+    color: var(--Colors-Neutral-1000, #333);
+text-align: right;
+font-family: "Baloo Bhaijaan 2";
+font-size: 20px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+  }
+.sessionName{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+   .mentorComments{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 8px;
+    align-self: stretch;
+  }
+  .mentorComments p{
+    color: var(--Colors-Neutral-600, #8E8E8E);
+text-align: right;
+font-family: "Baloo Bhaijaan 2";
+font-size: 16px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+
+  }
+  .arrow_left_active{
+    transform: rotate(270deg);
+    cursor: pointer;
+  }
+  .arrow_leftBtn{
+background-color: transparent;
+border: none;
+cursor: pointer;
+  }
+  .block{
+    display: block;
+  }
+  .none{
+    display: none;
+  }
+
+  

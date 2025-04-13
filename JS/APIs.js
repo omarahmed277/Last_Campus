@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 // API Configuration
 const API_BASE_URL = "https://tawgeeh-v1-production.up.railway.app";
 
@@ -83,6 +84,88 @@ window.auth = {
     } catch (error) {
       console.error("Login error:", error);
       throw error;
+=======
+// تسجيل الدخول
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('loginButton')?.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        if (!email || !password) {
+            alert('الرجاء إدخال البريد الإلكتروني وكلمة المرور');
+            return;
+        }
+
+        try {
+            const response = await fetch('https://tawgeeh-v1-production.up.railway.app/auth/login', {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'accept': '*/*'
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            localStorage.setItem('token', data.access_token);
+            alert('تم تسجيل الدخول بنجاح!');
+            window.location.href = '/dashboard';
+        } catch (error) {
+            console.error('Error:', error);
+            alert('حدث خطأ أثناء الاتصال بالخادم');
+        }
+    });
+
+    document.getElementById('forgetBtn')?.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('resetEmail')?.value;
+        
+        if (!email) {
+            alert('الرجاء إدخال البريد الإلكتروني');
+            return;
+        }
+
+        try {
+            const response = await fetch('https://tawgeeh-v1-production.up.railway.app/auth/forget-password', {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({email})
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            alert('تم إرسال رمز إعادة التعيين إلى بريدك الإلكتروني');
+            window.location.href = 'passwordScreen1.html';
+        } catch (error) {
+            console.error('Error:', error);
+            alert('حدث خطأ أثناء الاتصال بالخادم');
+        }
+    });
+});
+
+document.getElementById('resetPasswordBtn')?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const resetCode = document.querySelector('.resetCodePass1')?.value;
+    const newPassword = document.getElementById('newPassword')?.value;
+    const token = localStorage.getItem('token');
+    
+    if (!resetCode || !newPassword) {
+        alert('الرجاء إدخال الرمز وكلمة المرور الجديدة');
+        return;
+>>>>>>> Stashed changes
     }
   },
 

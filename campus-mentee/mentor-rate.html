@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mentor</title>
+    <link rel="stylesheet" href="./mentor.css">
+</head>
+<body>
+
+    
+    <header>
+        <nav>
+            <div class="left_Sec">
+                <div class="titel">
+                    <img id="image2" src="./mentor-images/freepik__adjust__7471.svg" alt="">
+                    <p class="mentor_name"></p>
+                </div>
+                <div class="buttonsNav">
+                    <button class="notBtn"><img src="./mentor-images/notification.svg" alt=""></button>
+                    <button class="messageBtn"><img src="./mentor-images/messages-2.svg" alt=""></button>
+                </div>
+            </div>
+            <div class="logo">
+                <img src="./mentor-images/logo_campus.svg" alt="">
+            </div>
+        </nav>
+       </header>
+    
+       <section id="profile-hero" class="container">
+        <figure class="bg-img">
+            <input type="file" id="uploadImageBackground" accept="image/*" style="display: none;">
+            <img  id="background_image" src="./mentor-images/1080x1920-light-gray-solid-color-background.jpg" alt="background-image" />
+            
+            <button class="edit_bigimage"><img src="./mentor-images/edit_bigimage.svg" alt=""></button>
+          </figure>
+          <div class="mentor_con mentor_con_rate">
+            <div class="mentorinfo">
+                <div class="personal-image">
+                    <img id="image1" src="./mentor-images/freepik__adjust__7471.svg" alt="">
+                    <input type="file" id="uploadImage" accept="image/*" style="display: none;">
+                    <span id="editBtnMain"><img src="./mentor-images/edit-2.svg" alt=""></span>
+                </div>
+                <div class="mentor_titele">
+                    <h4 class="mentor_name"></h4>
+                <p id="mentor_jop"></p>
+                <div class="contact">
+                    <img src="./mentor-images/instagram.svg" alt="">
+                    <img src="./mentor-images/dribbble.svg" alt="">
+                    <img src="./mentor-images/behance.svg" alt="">
+                    <img src="./mentor-images/linkedin.svg" alt="">
+                    <img src="./mentor-images/github.svg" alt="">
+                </div>
+                </div>
+            </div>
+            
+           
+            <div class="mentorButonsR mentorButons">
+               
+                <button class="editBtn">تعديل الحساب</button>
+            </div>
+          </div>
+         
+      </section>
+      
+  <section class="sessionSuccess">
+    <div class="mentor_sec2">
+        <p id="progres" >الانجازات</p>
+        <p id="rate" class="checked">التقييمات</p>
+        <p id="veiw">نظرة عامة</p>
+      </div>
+      <script>
+        let rate = document.getElementById('rate')
+let progres = document.getElementById('progres')
+let veiw = document.getElementById('veiw')
+rate.addEventListener('click', function(){
+    window.location.href = 'mentor-rate.html';
+})
+progres.addEventListener('click', function(){
+    window.location.href = 'mentor.html';
+})
+veiw.addEventListener('click', function(){
+    window.location.href = 'mentor-veiw.html';
+})
+document.getElementById('editBtnMain').addEventListener('click', function() {
+    document.getElementById('uploadImage').click();
+});
+
+// عند اختيار صورة، قم بتغيير الصور في المكانين وحفظها في localStorage
+document.getElementById('uploadImage').addEventListener('change', function(event) {
+    const file = event.target.files[0]; // الحصول على الملف المختار
+    if (file) {
+        const reader = new FileReader(); // إنشاء FileReader لقراءة الملف
+
+        reader.onload = function(e) {
+            const imageData = e.target.result;
+            // تغيير الصورة الأولى
+            document.getElementById('image1').src = imageData;
+            // تغيير الصورة الثانية
+            document.getElementById('image2').src = imageData;
+            
+            // حفظ الصورة في localStorage
+            localStorage.setItem('profileImage', imageData);
+        };
+
+        reader.readAsDataURL(file); // قراءة الملف كـ URL
+    }
+});
+
+document.querySelector('.edit_bigimage').addEventListener('click', function() {
+    document.getElementById('uploadImageBackground').click();
+});
+
+// عند اختيار صورة الخلفية، قم بتغييرها وحفظها في localStorage
+document.getElementById('uploadImageBackground').addEventListener('change', function(event) {
+    const file = event.target.files[0]; // الحصول على الملف المختار
+    if (file) {
+        const reader = new FileReader(); // إنشاء FileReader لقراءة الملف
+
+        reader.onload = function(e) {
+            const imageData = e.target.result;
+            // تغيير صورة الخلفية
+            document.getElementById('background_image').src = imageData;
+            
+            // حفظ صورة الخلفية في localStorage
+            localStorage.setItem('backgroundImage', imageData);
+        };
+
+        reader.readAsDataURL(file); // قراءة الملف كـ URL
+    }
+});
+
+// عند تحميل الصفحة، تحقق مما إذا كانت هناك صور محفوظة في localStorage
+window.addEventListener('load', function() {
+    // تحميل صورة الملف الشخصي إذا كانت موجودة
+    const savedProfileImage = localStorage.getItem('profileImage');
+    if (savedProfileImage) {
+        document.getElementById('image1').src = savedProfileImage;
+        document.getElementById('image2').src = savedProfileImage;
+    }
+    
+    // تحميل صورة الخلفية إذا كانت موجودة
+    const savedBackgroundImage = localStorage.getItem('backgroundImage');
+    if (savedBackgroundImage) {
+        document.getElementById('background_image').src = savedBackgroundImage;
+    }
+});
+
+let mentor_name = document.querySelectorAll('.mentor_name')
+    let mentor_jop = document.getElementById('mentor_jop')
+    
+    let mentor_titele = [
+    mentor_name.forEach(name => {
+    name.textContent = 'Abdallah Amr'
+    })
+    ,
+    mentor_jop.textContent = 'Front-End Developer'
+    
+    ]
+      </script>
+    <div class="sessionSuccess_con">
+
+        <div class="session1 sessionsFormat">
+            <div class="session_con">
+                <img src="./mentor-images/Frame 1171278255.png" alt="">
+                <div class="time timeR">
+                    <h4>نهال سراج الدين</h4>
+                    <p>ذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</p>
+                    <div class="stars_con">
+
+                        <p>4.3</p>
+                        <div class="stars" >
+                            <img src="./mentor-images/ic_baseline-star (1).svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                                        </div>
+                    </div>
+                
+
+                </div>
+        
+              
+        
+                  <div class="rette-con">
+                    <div class="ratte">
+                        <span><p>0.9</p><img src="./mentor-images/hand-thumb-up.svg" alt=""></span>
+                        <span><p>Reply</p><img src="./mentor-images/chat-bubble-oval-left-ellipsis.svg" alt=""></span>
+                        </div>
+                        <div class="date dateR">
+                            <p>20 Jan, 2025</p>
+                        </div> 
+                            </div>
+                            
+                        </div>
+                            </div>
+                        
+<div class="session2 sessionsFormat">
+    <div class="session_con">
+        <img src="./mentor-images/Frame 1171278255.png" alt="">
+        <div class="time timeR">
+            <h4>نهال سراج الدين</h4>
+            <p>ذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</p>
+            <div class="stars_con">
+
+                <p>4.3</p>
+                <div class="stars" >
+                    <img src="./mentor-images/ic_baseline-star (1).svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                                </div>
+            </div>
+        
+        </div>
+
+      
+
+          <div class="rette-con">
+            <div class="ratte">
+                <span><p>0.9</p><img src="./mentor-images/hand-thumb-up.svg" alt=""></span>
+                <span><p>Reply</p><img src="./mentor-images/chat-bubble-oval-left-ellipsis.svg" alt=""></span>
+                </div>
+                <div class="date dateR">
+                    <p>20 Jan, 2025</p>
+                </div> 
+                    </div>
+                    
+                </div>
+                    </div>
+                
+<div class="session3 sessionsFormat">
+    <div class="session_con">
+        <img src="./mentor-images/Frame 1171278255.png" alt="">
+        <div class="time timeR">
+            <h4>نهال سراج الدين</h4>
+            <p>ذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</p>
+            <div class="stars_con">
+
+                <p>4.3</p>
+                <div class="stars" >
+                    <img src="./mentor-images/ic_baseline-star (1).svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                                </div>
+            </div>
+        
+        </div>
+
+      
+
+          <div class="rette-con">
+            <div class="ratte">
+                <span><p>0.9</p><img src="./mentor-images/hand-thumb-up.svg" alt=""></span>
+                <span><p>Reply</p><img src="./mentor-images/chat-bubble-oval-left-ellipsis.svg" alt=""></span>
+                </div>
+                <div class="date dateR">
+                    <p>20 Jan, 2025</p>
+                </div> 
+                    </div>
+                    
+                </div>
+                    </div>
+                
+<div class="session4 sessionsFormat">
+    <div class="session_con">
+        <img src="./mentor-images/Frame 1171278255.png" alt="">
+        <div class="time timeR">
+            <h4>نهال سراج الدين</h4>
+            <p>ذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</p>
+            <div class="stars_con">
+
+                <p>4.3</p>
+                <div class="stars" >
+                    <img src="./mentor-images/ic_baseline-star (1).svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                                </div>
+            </div>
+        
+        </div>
+
+      
+
+          <div class="rette-con">
+            <div class="ratte">
+                <span><p>0.9</p><img src="./mentor-images/hand-thumb-up.svg" alt=""></span>
+                <span><p>Reply</p><img src="./mentor-images/chat-bubble-oval-left-ellipsis.svg" alt=""></span>
+                </div>
+                <div class="date dateR">
+                    <p>20 Jan, 2025</p>
+                </div> 
+                    </div>
+                    
+                </div>
+                    </div>
+                
+<div class="session5 sessionsFormat">
+    <div class="session_con">
+        <img src="./mentor-images/Frame 1171278255.png" alt="">
+        <div class="time timeR">
+            <h4>نهال سراج الدين</h4>
+            <p>ذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</p>
+            <div class="stars_con">
+
+                <p>4.3</p>
+                <div class="stars" >
+                    <img src="./mentor-images/ic_baseline-star (1).svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                            <img src="./mentor-images/ic_baseline-star.svg" alt="">
+                                </div>
+            </div>
+        
+        </div>
+
+      
+
+          <div class="rette-con">
+            <div class="ratte">
+                <span><p>0.9</p><img src="./mentor-images/hand-thumb-up.svg" alt=""></span>
+                <span><p>Reply</p><img src="./mentor-images/chat-bubble-oval-left-ellipsis.svg" alt=""></span>
+                </div>
+                <div class="date dateR">
+                    <p>20 Jan, 2025</p>
+                </div> 
+                    </div>
+                    
+                </div>
+                    </div>
+                
+          </div>  
+
+  </section>
+  <script src="mentor.js"></script>
+
+  
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="editProfile.css">
+    <link rel="stylesheet" href="./mentor.css">
+</head>
+<body>
+    <div class="mainContaner" >
+        <div class="top_con">
+            <h3>تحديث تفاصيل ملفك الشخصي</h3>
+            <img id="closeBtn10" src="./mentor-images/close-circle.svg" alt="">
+        </div>
+        <div class="infolist infolistEX">
+            <a href="">معلومات اساسية</a>
+            <a  href="">خبراتي</a>
+            <a class="checked" href="">شهاداتي</a>
+            <a href="">التعليم</a>
+        </div>
+            
+        <div class="second_con">
+            <div class="veiw_con">
+                <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                <div class="text">
+            <h4>AI in UX / UI Design</h4>
+            <p>Uxcel</p>
+            <p>Nov 2024</p>
+                </div>
+            </div>
+            
+            <div class="education">
+                <div class="edu_con">
+                    <p>عرض الشهادة</p>
+                    <img src="./mentor-images/export.svg" alt="">
+                </div>
+            </div>
+        </div>
+    
+        <div class="second_con">
+            <div class="veiw_con">
+                <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                <div class="text">
+            <h4>AI in UX / UI Design</h4>
+            <p>Uxcel</p>
+            <p>Nov 2024</p>
+                </div>
+            </div>
+            
+            <div class="education">
+                <div class="edu_con">
+                    <p>عرض الشهادة</p>
+                    <img src="./mentor-images/export.svg" alt="">
+                </div>
+            </div>
+        </div>
+       
+
+        <div class="form_contaner">
+            <div class="form_group">
+                <label class="label" for="specialization">اسم الشهادة</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+           
+            
+           
+            <div class="form_group">
+                <label class="label" for="specialization">الجهة المانحة للشهادة</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+            <div class="date_ConF" >
+                <div class="select-wrapper">
+                <div class="form_group form_groupD">
+                    <label class="label" for="specialization">تاريخ الإصدار</label>
+                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
+                    <span id="specializationError" class="error"></span>
+                </div>
+            </div>
+            <div class="select-wrapper">
+                <div class="form_group form_groupD">
+                    <label class="label" for="specialization">تاريخ الإنتهاء</label>
+                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
+                    <span id="specializationError" class="error"></span>
+                </div>
+            </div>
+            </div>
+            <div class="form_group">
+                <label class="label" for="specialization">رقم الشهادة</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label" for="specialization"> رابط الشهادة </label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+        </div>  
+           <div class="buttons_con">
+            <button class="updateBtn">
+                حفظ
+            </button>
+            <button class="removeBtn updateBtn">
+                إلغاء
+            </button>
+           </div>
+
+    </div>
+
+</body>
+</html>

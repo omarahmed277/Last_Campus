@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mentor</title>
+    <link rel="stylesheet" href="./mentor.css">
+    <link rel="stylesheet" href="editProfile.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+
+</head>
+<body>
+    <style>
+        /* Base error message styling */
+.error {
+    display: block;
+    color: #dc3545; /* Red color for errors */
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    text-align: right;
+    padding-right: 0.5rem;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Error state for input fields */
+.error-border{
+    border-color: #dc3545 !important;
+}
+
+
+    </style>
+<div class="overlay" id="editProfileInfo">
+    <div class="mainContaner mainContaner_Info scrollableContent">
+        <div class="top_con">
+            <h3>تحديث تفاصيل ملفك الشخصي</h3>
+            <img id="closeBtn1" src="./mentor-images/close-circle.svg" alt="">
+        </div>
+        <div class="infolist">
+            <p class="checked Info" >معلومات اساسية</p>
+            <p class="experience">الخبرات</p>
+            <p class="specialization">الشهادات</p>
+            <p class="educationE">التعليم</p>
+        </div>
+            <h1>تحميل صورة الملف الشخصي</h1>
+        <div class="uplodimage">
+            <div class="image">
+                <img src="./mentor-images/personal_image.png" alt="">
+                <img src="./mentor-images/trash.svg" alt="">
+            </div>
+            <div class="text">
+                <h4>تحميل صورة</h4>
+                <p>تأكد من أن حجم الملف أقل من 2 ميجا بايت</p>
+            </div>
+        </div>
+        <form class="form_contaner" action="" method="post" id="professionalForm">
+            <div class="form_group">
+                <label class="label" for="specialization">التخصص</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder="اكتب تخصصك" required oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label">عدد سنوات الخبرة</label>
+                <div class="select-wrapper">
+                    <select name="experience" id="experience" required>
+                        <option value="">اختر عدد السنوات</option>
+                        <option value="zero-one">0-1 سنين خبرة</option>
+                        <option value="one-three">1-3 سنين خبرة</option>
+                        <option value="three-five">3-5 سنين خبرة</option>
+                        <option value="PlusFive">أكثر من 5 سنوات</option>
+                    </select>
+                    <img src="./mentor-images/arrow-down.svg" alt="" class="select-icon arrowDown">
+                </div>
+                <span id="experienceError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label">الجنس</label>
+                <div class="select-wrapper">
+                    <select name="gender" id="gender" required>
+                        <option value="">اختر الجنس</option>
+                        <option value="male">ذكر</option>
+                        <option value="female">أنثى</option>
+                        <option value="other">غير محدد</option>
+                    </select>
+                    <img src="./mentor-images/arrow-down.svg" alt="" class="select-icon arrowDown">
+                </div>
+                <span id="genderError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label">نبذة عني:</label>
+                <textarea name="about_me" id="about_me" placeholder="نبذه عني (20 حرف على الأقل)" required minlength="20" oninput="checkInputDirection(this)"></textarea>
+                <span id="aboutMeError" class="error"></span>
+            </div>
+        </form>
+        
+        <form class="form_contaner" action="" method="post" id="socialForm">
+            <h2>الروابط الاجتماعية (مطلوبة)</h2>
+        
+            <div class="form_group">
+                <label class="label" for="linkedin">رابط حساب Linkedin</label>
+                <input class="input" type="url" name="linkedin" id="linkedin" placeholder="https://linkedin.com/username" required pattern="https?://.+" oninput="checkInputDirection(this)">
+                <span id="linkedinError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label" for="behance">رابط حساب Behance/Dribbble</label>
+                <input class="input" type="url" name="behance" id="behance" placeholder="https://behance.net/username" required pattern="https?://.+" oninput="checkInputDirection(this)">
+                <span id="behanceError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label" for="github">رابط حساب Git / Github</label>
+                <input class="input" type="url" name="github" id="github" placeholder="https://github.com/username" required pattern="https?://.+" oninput="checkInputDirection(this)">
+                <span id="githubError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label" for="instagram">رابط حساب Instagram</label>
+                <input class="input" type="url" name="instagram" id="instagram" placeholder="https://instagram.com/username" required pattern="https?://.+" oninput="checkInputDirection(this)">
+                <span id="instagramError" class="error"></span>
+            </div>
+            
+            <input class="updateBtn" type="submit" value="تحديث">
+        </form>
+    </div>
+</div>
+
+<!-- editProfileInfo -->
+<div class="overlay" id="editProfileEx_add">
+    <div class="mainContaner scrollableContent mainContaner_Info" >
+        <div class="top_con">
+            <h3>إضافة خبرة</h3>
+            <img id="closeBtn2" src="./mentor-images/close-circle.svg" alt="">
+        </div>
+        <!-- <div class="infolist infolistEX">
+            <p class="Info" >معلومات اساسية</p>
+            <p class="experience checked">الخبرات</p>
+            <p class="specialization">الشهادات</p>
+            <p class="educationE">التعليم</p>
+        </div> -->
+        <form class="form_contaner" action="" method="post" id="experienceForm">
+            <div class="form_group">
+                <label class="label" for="jobTitle">المسمى الوظيفي</label>
+                <input class="input" type="text" name="jobTitle" id="jobTitle" placeholder="اكتب المسمى الوظيفي" oninput="checkInputDirection(this)">
+                <span id="jobTitleError" class="error"></span>
+            </div>
+            
+            <div class="form_group">
+                <label class="label" for="companyName">اسم الشركة أو المؤسسة</label>
+                <input class="input" type="text" name="companyName" id="companyName" placeholder="اكتب اسم الشركة" oninput="checkInputDirection(this)">
+                <span id="companyNameError" class="error"></span>
+            </div>
+            
+            <div class="date_ConF">
+                <div class="select-wrapper">
+                    <div class="form_group form_groupD">
+                        <label class="label" for="startDate">تاريخ البدء </label>
+                        <input class="input date-start" type="text" name="startDate" id="startDate" placeholder="اختر التاريخ" data-pair="endDate1">
+                        <img src="https://cdn-icons-png.flaticon.com/512/7794/7794979.png" alt="تقويم" class="select-icon calendar" data-target="startDate1">
+                        <span id="startDateError" class="error"></span>
+                    </div>
+                </div>
+                
+                <div class="select-wrapper" id="endDateContainer">
+                    <div class="form_group form_groupD">
+                        <label class="label" for="endDate">تاريخ الإنتهاء </label>
+                        <input class="input date-end" type="text" name="endDate" id="endDate" placeholder="اختر التاريخ" data-pair="startDate1">
+                        <img src="https://cdn-icons-png.flaticon.com/512/7794/7794979.png" alt="تقويم" class="select-icon calendar" data-target="endDate1">
+                        <span id="endDateError" class="error"></span>
+                    </div>
+                </div>
+            </div>
+        
+           
+            
+           
+            
+            <div class="check">
+                <label for="stillWorking">مازلت أعمل في الشركة</label>
+                <input class="checkbox" type="checkbox" id="stillWorking">
+                <span id="stillWorkingError" class="error"></span>
+            </div>
+            
+            <div class="form_group">
+                <label class="label">اكتب ملخصًا عن مساهمتك</label>
+                <textarea name="contribution" id="contribution" placeholder="نبذة عن مساهمتك" required></textarea>
+                <span id="contributionError" class="error"></span>
+            </div>
+            
+            <div class="buttons_con">
+                <button type="submit" class="updateBtn" id="saveBtn">حفظ</button>
+                <button type="button" class="removeBtn updateBtn" id="cancelBtn">إلغاء</button>
+            </div>
+        </form>
+
+           </div>
+
+    </div>
+</div>
+<!-- editProfileEx_add -->
+<div class="overlay" id="editProfileEx_edit">
+    <div class="mainContaner" >
+        <div class="top_con">
+            <h3>تعديل الخبرة</h3>
+            <img id="closeBtn3"  src="./mentor-images/close-circle.svg" alt="">
+        </div>
+        <!-- <div class="infolist infolistEX">
+            <p class="Info" >معلومات اساسية</p>
+            <p class="experience checked">الخبرات</p>
+            <p class="specialization">الشهادات</p>
+            <p class="educationE">التعليم</p>
+        </div> -->
+            
+        <div class="second_con">
+            <div class="veiw_con">
+                <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                <div class="text">
+            <h4>Product Designer</h4>
+            <p>Campus</p>
+                </div>
+            </div>
+            <div class="date2_con">
+                <div class="date2">
+                    <p>Jan 2025 - Present</p>
+                </div>
+                <img src="./mentor-images/edit-2.svg" alt="">
+            </div>
+        </div>
+
+        <div class="second_con">
+            <div class="veiw_con">
+                <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                <div class="text">
+            <h4>Product Designer</h4>
+            <p>Campus</p>
+                </div>
+            </div>
+            <div class="date2_con">
+                <div class="date2">
+                    <p>Jan 2025 - Present</p>
+                </div>
+                <img src="./mentor-images/edit-2.svg" alt="">
+            </div>
+            
+        </div>
+       
+<button class="moreExBtn" id="moreExBtn_EX">
+    أضف خبرة <img src="./mentor-images/add-square.svg" alt="">
+</button>
+    </div>
+</div>
+
+  
+    <!-- editProfileEx_edit -->
+<div class="overlay" id="editProfileEx_edit2">
+    <div class="mainContaner">
+        <div class="top_con">
+            <h3>تعديل الخبرة</h3>
+            <img id="closeBtn4" src="./mentor-images/close-circle.svg" alt="">
+        </div>
+        <!-- <div class="infolist infolistEX">
+            <p class="Info" >معلومات اساسية</p>
+            <p class="specialization checked">الخبرات</p>
+            <p class="experience">الشهادات</p>
+            <p class="educationE">التعليم</p>
+        </div> -->
+        <div class="second_con">
+            <div class="veiw_con">
+                <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                <div class="text">
+            <h4>Product Designer</h4>
+            <p>Campus</p>
+                </div>
+            </div>
+            <div class="date2_con">
+                <div class="date2">
+                    <p>Jan 2025 - Present</p>
+                </div>
+                <img src="./mentor-images/edit-2.svg" alt="">
+            </div>
+        </div>
+        <div class="second_con">
+            <div class="veiw_con">
+                <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                <div class="text">
+            <h4>Product Designer</h4>
+            <p>Campus</p>
+                </div>
+            </div>
+            <div class="date2_con">
+                <div class="date2">
+                    <p>Jan 2025 - Present</p>
+                </div>
+                <img src="./mentor-images/edit-2.svg" alt="">
+            </div>
+        </div>
+        <div class="form_contaner">
+            <div class="form_group">
+                <label class="label" for="specialization">المسمى الوظيفي</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+           
+            
+           
+            <div class="form_group">
+                <label class="label" for="specialization">اسم الشركة او المؤسسة</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+            <div class="date_ConF" >
+                <div class="select-wrapper">
+                <div class="form_group form_groupD">
+                    <label class="label" for="specialization">تاريخ البدء</label>
+                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
+                    <span id="specializationError" class="error"></span>
+                </div>
+            </div>
+            <div class="select-wrapper">
+                <div class="form_group form_groupD">
+                    <label class="label" for="specialization">تاريخ الإنتهاء</label>
+                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
+                    <span id="specializationError" class="error"></span>
+                </div>
+            </div>
+            </div>
+            <div class="check">
+                <label for="privacyCheckbox">مازلت اعمل في الشركة</label>
+                <input class="checkbox" type="checkbox" id="privacyCheckbox">
+                <span id="privacyError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label">اكتب ملخصًا عن مساهمتك</label>
+                <textarea name="about_me" id="about_me" placeholder="نبذه عني" required></textarea oninput="checkInputDirection(this)">
+                <span id="aboutMeError" class="error"></span>
+            </div>
+        </div>  
+           <div class="buttons_con">
+            <button class="updateBtn">
+                حفظ
+            </button>
+            <button class="removeBtn updateBtn">
+                إلغاء
+            </button>
+           </div>
+
+    </div>
+</div>
+
+    <!-- editProfileEx_edit2 -->
+    <div class="overlay" id="editProfileSp_add">
+    <div class="mainContaner scrollableContent mainContaner_Info"  >
+        <div class="top_con">
+            <h3>إضافة شهادة</h3>
+            <img id="closeBtn5" src="./mentor-images/close-circle.svg" alt="">
+        </div>
+        <!-- <div class="infolist infolistEX">
+            <p class="Info" >معلومات اساسية</p>
+            <p class="experience">الخبرات</p>
+            <p class="specialization checked">الشهادات</p>
+            <p class="educationE">التعليم</p>
+        </div> -->
+            
+        <form class="form_contaner" action="" method="post" id="certificateForm">
+            <div class="form_group">
+                <label class="label" for="certificateName">اسم الشهادة</label>
+                <input class="input" type="text" name="certificateName" id="certificateName" placeholder="أدخل اسم الشهادة">
+                <span id="certificateNameError" class="error"></span>
+            </div>
+            
+            <div class="form_group">
+                <label class="label" for="issuingAuthority">الجهة المانحة للشهادة</label>
+                <input class="input" type="text" name="issuingAuthority" id="issuingAuthority" placeholder="أدخل اسم الجهة المانحة">
+                <span id="issuingAuthorityError" class="error"></span>
+            </div>
+            
+            <div class="date_ConF">
+                <div class="select-wrapper">
+                    <div class="form_group form_groupD">
+                        <label class="label" for="startDate2">تاريخ البدء 2</label>
+                        <input class="input date-start" type="text" name="startDate2" id="startDate2" placeholder="اختر التاريخ" data-pair="endDate2">
+                        <img src="https://cdn-icons-png.flaticon.com/512/7794/7794979.png" alt="تقويم" class="select-icon calendar" data-target="startDate2">
+                        <span id="startDate2Error" class="error"></span>
+                    </div>
+                </div>
+                
+                <div class="select-wrapper">
+                    <div class="form_group form_groupD">
+                        <label class="label" for="endDate2">تاريخ الإنتهاء 2</label>
+                        <input class="input date-end" type="text" name="endDate2" id="endDate2" placeholder="اختر التاريخ" data-pair="startDate2">
+                        <img src="https://cdn-icons-png.flaticon.com/512/7794/7794979.png" alt="تقويم" class="select-icon calendar" data-target="endDate2">
+                        <span id="endDate2Error" class="error"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form_group">
+                <label class="label" for="certificateNumber">رقم الشهادة</label>
+                <input class="input" type="text" name="certificateNumber" id="certificateNumber" placeholder="أدخل رقم الشهادة">
+                <span id="certificateNumberError" class="error"></span>
+            </div>
+            
+            <div class="form_group">
+                <label class="label" for="certificateLink">رابط الشهادة</label>
+                <input class="input" type="url" name="certificateLink" id="certificateLink" placeholder="https://example.com/certificate">
+                <span id="certificateLinkError" class="error"></span>
+            </div>
+            
+            <div class="buttons_con">
+                <input type="submit" class="updateBtn" id="saveBtnSP" value="حفظ">
+                <input type="button" class="removeBtn updateBtn" id="cancelBtnSP" value="إلغاء">
+            </div>
+        </form>
+           </div>
+
+    </div>
+</div>
+
+    <!-- editProfileSp_add -->
+    <div class="overlay" id="editProfileEdu_add">
+    <div class="mainContaner">
+                <div class="top_con">
+
+            <h3>إضافة تعليم</h3>
+            <img id="closeBtn6" src="./mentor-images/close-circle.svg" alt="">
+        </div>
+        <!-- <div class="infolist infolistEX">
+            <p class="Info" >معلومات اساسية</p>
+            <p class="experience">الخبرات</p>
+            <p class="specialization">الشهادات</p>
+            <p class="educationE checked">التعليم</p>
+        </div> -->
+            
+        <form class="form_contaner" action="" method="post" id="educationForm">
+            <div class="form_group">
+                <label class="label" for="institution">جامعة، كلية، مدرسة</label>
+                <input class="input" type="text" name="institution" id="institution" placeholder="اكتب اسم المؤسسة التعليمية">
+                <span id="institutionError" class="error"></span>
+            </div>
+            
+            <div class="form_group">
+                <label class="label" for="degree">الدرجة العلمية و التخصص</label>
+                <input class="input" type="text" name="degree" id="degree" placeholder="اكتب الدرجة العلمية والتخصص">
+                <span id="degreeError" class="error"></span>
+            </div>
+            
+            <div class="date_ConF">
+                <div class="select-wrapper">
+                    <div class="form_group form_groupD">
+                        <label class="label" for="startDate">تاريخ البدء </label>
+                        <input class="input date-start" type="text" name="startDate" id="startDate" placeholder="اختر التاريخ" data-pair="endDate1">
+                        <img src="https://cdn-icons-png.flaticon.com/512/7794/7794979.png" alt="تقويم" class="select-icon calendar" data-target="startDate1">
+                        <span id="startDateError" class="error"></span>
+                    </div>
+                </div>
+                
+                <div class="select-wrapper" id="endDateContainer">
+                    <div class="form_group form_groupD">
+                        <label class="label" for="endDate">تاريخ الإنتهاء </label>
+                        <input class="input date-end" type="text" name="endDate" id="endDate" placeholder="اختر التاريخ" data-pair="startDate1">
+                        <img src="https://cdn-icons-png.flaticon.com/512/7794/7794979.png" alt="تقويم" class="select-icon calendar" data-target="endDate1">
+                        <span id="endDateError" class="error"></span>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="buttons_con">
+                <input type="submit" class="updateBtn" value="حفظ" id="saveBtnEdu">
+                <input type="button" class="removeBtn updateBtn" value="إلغاء" id="cancelBtnEdu">
+            </div>
+        </form>
+           </div>
+
+    </div>
+</div>
+
+    <!-- editProfileEdu_add -->
+<div class="overlay" id="editProfileEdu_edit">
+    <div class="mainContaner" >
+        <div class="top_con">
+            <h3>تعديل التعليم</h3>
+            <img id="closeBtn7" src="./mentor-images/close-circle.svg" alt="">
+        </div>
+        <!-- <div class="infolist infolistEX">
+            <p class="Info" >معلومات اساسية</p>
+            <p class="experience">الخبرات</p>
+            <p class="specialization">الشهادات</p>
+            <p class="educationE checked">التعليم</p>
+        </div> -->
+            
+       
+
+        <div class="second_con">
+            <div class="veiw_con">
+                <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                <div class="text">
+            <h4>Scholarship UX UI Design Track</h4>
+            <p>Information Technology institute (ITI)</p>
+                </div>
+            </div>
+            <div class="date2_con">
+                <div class="date2">
+                    <p>Jan 2025 - Present</p>
+                </div>
+                <img src="./mentor-images/edit-2.svg" alt="">
+            </div>
+        </div>
+        <div class="second_con">
+            <div class="veiw_con">
+                <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                <div class="text">
+            <h4>Education Technology</h4>
+            <p>Minya University</p>
+                </div>
+            </div>
+            <div class="date2_con">
+                <div class="date2">
+                    <p>Jan 2025 - Present</p>
+                </div>
+                <img src="./mentor-images/edit-2.svg" alt="">
+            </div>
+        </div>
+    
+       
+<button class="moreExBtn" id="moreExBtn_Edu">
+    أضف درجة علمية <img src="./mentor-images/add-square.svg" alt="">
+</button>
+    </div>
+</div>
+<!-- editProfileEdu_edit -->
+<div class="overlay" id="editProfileEdu_edit2">
+    <div class="mainContaner" >
+        <div class="top_con">
+            <h3>تعديل التعليم</h3>
+            <img id="closeBtn8" src="./mentor-images/close-circle.svg" alt="">
+        </div>
+        <!-- <div class="infolist infolistEX">
+            <p >معلومات اساسية</a>
+            <p  >الخبرات</a>
+            <p  >الشهادات</a>
+            <p class="checked" >التعليم</a>
+        </div> -->
+        <div class="second_con">
+            <div class="veiw_con">
+                <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                <div class="text">
+            <h4>Scholarship UX UI Design Track</h4>
+            <p>Information Technology institute (ITI)</p>
+                </div>
+            </div>
+            <div class="date2_con">
+                <div class="date2">
+                    <p>Jan 2025 - Present</p>
+                </div>
+                <img src="./mentor-images/edit-2.svg" alt="">
+            </div>
+        </div>
+        <div class="second_con">
+            <div class="veiw_con">
+                <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                <div class="text">
+            <h4>Education Technology</h4>
+            <p>Minya University</p>
+                </div>
+            </div>
+            <div class="date2_con">
+                <div class="date2">
+                    <p>Jan 2025 - Present</p>
+                </div>
+                <img src="./mentor-images/edit-2.svg" alt="">
+            </div>
+        </div>
+    
+        <div class="form_contaner">
+            <div class="form_group">
+                <label class="label" for="specialization">جامعة، كلية، مدرسة</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+           
+            
+           
+            <div class="form_group">
+                <label class="label" for="specialization">الدرجة العلمية و التخصص</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+            <div class="date_ConF" >
+                <div class="select-wrapper">
+                <div class="form_group form_groupD">
+                    <label class="label" for="specialization">تاريخ البدء</label>
+                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
+                    <span id="specializationError" class="error"></span>
+                </div>
+            </div>
+            <div class="select-wrapper">
+                <div class="form_group form_groupD">
+                    <label class="label" for="specialization">تاريخ الإنتهاء</label>
+                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
+                    <span id="specializationError" class="error"></span>
+                </div>
+            </div>
+            </div>
+            
+        </div>  
+           <div class="buttons_con">
+            <button class="updateBtn">
+                حفظ
+            </button>
+            <button class="removeBtn updateBtn">
+                إلغاء
+            </button>
+           </div>
+
+    </div>
+</div>
+    <!-- editProfileEdu_edit2 -->
+<div class="overlay" id="editProfileSp_edit">
+    <div class="mainContaner" >
+        <div class="top_con">
+            <h3>تعديل الشهادة</h3>
+            <img id="closeBtn9" src="./mentor-images/close-circle.svg" alt="">
+        </div>
+        <!-- <div class="infolist infolistEX">
+            <p class="Info" >معلومات اساسية</p>
+            <p class="experience">الخبرات</p>
+            <p class="specialization checked">الشهادات</p>
+            <p class="educationE">التعليم</p>
+        </div> -->
+            
+       
+
+        <div class="second_con">
+            <div class="veiw_con">
+                <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                <div class="text">
+            <h4>AI in UX / UI Design</h4>
+            <p>Uxcel</p>
+            <p>Nov 2024</p>
+                </div>
+            </div>
+            
+            <div class="education">
+                <div class="edu_con">
+                    <p>عرض الشهادة</p>
+                    <img src="./mentor-images/export.svg" alt="">
+                </div>
+            </div>
+        </div>
+    
+        <div class="second_con">
+            <div class="veiw_con">
+                <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                <div class="text">
+            <h4>AI in UX / UI Design</h4>
+            <p>Uxcel</p>
+            <p>Nov 2024</p>
+                </div>
+            </div>
+            
+            <div class="education">
+                <div class="edu_con">
+                    <p>عرض الشهادة</p>
+                    <img src="./mentor-images/export.svg" alt="">
+                </div>
+            </div>
+        </div>
+       
+<button class="moreExBtn" id="moreExBtn_SP">
+    أضف شهادة <img src="./mentor-images/add-square.svg" alt="">
+</button>
+    </div>
+</div>
+    <!--  editProfileSp_edit -->
+<div class="overlay" id="editProfileSp_edit2" >
+    <div class="mainContaner" >
+        <div class="top_con">
+            <h3>تعديل الشهادة</h3>
+            <img id="closeBtn10" src="./mentor-images/close-circle.svg" alt="">
+        </div>
+        <!-- <div class="infolist infolistEX">
+            <p class="Info" >معلومات اساسية</p>
+            <p class="experience">الخبرات</p>
+            <p class="specialization checked">الشهادات</p>
+            <p class="educationE">التعليم</p>
+        </div> -->
+            
+        <div class="second_con">
+            <div class="veiw_con">
+                <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                <div class="text">
+            <h4>AI in UX / UI Design</h4>
+            <p>Uxcel</p>
+            <p>Nov 2024</p>
+                </div>
+            </div>
+            
+            <div class="education">
+                <div class="edu_con">
+                    <p>عرض الشهادة</p>
+                    <img src="./mentor-images/export.svg" alt="">
+                </div>
+            </div>
+        </div>
+    
+        <div class="second_con">
+            <div class="veiw_con">
+                <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                <div class="text">
+            <h4>AI in UX / UI Design</h4>
+            <p>Uxcel</p>
+            <p>Nov 2024</p>
+                </div>
+            </div>
+            
+            <div class="education">
+                <div class="edu_con">
+                    <p>عرض الشهادة</p>
+                    <img src="./mentor-images/export.svg" alt="">
+                </div>
+            </div>
+        </div>
+       
+
+        <div class="form_contaner">
+            <div class="form_group">
+                <label class="label" for="specialization">اسم الشهادة</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+           
+            
+           
+            <div class="form_group">
+                <label class="label" for="specialization">الجهة المانحة للشهادة</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+            <div class="date_ConF" >
+                <div class="select-wrapper">
+                <div class="form_group form_groupD">
+                    <label class="label" for="specialization">تاريخ الإصدار</label>
+                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
+                    <span id="specializationError" class="error"></span>
+                </div>
+            </div>
+            <div class="select-wrapper">
+                <div class="form_group form_groupD">
+                    <label class="label" for="specialization">تاريخ الإنتهاء</label>
+                    <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                    <img src="./mentor-images/calendar.svg" alt="" class="select-icon calendar">
+                    <span id="specializationError" class="error"></span>
+                </div>
+            </div>
+            </div>
+            <div class="form_group">
+                <label class="label" for="specialization">رقم الشهادة</label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+            <div class="form_group">
+                <label class="label" for="specialization"> رابط الشهادة </label>
+                <input class="input" type="text" name="specialization" id="specialization" placeholder=" اكتب تخصصك" oninput="checkInputDirection(this)">
+                <span id="specializationError" class="error"></span>
+            </div>
+        </div>  
+           <div class="buttons_con">
+            <button class="updateBtn">
+                حفظ
+            </button>
+            <button class="removeBtn updateBtn">
+                إلغاء
+            </button>
+           </div>
+
+    </div>
+</div>
+    <!--  editProfileSp_edit2 -->
+
+
+    
+<header>
+    <nav>
+        <div class="left_Sec">
+            <div class="titel">
+                <img id="image2" src="./mentor-images/freepik__adjust__7471.svg" alt="">
+                <p class="mentor_name"></p>
+            </div>
+            <div class="buttonsNav">
+                <button class="notBtn"><img src="./mentor-images/notification.svg" alt=""></button>
+                <button class="messageBtn"><img src="./mentor-images/messages-2.svg" alt=""></button>
+            </div>
+        </div>
+        <div class="logo">
+            <img src="./mentor-images/logo_campus.svg" alt="">
+        </div>
+    </nav>
+   </header>
+
+   <section id="profile-hero" class="container">
+    <figure class="bg-img">
+        <input type="file" id="uploadImageBackground" accept="image/*" style="display: none;">
+        <img  id="background_image" src="./mentor-images/1080x1920-light-gray-solid-color-background.jpg" alt="background-image" />
+        
+        <button class="edit_bigimage"><img src="./mentor-images/edit_bigimage.svg" alt=""></button>
+      </figure>
+      <div class="mentor_con mentor_con_rate">
+        <div class="mentorinfo">
+            <div class="personal-image">
+                <img id="image1" src="./mentor-images/freepik__adjust__7471.svg" alt="">
+                <input type="file" id="uploadImage" accept="image/*" style="display: none;">
+                <span id="editBtnMain"><img src="./mentor-images/edit-2.svg" alt=""></span>
+            </div>
+            <div class="mentor_titele">
+                <h4 class="mentor_name"></h4>
+            <p id="mentor_jop"></p>
+            <div class="contact">
+                <img src="./mentor-images/instagram.svg" alt="">
+                <img src="./mentor-images/dribbble.svg" alt="">
+                <img src="./mentor-images/behance.svg" alt="">
+                <img src="./mentor-images/linkedin.svg" alt="">
+                <img src="./mentor-images/github.svg" alt="">
+            </div>
+            </div>
+        </div>
+        
+       
+        <div class="mentorButonsR mentorButons">
+           
+            <button class="editBtn">تعديل الحساب</button>
+        </div>
+      </div>
+     
+  </section>
+  <section class="veiwMentor">
+    <div class="mentor_sec2">
+        <p id="progres" >الانجازات</p>
+        <p id ="rate" >التقييمات</p>
+        <p id="veiw" class="checked">نظرة عامة</p>
+      </div>
+      <script>
+        let rate = document.getElementById('rate')
+let progres = document.getElementById('progres')
+let veiw = document.getElementById('veiw')
+rate.addEventListener('click', function(){
+    window.location.href = 'mentor-rate.html';
+})
+progres.addEventListener('click', function(){
+    window.location.href = 'mentor.html';
+})
+veiw.addEventListener('click', function(){
+    window.location.href = 'mentor-veiw.html';
+})
+
+document.getElementById('editBtnMain').addEventListener('click', function() {
+    document.getElementById('uploadImage').click();
+});
+
+// عند اختيار صورة، قم بتغيير الصور في المكانين وحفظها في localStorage
+document.getElementById('uploadImage').addEventListener('change', function(event) {
+    const file = event.target.files[0]; // الحصول على الملف المختار
+    if (file) {
+        const reader = new FileReader(); // إنشاء FileReader لقراءة الملف
+
+        reader.onload = function(e) {
+            const imageData = e.target.result;
+            // تغيير الصورة الأولى
+            document.getElementById('image1').src = imageData;
+            // تغيير الصورة الثانية
+            document.getElementById('image2').src = imageData;
+            
+            // حفظ الصورة في localStorage
+            localStorage.setItem('profileImage', imageData);
+        };
+
+        reader.readAsDataURL(file); // قراءة الملف كـ URL
+    }
+});
+
+document.querySelector('.edit_bigimage').addEventListener('click', function() {
+    document.getElementById('uploadImageBackground').click();
+});
+
+// عند اختيار صورة الخلفية، قم بتغييرها وحفظها في localStorage
+document.getElementById('uploadImageBackground').addEventListener('change', function(event) {
+    const file = event.target.files[0]; // الحصول على الملف المختار
+    if (file) {
+        const reader = new FileReader(); // إنشاء FileReader لقراءة الملف
+
+        reader.onload = function(e) {
+            const imageData = e.target.result;
+            // تغيير صورة الخلفية
+            document.getElementById('background_image').src = imageData;
+            
+            // حفظ صورة الخلفية في localStorage
+            localStorage.setItem('backgroundImage', imageData);
+        };
+
+        reader.readAsDataURL(file); // قراءة الملف كـ URL
+    }
+});
+
+// عند تحميل الصفحة، تحقق مما إذا كانت هناك صور محفوظة في localStorage
+window.addEventListener('load', function() {
+    // تحميل صورة الملف الشخصي إذا كانت موجودة
+    const savedProfileImage = localStorage.getItem('profileImage');
+    if (savedProfileImage) {
+        document.getElementById('image1').src = savedProfileImage;
+        document.getElementById('image2').src = savedProfileImage;
+    }
+    
+    // تحميل صورة الخلفية إذا كانت موجودة
+    const savedBackgroundImage = localStorage.getItem('backgroundImage');
+    if (savedBackgroundImage) {
+        document.getElementById('background_image').src = savedBackgroundImage;
+    }
+});
+
+let mentor_name = document.querySelectorAll('.mentor_name')
+let mentor_jop = document.getElementById('mentor_jop')
+
+let mentor_titele = [
+mentor_name.forEach(name => {
+name.textContent = 'Abdallah Amr'
+})
+,
+mentor_jop.textContent = 'Front-End Developer'
+
+]
+      </script>
+      
+    
+    <div class="main">
+        <div class="mentor_veiw_con">
+      <h5>أنا معتصم، مصمم UI/UX شغوف بإنشاء تجارب مستخدم سلسة وواجهات جذابة تلبي احتياجات المستخدمين. لدي خبرة في تصميم تطبيقات الويب والموبايل، وأمتلك معرفة قوية بمبادئ التصميم والتفكير التصميمي. أحب البحث عن حلول مبتكرة لتحسين تجربة المستخدم، وأمتلك خلفية في التصوير والمونتاج، مما يعزز فهمي للعناصر البصرية والتفاعل. كما أن لدي معرفة بأساسيات الـ Front-End وFlutter، مما يساعدني على التعاون الفعّال مع المطورين.</h5>
+
+            <div class="veiw_mentor1 veiw_mentorFormat">
+                <div class="top_con">
+                    <h1>الخبرات</h1>
+            <div class="editIcons">
+                <img id="edit_2BtnEx" src="./mentor-images/edit-2.svg" alt="">
+                <img id="addBtnEx" src="./mentor-images/add-square.svg" alt="">
+            </div>
+                </div>
+                <div class="second_con">
+                    <div class="veiw_con">
+                        <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                        <div class="text">
+                    <h4>Product Designer</h4>
+                    <p>Campus</p>
+                        </div>
+                    </div>
+                    <div class="date2">
+                        <p>Jan 2025 - Present</p>
+                    </div>
+                </div>
+                  
+                <div class="second_con">
+                    <div class="veiw_con">
+                        <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                        <div class="text">
+                    <h4>Product Designer</h4>
+                    <p>Campus</p>
+                        </div>
+                    </div>
+                    <div class="date2">
+                        <p>Jan 2025 - Present</p>
+                    </div>
+                </div>
+                  
+                
+            </div>
+            <div class="veiw_mentor2 veiw_mentorFormat">
+                <div class="top_con">
+                    <h1>الشهادات</h1>
+            <div class="editIcons">
+                <img id="edit_2BtnSp" src="./mentor-images/edit-2.svg" alt="">
+                <img id="edit_addSp" src="./mentor-images/add-square.svg" alt="">
+            </div>
+                </div>
+                <div class="second_con">
+                    <div class="veiw_con">
+                        <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                        <div class="text">
+                    <h4>AI in UX / UI Design</h4>
+                    <p>Uxcel</p>
+                    <p>Nov 2024</p>
+                        </div>
+                    </div>
+                    
+                    <div class="education">
+                        <div class="edu_con">
+                            <p>عرض الشهادة</p>
+                            <img src="./mentor-images/export.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="second_con">
+                    <div class="veiw_con">
+                        <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                        <div class="text">
+                    <h4>AI in UX / UI Design</h4>
+                    <p>Uxcel</p>
+                    <p>Nov 2024</p>
+                        </div>
+                    </div>
+                    
+                    <div class="education">
+                        <div class="edu_con">
+                            <p>عرض الشهادة</p>
+                            <img src="./mentor-images/export.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+                  <button id="moreBtn">
+                    عرض المزيد +3
+                    <img src="./mentor-images/chevron-down.svg" alt="">
+                  </button>
+                
+            </div>
+            <div class="veiw_mentor3 veiw_mentorFormat">
+                <div class="top_con">
+                    <h1>التعليم</h1>
+            <div class="editIcons">
+                <img id="edit_2BtnEdu" src="./mentor-images/edit-2.svg" alt="">
+                <img id="edit_addEdu" src="./mentor-images/add-square.svg" alt="">
+            </div>
+                </div>
+                <div class="second_con">
+                    <div class="veiw_con">
+                        <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                        <div class="text">
+                    <h4>Scholarship UX UI Design Track</h4>
+                    <p>Information Technology institute (ITI)</p>
+                        </div>
+                    </div>
+                    <div class="date2">
+                        <p>Jan 2025 - Present</p>
+                    </div>
+                </div>
+            
+                <div class="second_con">
+                    <div class="veiw_con">
+                        <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                        <div class="text">
+                    <h4>Education Technology</h4>
+                    <p>Minya University</p>
+                        </div>
+                    </div>
+                    <div class="date2">
+                        <p>Jan 2025 - Present</p>
+                    </div>
+                </div>
+                  
+                
+            </div>
+                   
+                            
+                      </div>  
+
+                      <aside class="left_section">
+                        <div class="video">
+                            <h1>فيديو تعريفي</h1>
+                            <div class="video_con" onclick="document.getElementById('videoInput').click();">
+                                <img id="uplodimage" src="./mentor-images/upload-cloud-02.svg" alt="">
+                                <h4 id="uplodeBtn">إضغظ لتحميل ملف الفيديو</h4>
+                                <p id="size">MP4, 4:3 (حد اقصى 25 ميجا)</p>
+                                <input type="file" id="videoInput" accept="video/mp4" style="display: none;" onchange="loadVideo(event)">
+                            </div>
+                            <video id="videoPlayer" controls style="display: none; width: 100%; margin-top: 10px;"></video>
+                        </div>
+                        
+                        <div class="statistics">
+                                <div class="top_con">
+                                    <h1>إحصائياتي</h1>
+                            <div class="statisticsIcons">
+                                <img src="./mentor-images/arrow-down.svg" alt="">
+                                <p>المزيد</p>
+                                
+                            </div>
+                                </div>
+                                <div class="statistics_con">
+                                    
+                                    <div class="veiw_conS">
+                                        <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                                        <div class="text">
+                                    <h4>2,200 دقيقة</h4>
+                                    <p>إجمالي وقت الإرشاد</p>
+                                        </div>
+                                    </div>
+                                    <div class="veiw_conS">
+                                        <img src="./mentor-images/Frame 1171278344.svg" alt="">
+                                        <div class="text">
+                                    <h4>70</h4>
+                                    <p>الجلسات المكتملة</p>
+                                        </div>
+                                    </div>
+                                  
+                               
+                                  
+                                
+                            </div>
+                        </div>
+                        
+                      </aside>
+                    </div>      
+
+  </section>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+                    // تهيئة جميع حقول التاريخ
+                    const datePickers = {};
+                    
+                    // تهيئة جميع حقول البدء والانتهاء
+                    document.querySelectorAll('.date-start, .date-end').forEach(input => {
+                        const pairId = input.getAttribute('data-pair');
+                        
+                        datePickers[input.id] = flatpickr(input, {
+                            locale: "ar",
+                            dateFormat: "Y-m-d",
+                            allowInput: true,
+                            onChange: function(selectedDates, dateStr, instance) {
+                                const errorElement = document.getElementById(`${instance.input.id}Error`);
+                                if (errorElement) errorElement.textContent = "";
+                                
+                                // إذا كان حقل بدء، نحدد الحد الأدنى لحقل الانتهاء المقابل
+                                if (instance.input.classList.contains('date-start')) {
+                                    const endDateId = instance.input.getAttribute('data-pair');
+                                    if (endDateId && datePickers[endDateId]) {
+                                        datePickers[endDateId].set('minDate', dateStr);
+                                    }
+                                }
+                                
+                                // إذا كان حقل انتهاء، نتحقق من أنه بعد تاريخ البدء
+                                if (instance.input.classList.contains('date-end')) {
+                                    const startDateId = instance.input.getAttribute('data-pair');
+                                    if (startDateId && datePickers[startDateId] && datePickers[startDateId].input.value) {
+                                        const startDate = new Date(datePickers[startDateId].input.value);
+                                        const endDate = new Date(dateStr);
+                                        
+                                        if (endDate < startDate) {
+                                            document.getElementById(`${instance.input.id}Error`).textContent = 
+                                                "تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء";
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    });
+                    
+                    // إضافة حدث النقر لأيقونات التقويم
+                    document.querySelectorAll('.select-icon.calendar').forEach(icon => {
+                        icon.addEventListener('click', function() {
+                            const targetId = this.getAttribute('data-target');
+                            if (targetId && datePickers[targetId]) {
+                                datePickers[targetId].open();
+                            }
+                        });
+                    });
+                    
+                    // دالة للتحقق من جميع التواريخ قبل الإرسال
+                    window.validateDates = function() {
+                        let isValid = true;
+                        
+                        document.querySelectorAll('.date-start').forEach(startInput => {
+                            const startError = document.getElementById(`${startInput.id}Error`);
+                            const endInputId = startInput.getAttribute('data-pair');
+                            const endInput = document.getElementById(endInputId);
+                            const endError = document.getElementById(`${endInputId}Error`);
+                            
+                            // تحقق من إدخال تاريخ البدء
+                            if (!startInput.value) {
+                                startError.textContent = "يجب اختيار تاريخ البدء";
+                                isValid = false;
+                            } else {
+                                startError.textContent = "";
+                            }
+                            
+                            // تحقق من إدخال تاريخ الانتهاء
+                            if (endInput && !endInput.value) {
+                                endError.textContent = "يجب اختيار تاريخ الانتهاء";
+                                isValid = false;
+                            } else {
+                                endError.textContent = "";
+                            }
+                            
+                            // تحقق من أن تاريخ الانتهاء بعد تاريخ البدء
+                            if (startInput.value && endInput.value) {
+                                const startDate = new Date(startInput.value);
+                                const endDate = new Date(endInput.value);
+                                
+                                if (endDate < startDate) {
+                                    endError.textContent = "تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء";
+                                    isValid = false;
+                                }
+                            }
+                        });
+                        
+                        return isValid;
+                    };
+                });
+  </script>
+  <script src="mentor.js"></script>
+  <script src="./validationMentor.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
+  
+</body>
+</html>
