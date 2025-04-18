@@ -1,0 +1,44 @@
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6vw 1.7vw;
+  border-radius: 16px;
+  border: 1px solid var(--Colors-Neutral-200, #e8e8e8);
+  background: #fff;
+  box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.12);
+  margin-bottom: 1.43vw;
+}
+.nav > div {
+  display: flex;
+  align-items: center;
+  gap: 0.85vw;
+}
+.nav > div a {
+  color: var(--Colors-Neutral-1000, #333);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  cursor: pointer;
+  text-decoration: none;
+}
+.nav > div div {
+  display: flex;
+  align-items: center;
+  gap: 0.6vw;
+}
+.nav > div div img {
+  cursor: pointer;
+}
+
+.proPhoto {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  aspect-ratio: 1/1;
+  border-radius: 150px;
+  background: url(<path-to-image>) lightgray 50% / cover no-repeat;
+}

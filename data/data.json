@@ -1,0 +1,812 @@
+{
+  "users": [
+    {
+      "id": "123",
+      "userName": "هادى محمد",
+      "backGroundImage": "public/images/8a5c72484a506d9c88179ec1010ed390.png",
+      "userImage": "/public/images/avatar-01.png",
+      "jop": "Front End Developer",
+      "git": "https://github.com/hady-mohammed",
+      "linkedIn": "https://linkedin.com/in/hady-mohammed",
+      "behance": "",
+      "dribbble": "",
+      "instagram": "",
+      "about": "مطور واجهات أمامية متحمس مع خبرة في بناء تطبيقات الويب التفاعلية. متخصص في React وNext.js، مع شغف لإنشاء واجهات مستخدم سلسة وسريعة الاستجابة. لدي خبرة في العمل مع APIs وإدارة حالة التطبيق وتحسين الأداء.",
+      "experiences": [
+        {
+          "campanyImage": "/public/images/gallery-01.png",
+          "expSpeciality": "Front End Developer",
+          "campanyName": "Tech Solutions",
+          "experienceDate": "Jan 2024 - Present"
+        },
+        {
+          "campanyImage": "/public/images/gallery-01.png",
+          "expSpeciality": "React Developer",
+          "campanyName": "Digital Agency",
+          "experienceDate": "Jun 2023 - Dec 2023"
+        }
+      ],
+      "certificates": [
+        {
+          "certificateImage": "/public/images/gallery-02.png",
+          "certificateSpeciality": "Advanced React Development",
+          "academyName": "Meta",
+          "certificateDate": "Dec 2023"
+        },
+        {
+          "certificateImage": "/public/images/gallery-02.png",
+          "certificateSpeciality": "Web Development Bootcamp",
+          "academyName": "Udemy",
+          "certificateDate": "Aug 2023"
+        },
+        {
+          "certificateImage": "/public/images/gallery-02.png",
+          "certificateSpeciality": "Web Development Bootcamp",
+          "academyName": "Udemy",
+          "certificateDate": "Aug 2023"
+        }
+      ],
+      "education": [
+        {
+          "eduImage": "/public/images/gallery-03.jpg",
+          "eduSpeciality": "Computer Science",
+          "academyName": "Cairo University",
+          "eduDate": "2019 - 2023"
+        },
+        {
+          "eduImage": "/public/images/gallery-03.jpg",
+          "eduSpeciality": "Computer Science",
+          "academyName": "Cairo University",
+          "eduDate": "2019 - 2023"
+        }
+      ],
+      "achievements": [
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 1000,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 500,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 100,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 50,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 25,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        }
+      ],
+      "rates": [
+        {
+          "raterImage": "/public/images/avatar-03.png",
+          "raterName": "معتصم شعبان",
+          "rateComent": "هادي مطور موهوب جداً وله خبرة ممتازة في React. عملت معه في عدة مشاريع وكان دائماً يقدم حلول مبتكرة ويلتزم بالمواعيد النهائية.",
+          "rateDate": "Jan 15, 2024"
+        },
+        {
+          "raterImage": "/public/images/Frame 1171278255 (1).png",
+          "raterName": "نهال سراج",
+          "rateComent": "تعاونت مع هادي في تطوير واجهة المستخدم لمشروعنا. كان متعاوناً جداً ويمتلك مهارات تقنية عالية.",
+          "rateDate": "Dec 20, 2023"
+        },
+        {
+          "raterImage": "/public/images/avatar-04.png",
+          "raterName": "عمر احمد",
+          "rateComent": "هادي مطور ممتاز، عملت معه في مشروع كبير وكان أداؤه ممتاز",
+          "rateDate": "Feb 10, 2024"
+        }
+      ],
+      "sessions": [
+        {
+          "type": "upcoming",
+          "trainee": "معتصم شعبان",
+          "date": "27 مارس 2025",
+          "time": "3 مساءاً - 3:30 مساءاً",
+          "status": "قادمة"
+        },
+        {
+          "type": "upcoming",
+          "trainee": "نهال سراج",
+          "date": "28 مارس 2025",
+          "time": "3 مساءاً - 3:30 مساءاً",
+          "status": "قادمة"
+        },
+        {
+          "type": "upcoming",
+          "trainee": "هادى محمد",
+          "date": "29 مارس 2025",
+          "time": "3 مساءاً - 3:30 مساءاً",
+          "status": "قادمة"
+        },
+        {
+          "type": "suspended",
+          "trainee": "معتصم شعبان",
+          "date": "28 مارس 2025",
+          "time": "13 مساءاً - 3:30 مساءاً",
+          "status": "معلقة"
+        },
+        {
+          "type": "suspended",
+          "trainee": "نهال سراج",
+          "date": "29 مارس 2025",
+          "time": "13 مساءاً - 3:30 مساءاً",
+          "status": "معلقة"
+        },
+        {
+          "type": "suspended",
+          "trainee": "هادى محمد",
+          "date": "30 مارس 2025",
+          "time": "3 مساءاً - 3:30 مساءاً",
+          "status": "معلقة"
+        },
+        {
+          "type": "canceled",
+          "trainee": "سارة محمد",
+          "date": "25 مارس 2025",
+          "time": "3 مساءاً - 3:30 مساءاً",
+          "status": "ملغاة"
+        },
+        {
+          "type": "canceled",
+          "trainee": "معتصم شعبان",
+          "date": "26 مارس 2025",
+          "time": "13 مساءاً - 3:30 مساءاً",
+          "status": "ملغاة"
+        },
+        {
+          "type": "canceled",
+          "trainee": "نهال سراج",
+          "date": "27 مارس 2025",
+          "time": "3 مساءاً - 3:30 مساءاً",
+          "status": "ملغاة"
+        },
+        {
+          "type": "successed",
+          "trainee": "هادى محمد",
+          "date": "28 مارس 2025",
+          "time": "3 مساءاً - 3:30 مساءاً",
+          "status": "ملغاة"
+        }
+      ]
+    },
+    {
+      "id": "456",
+      "userName": "معتصم شعبان",
+      "backGroundImage": "/public/images/8a5c72484a506d9c88179ec1010ed390.png",
+      "userImage": "/public/images/avatar-02.png",
+      "jop": "UI/UX Designer",
+      "git": "",
+      "linkedIn": "https://linkedin.com/in/moatasem-shaaban",
+      "behance": "https://behance.net/moatasem",
+      "dribbble": "https://dribbble.com/moatasem",
+      "instagram": "",
+      "aboutMe": "مصمم UI/UX شغوف بإنشاء تجارب مستخدم سلسة وواجهات جذابة. لدي خبرة في تصميم تطبيقات الويب والموبايل، وأمتلك معرفة قوية بمبادئ التصميم والتفكير التصميمي. أحب البحث عن حلول مبتكرة لتحسين تجربة المستخدم.",
+      "experiences": [
+        {
+          "campanyImage": "/public/images/gallery-01.png",
+          "expSpeciality": "Senior UI/UX Designer",
+          "campanyName": "Design Studio",
+          "experienceDate": "Mar 2023 - Present"
+        },
+        {
+          "campanyImage": "/public/images/gallery-01.png",
+          "expSpeciality": "Product Designer",
+          "campanyName": "Tech Startup",
+          "experienceDate": "Jan 2022 - Feb 2023"
+        }
+      ],
+      "certificates": [
+        {
+          "certificateImage": "/public/images/gallery-02.png",
+          "certificateSpeciality": "Advanced UI/UX Design",
+          "academyName": "Google",
+          "certificateDate": "Nov 2023"
+        },
+        {
+          "certificateImage": "/public/images/gallery-02.png",
+          "certificateSpeciality": "Design Systems",
+          "academyName": "Figma",
+          "certificateDate": "Jun 2023"
+        }
+      ],
+      "education": [
+        {
+          "eduImage": "/public/images/gallery-03.jpg",
+          "eduSpeciality": "Graphic Design",
+          "academyName": "Helwan University",
+          "eduDate": "2018 - 2022"
+        }
+      ],
+      "achievements": [
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 1000,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 500,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 100,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 50,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 25,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        }
+      ],
+      "rates": [
+        {
+          "raterImage": "/public/images/avatar-05.png",
+          "raterName": "هادى محمد",
+          "rateComent": "معتصم مصمم موهوب جداً ولديه رؤية إبداعية مميزة. تعاونا في عدة مشاريع وكانت تصاميمه دائماً تلبي احتياجات المستخدمين بشكل ممتاز.",
+          "rateDate": "Jan 20, 2024"
+        },
+        {
+          "raterImage": "/public/images/Frame 1171278255 (1).png",
+          "raterName": "نهال سراج",
+          "rateComent": "عملت مع معتصم في تصميم منصتنا التعليمية. يمتلك فهماً عميقاً لتجربة المستخدم وقدرة على ترجمة المتطلبات إلى تصاميم جذابة.",
+          "rateDate": "Nov 15, 2023"
+        },
+        {
+          "raterImage": "/public/images/avatar-04.png",
+          "raterName": "عمر احمد",
+          "rateComent": "معتصم مصمم ممتاز، عملت معه في مشروع كبير وكان أداؤه ممتاز",
+          "rateDate": "Feb 20, 2024"
+        }
+      ]
+    },
+    {
+      "id": "789",
+      "userName": "نهال سراج",
+      "backGroundImage": "/public/images/8a5c72484a506d9c88179ec1010ed390.png",
+      "userImage": "/public/images/Frame 1171278255 (1).png",
+      "jop": "Product Manager",
+      "git": "",
+      "linkedIn": "https://linkedin.com/in/nehal-serag",
+      "behance": "",
+      "dribbble": "",
+      "instagram": "https://instagram.com/nehal.serag",
+      "aboutMe": "مديرة منتجات ذات خبرة في قيادة فرق متعددة التخصصات وتطوير منتجات رقمية ناجحة. أركز على فهم احتياجات المستخدمين وترجمتها إلى ميزات قابلة للتنفيذ. لدي خلفية في تحليل البيانات واتخاذ القرارات المدفوعة بالبيانات.",
+      "experiences": [
+        {
+          "campanyImage": "/public/images/gallery-01.png",
+          "expSpeciality": "Senior Product Manager",
+          "campanyName": "EdTech Startup",
+          "experienceDate": "Jun 2023 - Present"
+        },
+        {
+          "campanyImage": "/public/images/gallery-01.png",
+          "expSpeciality": "Product Owner",
+          "campanyName": "Software House",
+          "experienceDate": "Mar 2022 - May 2023"
+        }
+      ],
+      "certificates": [
+        {
+          "certificateImage": "/public/images/gallery-02.png",
+          "certificateSpeciality": "Professional Product Management",
+          "academyName": "Product School",
+          "certificateDate": "Oct 2023"
+        },
+        {
+          "certificateImage": "/public/images/gallery-02.png",
+          "certificateSpeciality": "Agile Leadership",
+          "academyName": "Scrum Alliance",
+          "certificateDate": "May 2023"
+        }
+      ],
+      "education": [
+        {
+          "eduImage": "/public/images/gallery-03.jpg",
+          "eduSpeciality": "Business Administration",
+          "academyName": "Alexandria University",
+          "eduDate": "2017 - 2021"
+        }
+      ],
+      "achievements": [
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 1000,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 500,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 100,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 50,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 25,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        }
+      ],
+      "rates": [
+        {
+          "raterImage": "/public/images/avatar-05.png",
+          "raterName": "هادى محمد",
+          "rateComent": "نهال قائدة منتج استثنائية. عملت معها على تطوير منصة تعليمية وكانت رؤيتها واضحة وقدرتها على إدارة المشروع ممتازة.",
+          "rateDate": "Dec 10, 2023"
+        },
+        {
+          "raterImage": "/public/images/avatar-03.png",
+          "raterName": "معتصم شعبان",
+          "rateComent": "تعاونت مع نهال في عدة مشاريع. تمتلك مهارات قيادية قوية وفهم عميق لاحتياجات السوق والمستخدمين.",
+          "rateDate": "Nov 05, 2023"
+        },
+        {
+          "raterImage": "/public/images/avatar-04.png",
+          "raterName": "عمر احمد",
+          "rateComent": "نهال مديرة منتجات ممتازة، عملت معها في مشروع كبير وكان أداؤها ممتاز",
+          "rateDate": "Feb 25, 2024"
+        }
+      ]
+    },
+    {
+      "id": "725",
+      "userName": "احمد شارونى",
+      "backGroundImage": "/public/images/bg-developer.jpg",
+      "userImage": "/public/images/avatar-04.png",
+      "jop": "Backend Developer",
+      "git": "https://github.com/ahmed-sharony",
+      "linkedIn": "https://linkedin.com/in/ahmed-sharony",
+      "behance": "",
+      "dribbble": "",
+      "instagram": "https://instagram.com/ahmed.sharony",
+      "aboutMe": "مطور خلفية متخصص في تطوير واجهات برمجة التطبيقات RESTful وقواعد البيانات. خبرة في Node.js و Express و MongoDB.",
+      "experiences": [
+        {
+          "id": "1",
+          "image": "./images/node-express.png",
+          "title": "تطوير خدمات الويب",
+          "type": "Backend Development",
+          "date": "2023 - Present"
+        },
+        {
+          "id": "2",
+          "image": "./images/database.png",
+          "title": "إدارة قواعد البيانات",
+          "type": "Database Management",
+          "date": "2022 - 2023"
+        }
+      ],
+      "achievements": [
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 1000,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 500,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 100,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 50,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 25,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        }
+      ],
+      "rates": [
+        {
+          "raterImage": "/public/images/avatar-01.png",
+          "raterName": "على سليم",
+          "rateComent": "احمد مطور متميز في الباك اند، عملت معه في مشروع كبير وكان اداؤه ممتاز",
+          "rateDate": "Mar 10, 2024"
+        },
+        {
+          "raterImage": "/public/images/avatar-02.png",
+          "raterName": "عبدالله عمرو",
+          "rateComent": "تعاونت مع احمد في بناء خدمات API، يمتلك معرفة عميقة في تصميم وتطوير الخدمات",
+          "rateDate": "Feb 20, 2024"
+        },
+        {
+          "raterImage": "/public/images/avatar-04.png",
+          "raterName": "عمر احمد",
+          "rateComent": "احمد مطور محترف ويمتلك خبرة كبيرة في تطوير الباك اند. ساعدني في حل مشاكل معقدة",
+          "rateDate": "Jan 15, 2024"
+        }
+      ]
+    },
+    {
+      "id": "101",
+      "userName": "عمر احمد",
+      "backGroundImage": "/public/images/bg-mobile.jpg",
+      "userImage": "/public/images/avatar-05.png",
+      "jop": "Mobile Developer",
+      "git": "https://github.com/omar-ahmed",
+      "linkedIn": "https://linkedin.com/in/omar-ahmed-dev",
+      "behance": "",
+      "dribbble": "",
+      "instagram": "https://instagram.com/omar.ahmed.dev",
+      "aboutMe": "مطور تطبيقات موبايل متخصص في Flutter و React Native. خبرة في تطوير تطبيقات عالية الأداء وواجهات مستخدم جذابة.",
+      "experiences": [
+        {
+          "id": "1",
+          "image": "./images/flutter.png",
+          "title": "تطوير تطبيقات Flutter",
+          "type": "Mobile Development",
+          "date": "2023 - Present"
+        },
+        {
+          "id": "2",
+          "image": "./images/react-native.png",
+          "title": "تطوير React Native",
+          "type": "Mobile Development",
+          "date": "2022 - 2023"
+        }
+      ],
+      "achievements": [
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 1000,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 500,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 100,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 50,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 25,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        }
+      ],
+      "rates": [
+        {
+          "raterImage": "/public/images/avatar-02.png",
+          "raterName": "عبدالله عمرو",
+          "rateComent": "عمر مطور موبايل موهوب، تطبيقاته دائماً تمتاز بالجودة العالية وسهولة الاستخدام",
+          "rateDate": "Feb 15, 2024"
+        },
+        {
+          "raterImage": "/public/images/avatar-05.png",
+          "raterName": "احمد شارونى",
+          "rateComent": "عملت مع عمر على مشروع متكامل، تطبيقاته سريعة وذات كفاءة عالية",
+          "rateDate": "Jan 25, 2024"
+        },
+        {
+          "raterImage": "/public/images/avatar-01.png",
+          "raterName": "على سليم",
+          "rateComent": "عمر يمتلك مهارات ممتازة في تطوير واجهات المستخدم للموبايل",
+          "rateDate": "Dec 30, 2023"
+        }
+      ]
+    },
+    {
+      "id": "102",
+      "userName": "على سليم",
+      "backGroundImage": "/public/images/bg-security.jpg",
+      "userImage": "/public/images/avatar-03.png",
+      "jop": "Security Engineer",
+      "git": "https://github.com/ali-selim",
+      "linkedIn": "https://linkedin.com/in/ali-selim",
+      "behance": "",
+      "dribbble": "",
+      "instagram": "https://instagram.com/ali.selim.sec",
+      "aboutMe": "مهندس أمن سيبراني متخصص في اختبار الاختراق وتحليل الثغرات. خبرة في حماية التطبيقات الويب والموبايل.",
+      "experiences": [
+        {
+          "id": "1",
+          "image": "./images/security.png",
+          "title": "اختبار اختراق تطبيقات الويب",
+          "type": "Security",
+          "date": "2023 - Present"
+        },
+        {
+          "id": "2",
+          "image": "./images/analysis.png",
+          "title": "تحليل الثغرات الأمنية",
+          "type": "Security Analysis",
+          "date": "2022 - 2023"
+        }
+      ],
+      "achievements": [
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 1000,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 500,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 100,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 50,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 25,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        }
+      ],
+      "rates": [
+        {
+          "raterImage": "/public/images/avatar-04.png",
+          "raterName": "عمر احمد",
+          "rateComent": "على خبير أمني ممتاز، ساعدنا في تأمين تطبيقاتنا وتحديد نقاط الضعف بشكل احترافي",
+          "rateDate": "Mar 1, 2024"
+        },
+        {
+          "raterImage": "/public/images/avatar-05.png",
+          "raterName": "احمد شارونى",
+          "rateComent": "على محترف في مجال الأمن السيبراني، قدم لنا حلول مبتكرة لحماية خدماتنا",
+          "rateDate": "Feb 10, 2024"
+        },
+        {
+          "raterImage": "/public/images/avatar-02.png",
+          "raterName": "عبدالله عمرو",
+          "rateComent": "تعاونت مع على في تأمين بنية DevOps، خبرته في الأمن السيبراني قيمة جداً",
+          "rateDate": "Jan 20, 2024"
+        }
+      ]
+    },
+    {
+      "id": "103",
+      "userName": "عبدالله عمرو",
+      "backGroundImage": "/public/images/bg-devops.jpg",
+      "userImage": "/public/images/avatar-02.png",
+      "jop": "DevOps Engineer",
+      "git": "https://github.com/abdullah-amr",
+      "linkedIn": "https://linkedin.com/in/abdullah-amr",
+      "behance": "",
+      "dribbble": "",
+      "instagram": "https://instagram.com/abdullah.devops",
+      "aboutMe": "مهندس DevOps متخصص في أتمتة عمليات التطوير والنشر. خبرة في Docker و Kubernetes و CI/CD.",
+      "experiences": [
+        {
+          "id": "1",
+          "image": "./images/kubernetes.png",
+          "title": "إدارة Kubernetes",
+          "type": "DevOps",
+          "date": "2023 - Present"
+        },
+        {
+          "id": "2",
+          "image": "./images/cicd.png",
+          "title": "تطوير CI/CD",
+          "type": "Pipeline Development",
+          "date": "2022 - 2023"
+        }
+      ],
+      "achievements": [
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 1000,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 500,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 100,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 50,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        },
+        {
+          "image": "public/images/Frame 1171278344.png",
+          "minutes": 25,
+          "status": "Online",
+          "date": "Jan 20, 2025"
+        }
+      ],
+      "rates": [
+        {
+          "raterImage": "/public/images/avatar-05.png",
+          "raterName": "احمد شارونى",
+          "rateComent": "عبدالله محترف في مجال DevOps، ساعد في تحسين عملية النشر وتقليل وقت التطوير بشكل كبير",
+          "rateDate": "Mar 20, 2024"
+        },
+        {
+          "raterImage": "/public/images/avatar-04.png",
+          "raterName": "عمر احمد",
+          "rateComent": "عبدالله قام بتحسين بيئة التطوير بشكل كبير، أتمتة العمليات أصبحت أسرع وأكثر كفاءة",
+          "rateDate": "Feb 28, 2024"
+        },
+        {
+          "raterImage": "/public/images/avatar-01.png",
+          "raterName": "على سليم",
+          "rateComent": "خبرة عبدالله في الـ DevOps ممتازة، قام بتطوير نظام نشر آمن وفعال",
+          "rateDate": "Jan 30, 2024"
+        }
+      ]
+    },
+    {
+      "id": "5e5b",
+      "name": "hady",
+      "email": "hady25750@gmail.com",
+      "password": "123123",
+      "phone": "01025376863",
+      "specialization": "front end",
+      "country": "egypt",
+      "bio": "front end",
+      "gender": "MALE",
+      "experienceLevel": "INTERMEDIATE"
+    },
+    {
+      "id": "66b9",
+      "name": "hady",
+      "email": "hady25750@gmail.com",
+      "password": "123123",
+      "phone": "01025376863",
+      "specialization": "front end",
+      "country": "egypt",
+      "bio": "front",
+      "gender": "MALE",
+      "experienceLevel": "INTERMEDIATE"
+    },
+    {
+      "id": "c989",
+      "name": "hady",
+      "email": "hady25750@gmail.com",
+      "password": "123123",
+      "phone": "01025376863",
+      "specialization": "front end",
+      "country": "egypt",
+      "bio": "front",
+      "gender": "MALE",
+      "experienceLevel": "INTERMEDIATE"
+    },
+    {
+      "id": "2f0a",
+      "name": "hady",
+      "email": "hady@gmail.com",
+      "password": "123123",
+      "phone": "01025376863",
+      "specialization": "front end",
+      "country": "egypt",
+      "bio": "ffff",
+      "gender": "MALE",
+      "experienceLevel": "INTERMEDIATE"
+    },
+    {
+      "id": "dc89",
+      "name": "hady",
+      "email": "hady257@gmail.com",
+      "password": "123123",
+      "phone": "01025541212",
+      "specialization": "front end",
+      "country": "egypt",
+      "bio": "hhhh",
+      "gender": "MALE",
+      "experienceLevel": "INTERMEDIATE"
+    }
+  ],
+  "chats": {
+    "conversations": [
+      {
+        "id": "chat1",
+        "participants": [
+          "123",
+          "456"
+        ],
+        "messages": [
+          {
+            "id": "msg1",
+            "senderId": "456",
+            "receiverId": "123",
+            "content": "مرحباً هادي! أنا معتصم، المرشد الخاص بك. سعيد جداً بانضمامك إلى منصتنا. كيف يمكنني مساعدتك اليوم؟",
+            "timestamp": "2025-04-05T22:13:00+02:00",
+            "status": "read"
+          },
+          {
+            "id": "msg2",
+            "senderId": "123",
+            "receiverId": "456",
+            "content": "شكراً جزيلاً معتصم! سعيد جداً بالتواصل معك. أود أن أستفسر عن كيفية البدء في جلسات الإرشاد وما هي الخطوات المطلوبة؟",
+            "timestamp": "2025-04-05T22:14:00+02:00",
+            "status": "read"
+          },
+          {
+            "id": "msg3",
+            "senderId": "456",
+            "receiverId": "123",
+            "content": "بالتأكيد! يمكنك تصفح الجلسات المتاحة في صفحتي الشخصية واختيار الوقت المناسب لك. بعدها سنتواصل لتحديد الأهداف والمواضيع التي تريد التركيز عليها. هل لديك مجال معين تريد التركيز عليه؟",
+            "timestamp": "2025-04-05T22:15:00+02:00",
+            "status": "read"
+          }
+        ]
+      }
+    ]
+  }
+}

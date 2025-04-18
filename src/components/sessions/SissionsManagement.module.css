@@ -1,0 +1,169 @@
+.sessionsManage {
+  padding: 2.9vw 5.56vw;
+}
+.title {
+  margin-bottom: 2.8vw;
+}
+.title h2 {
+  color: var(--Colors-Neutral-1000, #333);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.title p {
+  color: var(--Colors-Neutral-600, #8e8e8e);
+  text-align: right;
+  font-family: Poppins;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.sessionsNav {
+  display: flex;
+  padding: 8px 0px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 32px;
+  align-self: stretch;
+  border-top: 1px solid var(--Colors-Neutral-300, #d2d2d2);
+  margin-bottom: 2.7vw;
+}
+.sessionsNav a {
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--Gray600);
+  padding: 8px;
+  border: none;
+  background-color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.sessionsNav :global(.active) {
+  position: relative;
+  color: var(--Colors-Primary-500, #f82548);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  display: flex;
+  height: 50px;
+  padding: 8px;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 2px solid var(--Colors-Primary-500, #f82548);
+}
+
+.sessions {
+  display: grid;
+  gap: 24px;
+}
+.session {
+  border-radius: 8px;
+  position: relative;
+  padding: 1.6vw 3.1vw 1.6vw 1.6vw;
+  overflow: hidden;
+  border: 1px solid var(--Colors-Neutral-300, #d2d2d2);
+  background: #fff;
+  border-right-width: 6px;
+}
+
+.upcoming {
+  border-right-color: var(--Colors-Neutral-300, #d2d2d2);
+}
+.suspended {
+  border-right-color: var(--Colors-Secondary-500, #ffd72a);
+}
+.canceled {
+  border-right-color: var(--Colors-Primary-500, #f82548);
+}
+.successed {
+  border-right-color: var(--Colors-Green-200, #1fc16b);
+}
+
+.session .sessionTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5vw;
+}
+.session .sessionTitle p {
+  color: var(--Colors-Neutral-1000, #333);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.session .sessionTitle p span {
+  font-weight: 700;
+}
+.session .sessionTitle > span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--Gray500, #667085);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+}
+.session .sessionTime {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 1.66vw;
+}
+.session .sessionTime p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--Warm-black, #333);
+  text-align: right;
+
+  /* body 2 */
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.sessionsBtns {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.sessionsBtns button {
+  padding: 0.27vw 1.6vw;
+  border: 1px solid var(--Gray300);
+  font-family: "Baloo Bhaijaan 2";
+  color: var(--Gray500);
+  font-size: 20px;
+  font-weight: 400;
+  border-radius: 6px;
+  background-color: #fff;
+  cursor: pointer;
+  border: 1px solid var(--Colors-Neutral-300, #d2d2d2);
+}
+.sessionsBtns .accept {
+  background: var(--Colors-Primary-500, #f82548);
+  border: none;
+  color: #fff;
+}
+.sessionsBtns .cancel {
+  color: var(--Colors-Neutral-500, #a4a4a4);
+  border: none;
+}

@@ -1,0 +1,29 @@
+.searchBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.searchBar .filter {
+  display: flex;
+  width: 95px;
+  height: 70px;
+  padding: 0px 16px;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+  border-radius: 10px;
+  border: 1px solid var(--Storke-Color, #d2d2d2);
+  background: var(--White, #fff);
+  color: var(--Colors-Neutral-400, #bbb);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.searchBar .filter img {
+  width: 24px;
+  height: 24px;
+}

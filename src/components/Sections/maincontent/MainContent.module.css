@@ -1,0 +1,324 @@
+.content {
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+.content > div:first-child {
+  flex: 1;
+  display: grid;
+  gap: 24px;
+  align-items: flex-start;
+}
+.content > div:last-child {
+  flex: 0.5;
+}
+.content > div:first-child > p {
+  color: var(--Colors-Neutral-1000, #333);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27px; /* 168.75% */
+  margin: 0;
+}
+.content > div:first-child > div {
+  display: flex;
+  padding: 1.1vw;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 8px;
+  border: 1px solid var(--Colors-Neutral-300, #d2d2d2);
+  background: #fff;
+}
+.content > div:first-child > div .title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  padding: 0;
+}
+.content > div:first-child > div .title span {
+  color: var(--Colors-Neutral-1000, #333);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 27px; /* 112.5% */
+}
+.content > div:first-child > div .title div {
+  gap: 8px;
+}
+
+.content > div:first-child > div > div {
+  display: flex;
+  padding: 0.56vw 0px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+}
+
+.content > div:first-child > div > div > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+.content > div:first-child > div > div > div img {
+  display: flex;
+  width: 64px;
+  height: 64px;
+  padding: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  border-radius: 8px;
+  background: var(--Colors-Neutral-300, #d2d2d2);
+}
+.content > div:first-child > div > div > div div span {
+  color: var(--Colors-Neutral-1000, #333);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 27px; /* 135% */
+  margin-bottom: 0.4vw;
+}
+.content > div:first-child > div > div > div div p {
+  color: var(--Colors-Neutral-700, #777);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 27px; /* 135% */
+  margin: 0;
+}
+.content > div:first-child > div > div > p {
+  border-radius: 8px;
+  background: var(--Colors-Neutral-Alpha-10, rgba(51, 51, 51, 0.1));
+  padding: 0.3vw 0.6vw;
+  color: var(--Colors-Neutral-1000, #333);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 27px; /* 225% */
+}
+.content > div:first-child > div > div > a {
+  border-radius: 48px;
+  border: 1px solid var(--Gray300, #d0d5dd);
+  display: flex;
+  align-items: center;
+  gap: 1.7vw;
+  color: var(--Gray-900, #101828);
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px; /* 137.5% */
+  padding: 0.3vw 1.1vw;
+  text-decoration: none;
+  cursor: pointer;
+}
+.content > div:first-child .showMore {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 11px;
+  align-self: stretch;
+  border-radius: 8px;
+  background: var(--Gray-100, #f2f4f7);
+  color: var(--Red-Color, #f82548);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  cursor: pointer;
+}
+
+.content > div:last-child .vedio {
+  display: flex;
+  padding: 12px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 8px;
+  border: 1px solid var(--Colors-Neutral-200, #e8e8e8);
+  background: var(--Background-Color-White, #fdfdfe);
+}
+.content > div:last-child {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+.content > div:last-child .vedio span:first-child {
+  color: var(--Text-Primary, #00001d);
+  text-align: right;
+
+  /* Global Tokens/Body/B-1 */
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27px; /* 150% */
+}
+.content > div:last-child .vedio svg {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--Background-Color-White, #fdfdfe);
+  background: var(--Background-Color-White, #fdfdfe);
+
+  /* Shadows/shadow-xs-skeuomorphic */
+  box-shadow: 0px 0px 0px 1px
+      var(
+        --Colors-Effects-Shadows-shadow-skeumorphic-inner-border,
+        rgba(16, 24, 40, 0.18)
+      )
+      inset,
+    0px -2px 0px 0px var(
+        --Colors-Effects-Shadows-shadow-skeumorphic-inner,
+        rgba(16, 24, 40, 0.05)
+      ) inset,
+    0px 1px 2px 0px
+      var(--Colors-Effects-Shadows-shadow-xs, rgba(16, 24, 40, 0.05));
+  cursor: pointer;
+}
+
+.content > div:last-child .vedio span:last-of-type {
+  color: var(--Colors-Primary-500, #f82548);
+  text-align: right;
+
+  /* Global Tokens/Body/B-3 */
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 21px; /* 150% */
+}
+
+.content > div:last-child .vedio p {
+  color: var(--Text-Secondary, #667);
+  text-align: center;
+
+  /* Global Tokens/Body/B-4 */
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 150% */
+  margin: 0;
+}
+
+.content > div:last-child .statistic {
+  display: flex;
+  padding: 13px 18px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+  border-radius: 8px;
+  border: 1px solid var(--Colors-Neutral-200, #e8e8e8);
+  background: var(--Background-Color-White, #fdfdfe);
+}
+.content > div:last-child .statistic .title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+}
+.content > div:last-child .statistic .title span:first-child {
+  color: #000;
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27px; /* 135% */
+}
+
+.content > div:last-child .statistic .title span:last-child {
+  color: var(--Colors-Neutral-700, #777);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 27px; /* 192.857% */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  cursor: pointer;
+}
+.content > div:last-child .statistic > div:last-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  margin-top: 16px;
+  gap: 10px;
+}
+
+.content > div:last-child .statistic div:last-child > div {
+  display: flex;
+  width: 172px;
+  align-items: flex-start;
+  gap: 7px;
+}
+.content > div:last-child .statistic div:last-child > div img {
+  width: 64px;
+  height: 64px;
+  flex: 1 0 0;
+  aspect-ratio: 1/1;
+  border-radius: 8px;
+  background: var(--Colors-Neutral-300, #d2d2d2);
+}
+.content > div:last-child .statistic div:last-child > div div {
+  display: flex;
+  flex-direction: column;
+  /* align-items: flex-end; */
+  gap: 4px;
+}
+.content > div:last-child .statistic div:last-child > div div span {
+  color: var(--Colors-Neutral-1000, #333);
+  text-align: left;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27px; /* 135% */
+}
+.content > div:last-child .statistic div:last-child > div div p {
+  color: var(--Colors-Neutral-700, #777);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 27px; /* 192.857% */
+  margin: 0;
+}
+.certificates-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}

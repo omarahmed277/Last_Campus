@@ -1,0 +1,209 @@
+.container {
+  padding: 2.5vw 4.3vw;
+  position: relative;
+  height: 100vh;
+}
+.chat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 83.1vh;
+}
+.chatHeader {
+  border-radius: 8px;
+  border: 1px solid var(--Colors-Neutral-200, #e8e8e8);
+  background: var(--White, #fff);
+  box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 0.08);
+  width: 317px;
+  height: 100%;
+  padding-inline: 8px;
+}
+
+.title {
+  display: flex;
+  padding: 24px 16px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  border-bottom: 1px solid var(--Colors-Neutral-200, #e8e8e8);
+}
+.title span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--Black, #000);
+
+  /* Global Tokens/Headings/H-10 */
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 33px; /* 165% */
+}
+
+.title span img {
+  width: 16px;
+  height: 16px;
+}
+.title > img {
+  width: 24px;
+  height: 24px;
+}
+.users {
+  display: flex;
+  height: calc(100% - 81.89px);
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  overflow: auto;
+  padding-block: 8px;
+  gap: 8px;
+}
+.user {
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.user > div:first-child img {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #fff;
+}
+.user > div:first-child {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+  align-self: stretch;
+}
+.user > span {
+  width: 16px;
+  height: 16px;
+  padding: 4px;
+  border-radius: 8.061px;
+  background: var(--Alert-FF353F, #ff353f);
+}
+.user > div:first-child div span {
+  color: var(--Colors-Neutral-1000, #333);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 150% */
+}
+.user > div:first-child div p:first-of-type {
+  color: var(--Colors-Neutral-500, #a4a4a4);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px; /* 128.571% */
+}
+.user div p:last-of-type {
+  color: var(--Colors-Neutral-400, #bbb);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 150% */
+}
+.user div:last-child img {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+.user div:last-child {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.user > div:last-child span {
+  color: #fff;
+  text-align: center;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 150% */
+  display: flex;
+  width: 20px;
+  height: 20px;
+  padding: 4px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: var(--Alert-FF353F, #ff353f);
+}
+.chatContainer {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+.empaty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  justify-content: center;
+  width: 316px;
+}
+.empaty > img {
+  width: 54px;
+  height: 54px;
+}
+
+.empaty div {
+  text-align: center;
+  display: grid;
+  gap: 2px;
+}
+.empaty div span {
+  color: var(--Colors-Neutral-1000, #333);
+  text-align: center;
+
+  /* Global Tokens/Headings/H-9 */
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 39px; /* 162.5% */
+}
+.empaty div p {
+  color: var(--Colors-Neutral-500, #a4a4a4);
+
+  /* Global Tokens/Body/B-2 */
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+}
+.empaty a {
+  display: flex;
+  padding: var(--2, 8px) var(--3, 12px);
+  align-items: center;
+  gap: var(--15, 6px);
+  color: #ffffff;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; /* 150% */
+  text-decoration: none;
+  border-radius: 6px;
+  background: var(--Colors-Primary-500, #f82548);
+}
+.empaty a img {
+  width: 20px;
+  height: 20px;
+}

@@ -1,0 +1,275 @@
+* {
+  box-sizing: border-box;
+  direction: rtl;
+}
+body {
+  margin: 0;
+}
+.container {
+  padding: 2.5vw 4.3vw;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  transition: all 0.5s;
+  display: none;
+}
+.modules {
+  display: none;
+  width: 535px;
+  padding: 1.7vw;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: all 0.5s;
+  border-radius: 16px;
+  background: #fff;
+  /* height: 95vh; */
+  /* overflow: auto;*/
+}
+
+.modules .title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
+  margin-bottom: 1.1vw;
+}
+.modules .title span {
+  color: #000;
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 48px; /* 150% */
+}
+.modules .title img {
+  cursor: pointer;
+}
+.modules .edits {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+  align-self: stretch;
+  border-bottom: 1px solid var(--Colors-Neutral-200, #e8e8e8);
+  margin-bottom: 2.86vw;
+}
+.modules .edits span {
+  color: var(--Colors-Neutral-700, #777);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27px; /* 112.5% */
+  cursor: pointer;
+  padding: 0.56vw;
+}
+
+.modules .edits .active-edit {
+  color: var(--Colors-Neutral-1000, #333);
+  border-bottom: 3px solid var(--Colors-Neutral-800, #606060);
+}
+.modules .edit-info .photo {
+  margin-bottom: 1.7vw;
+}
+.modules .edit-info .photo > span {
+  color: var(--Colors-Neutral-1000, #333);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27px; /* 135% */
+  margin-bottom: 1.1vw;
+  display: block;
+}
+.modules .edit-info .photo > div {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  align-self: stretch;
+}
+.modules .edit-info .photo > div img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+.modules .edit-info .photo > div div span {
+  color: var(--Colors-Primary-500, #f82548);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 27px; /* 135% */
+}
+.modules .edit-info .photo > div div p {
+  color: var(--Colors-Neutral-600, #8e8e8e);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27px; /* 168.75% */
+  margin: 0;
+}
+
+.modules .form-data {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+.modules .form-data div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 4px;
+  align-self: stretch;
+}
+.modules .form-data div label {
+  color: var(--Gray-900, #101828);
+  text-align: right;
+
+  /* Global Tokens/Body/B-1 */
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27px; /* 150% */
+}
+.modules .form-data div textarea,
+.modules .form-data div select,
+.modules .form-data div input {
+  display: flex;
+  height: 48px;
+  padding: 0.56vw 0.86vw;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.56vw;
+  align-self: stretch;
+  color: var(--Colors-Neutral-700, #777);
+
+  /* text-base/regular */
+  font-family: "DM Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+  border-radius: 6px;
+  border: 1px solid var(--Colors-Neutral-300, #d2d2d2);
+  background: #ffffff;
+  outline: none;
+  transition: 0.3s;
+}
+.modules .form-data div textarea {
+  resize: none;
+  height: 6.18vw;
+}
+.modules .form-data div select {
+  appearance: none;
+  background-image: url("/images/arrow-down.svg");
+  background-repeat: no-repeat;
+  background-position: 1.11vw 50%;
+}
+.modules .form-data div input[type="submit"] {
+  display: flex;
+  padding: 0.56vw 0.85vw;
+  justify-content: center;
+  align-items: center;
+  gap: 0.56vw;
+  align-self: stretch;
+  border-radius: 6px;
+  background: var(--Colors-Primary-500, #f82548);
+  color: #ffffff;
+
+  /* Global Tokens/Body/B-1 */
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27px; /* 150% */
+  border: none;
+}
+
+.modules .form-data .social {
+  gap: 16px;
+  margin-top: 8px;
+}
+.modules .form-data .social span {
+  color: var(--Colors-Neutral-1000, #333);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 33px; /* 165% */
+}
+
+.modules .form-data .dates {
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 16px;
+}
+.modules .form-data .dates div {
+  width: 50%;
+}
+.modules .form-data .chickbox {
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 6px;
+  align-items: center;
+}
+.modules .form-data .chickbox input {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  accent-color: var(--Colors-Primary-500, #f82548);
+}
+.modules .form-data .form-btns {
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+.modules .form-data .form-btns button,
+.modules .form-data .form-btns input {
+  width: 50%;
+  cursor: pointer;
+}
+.modules .form-data .form-btns button {
+  display: flex;
+  height: 44px;
+  padding: 0.56vw 0.85vw;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex: 1 0 0;
+  color: var(--Colors-Neutral-600, #8e8e8e);
+
+  /* Global Tokens/Headings/H-10 */
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 33px; /* 165% */
+  border-radius: 6px;
+  border: 1px solid var(--Colors-Neutral-400, #bbb);
+  background-color: #ffffff;
+}
