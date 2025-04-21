@@ -1,0 +1,1119 @@
+/* ==========================================================================
+   Global Reset and Base Styles
+   ========================================================================== */
+
+/* CSS Variables for Consistent Theming */
+:root {
+  --default-font-family: "Baloo Bhaijaan 2", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Helvetica, Arial,
+    "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei",
+    "Source Han Sans CN", sans-serif;
+  --primary-color: #f82548;
+  --secondary-color: #0000b8;
+  --text-color: #333333;
+  --light-text: #8e8e8e;
+  --lighter-text: #bbbbbb;
+  --border-color: #d2d2d2;
+  --background-color: #f2f2f2;
+  --white: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.12);
+  --card-shadow: 0 16px 32px 0 rgba(88, 92, 95, 0.1);
+}
+
+/* Reset Default Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Base HTML and Body Styles */
+html,
+body {
+  font-family: var(--default-font-family);
+  direction: rtl; /* Right-to-left for Arabic */
+  background-color: var(--white);
+  height: 100%;
+}
+
+/* Main Container */
+.main-container {
+  position: relative;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding-bottom: 40px;
+}
+
+/* Reset Form Elements */
+button,
+input,
+select,
+textarea {
+  outline: 0;
+  border: none;
+  background: none;
+  font-family: var(--default-font-family);
+}
+
+/* General Button Styles */
+button {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* Reset Headings and Paragraphs */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+/* ==========================================================================
+   Header Section
+   ========================================================================== */
+
+/* Header */
+header {
+  background: var(--white);
+  margin: 34px auto 0;
+  width: 100%;
+  max-width: 1320px;
+}
+
+/* Navigation */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 24px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  background: var(--white);
+  box-shadow: 0 2px 15px 0 var(--shadow-color);
+  transition: all 0.3s ease;
+}
+
+/* Logo */
+.logo {
+  display: block;
+}
+
+.logo img {
+  width: 146px;
+  height: 36px;
+  object-fit: contain;
+}
+
+/* Middle Tabs (Navigation) */
+.middleTabs {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.middleTabs a {
+  color: var(--text-color);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 34px;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.middleTabs a:hover:not(.active) {
+  color: var(--primary-color);
+}
+
+.middleTabs a.active {
+  color: var(--primary-color);
+  font-weight: 600;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+/* Left Section (User/Auth) */
+.left_Sec {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-direction: row-reverse;
+}
+
+/* Title (User Profile Link) */
+.titel {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  text-decoration: none;
+}
+
+.titel img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.titel p {
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  text-align: right;
+}
+
+/* Navigation Buttons (Notifications, Messages) */
+.buttonsNav {
+  display: flex;
+  gap: 8px;
+}
+
+.buttonsNav .notBtn,
+.buttonsNav .messageBtn {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.buttonsNav .notBtn:hover,
+.buttonsNav .messageBtn:hover {
+  border-color: var(--primary-color);
+  background: rgba(248, 37, 72, 0.05);
+}
+
+.buttonsNav img {
+  width: 24px;
+  height: 24px;
+}
+
+/* Auth Group (Signup/Login Buttons) */
+.auth-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-direction: row-reverse;
+}
+
+/* Signup Button */
+.signup-btn {
+  padding: 8px 12px;
+  background: var(--primary-color);
+  border-radius: 6px;
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.signup-btn:hover {
+  background: #e01e3c;
+  box-shadow: 0 4px 8px rgba(248, 37, 72, 0.2);
+}
+
+/* Login Button */
+.login-btn {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: rgba(248, 37, 72, 0.05);
+}
+
+/* ==========================================================================
+   Search and Filter Section
+   ========================================================================== */
+
+/* Search Group */
+.search-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  gap: 24px;
+  position: relative;
+  width: 1321px;
+  margin: 16px auto 0;
+}
+
+/* Search Container */
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  flex-wrap: nowrap;
+  gap: 16px;
+  position: relative;
+  width: 100%;
+}
+
+/* Search Section */
+.search-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-self: stretch;
+  flex-wrap: nowrap;
+  position: relative;
+  width: 100%;
+}
+
+/* Filter Button */
+.filter-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 4px;
+  position: relative;
+  width: 95px;
+  height: 70px;
+  padding: 0 16px;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Filter Text */
+.filter-text {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  position: relative;
+  width: 33px;
+  height: 41px;
+  color: var(--lighter-text);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 41px;
+  text-align: right;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.filter-btn:hover .filter-text {
+  color: var(--primary-color);
+}
+
+/* Filter Icon */
+.filter-icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+}
+
+/* Filter Icon Image */
+.filter-icon-img {
+  position: relative;
+  width: 20px;
+  height: 19.075px;
+  margin: 2.463px 0 0 2px;
+  background: url(https://static.codia.ai/custom_image/2025-04-20/013852/search-icon-small.svg)
+    no-repeat center;
+  background-size: 100% 100%;
+  transition: transform 0.3s ease;
+}
+
+.filter-btn:hover .filter-icon-img {
+  transform: scale(1.1);
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 8px;
+  position: relative;
+  width: calc(100% - 111px);
+  height: 70px;
+  padding: 0 16px;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.search-bar:hover,
+.search-bar:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Search Input Group */
+.search-input-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  position: relative;
+  width: 293px;
+  cursor: text;
+}
+
+/* Search Placeholder */
+.search-placeholder {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  position: relative;
+  width: 261px;
+  height: 34px;
+  color: var(--lighter-text);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 34px;
+  text-align: right;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.search-bar:hover .search-placeholder,
+.search-bar:focus-within .search-placeholder {
+  color: var(--text-color);
+}
+
+/* Search Icon */
+.search-icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+}
+
+/* Search Icon Image */
+.search-icon-img {
+  position: relative;
+  width: 20.314px;
+  height: 20.314px;
+  margin: 2px 0 0 2px;
+  background: url(https://static.codia.ai/custom_image/2025-04-20/013852/search-icon-large.svg)
+    no-repeat center;
+  background-size: 100% 100%;
+  transition: transform 0.3s ease;
+}
+
+.search-bar:hover .search-icon-img,
+.search-bar:focus-within .search-icon-img {
+  transform: scale(1.1);
+}
+
+/* Filter Container */
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  align-self: stretch;
+  flex-wrap: nowrap;
+  gap: 32px;
+  position: relative;
+  width: 100%;
+}
+
+/* Filter Section */
+.filter-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-self: stretch;
+  flex-wrap: nowrap;
+  position: relative;
+  width: 100%;
+}
+
+/* Filter Toggle */
+.filter-toggle {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.filter-toggle:hover {
+  transform: rotate(90deg);
+}
+
+/* Filter Toggle Icon */
+.filter-toggle-icon {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 0;
+  left: 0;
+}
+
+/* Filter Toggle Image */
+.filter-toggle-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: url(https://static.codia.ai/custom_image/2025-04-20/013852/filter-icon.svg)
+    no-repeat center;
+  background-size: 100% 100%;
+}
+
+/* Filter Categories */
+.filter-categories {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  position: relative;
+  width: calc(100% - 48px);
+  overflow-x: auto;
+  padding: 5px 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) var(--background-color);
+}
+
+.filter-categories::-webkit-scrollbar {
+  height: 4px;
+}
+
+.filter-categories::-webkit-scrollbar-track {
+  background: var(--background-color);
+  border-radius: 10px;
+}
+
+.filter-categories::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 10px;
+}
+
+/* Filter Category */
+.filter-category {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  position: relative;
+  min-width: 100px;
+  padding: 12px 16px;
+  background: #ffffff;
+  color: var(--Colors-Neutral-1000, #333);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 36px;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.filter-category:hover:not(.active) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 184, 0.2);
+}
+
+/* Filter Category Size Variants */
+.filter-category.small {
+  min-width: 62px;
+}
+
+.filter-category.large {
+  min-width: 138px;
+}
+
+/* Active Filter Category */
+.filter-category.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  position: relative;
+  min-width: 89px;
+  padding: 12px 24px;
+  border-bottom: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  font-weight: 600;
+  overflow: hidden;
+  background: none;
+  box-shadow: none;
+}
+
+/* Sort Toggle */
+.sort-toggle {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.sort-toggle:hover {
+  transform: rotate(180deg);
+}
+
+/* Sort Icon */
+.sort-icon {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 0;
+  left: 0;
+}
+
+/* Sort Icon Image */
+.sort-icon-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: url(https://static.codia.ai/custom_image/2025-04-20/013852/sort-icon.svg)
+    no-repeat center;
+  background-size: 100% 100%;
+}
+
+/* ==========================================================================
+   Mentors Cards Section
+   ========================================================================== */
+
+/* Mentors Container */
+.mentors-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  flex-wrap: nowrap;
+  gap: 24px;
+  position: relative;
+  width: 100%;
+  margin-top: 24px;
+}
+
+/* Mentors Row */
+.mentors-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  align-self: stretch;
+  flex-wrap: wrap;
+  gap: 16px;
+  position: relative;
+  width: 100%;
+}
+
+/* Mentor Card */
+.mentor-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  position: relative;
+  width: 318px;
+  height: 390px;
+  background: var(--white);
+  border: 0.88px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mentor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px 0 rgba(88, 92, 95, 0.15);
+}
+
+/* Mentor Header */
+.mentor-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  flex-wrap: nowrap;
+  gap: 8px;
+  position: relative;
+  min-width: 0;
+  height: 236px;
+  padding: 16px;
+  background: var(--background-color);
+}
+
+/* Mentor Profile */
+.mentor-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-wrap: nowrap;
+  gap: 8px;
+  position: relative;
+}
+
+/* Mentor Avatar */
+.mentor-avatar {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 150px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.mentor-card:hover .mentor-avatar {
+  transform: scale(1.05);
+}
+
+/* Mentor Name */
+.mentor-name {
+  position: relative;
+  height: 27px;
+  color: #000000;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 27px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Mentor Title */
+.mentor-title {
+  position: relative;
+  height: 24px;
+  color: var(--light-text);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Mentor Experience */
+.mentor-experience {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 4px;
+  position: relative;
+  width: 99px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.03);
+  transition: background-color 0.3s ease;
+}
+
+.mentor-card:hover .mentor-experience {
+  background-color: rgba(248, 37, 72, 0.05);
+}
+
+/* Experience Text */
+.experience-text {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  position: relative;
+  width: 83px;
+  height: 17px;
+  color: #4a4a4a;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16.8px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Mentor Social Links */
+.mentor-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-wrap: nowrap;
+  gap: 16px;
+  position: relative;
+  padding: 8px 0;
+}
+
+/* Social Icon */
+.social-icon {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Social Icon Image */
+.social-icon-img {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  margin: 2px 0 0 2px;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Individual Social Icons */
+.social-icon-1 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-1.svg);
+}
+.social-icon-2 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-2.svg);
+}
+.social-icon-3 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-3.svg);
+}
+.social-icon-4 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-4.svg);
+}
+.social-icon-5 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-5.svg);
+}
+.social-icon-6 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-6.svg);
+}
+.social-icon-7 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-7.svg);
+}
+.social-icon-8 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-8.svg);
+}
+.social-icon-9 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-9.svg);
+}
+.social-icon-10 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-10.svg);
+}
+.social-icon-11 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-11.svg);
+}
+.social-icon-12 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-12.svg);
+}
+.social-icon-13 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-13.svg);
+}
+.social-icon-14 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-14.svg);
+}
+.social-icon-15 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-15.svg);
+}
+.social-icon-16 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-16.svg);
+}
+.social-icon-17 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-17.svg);
+}
+.social-icon-18 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-18.svg);
+}
+.social-icon-19 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-19.svg);
+}
+.social-icon-20 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-20.svg);
+}
+.social-icon-21 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-21.svg);
+}
+.social-icon-22 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-22.svg);
+}
+.social-icon-23 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-23.svg);
+}
+.social-icon-24 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-24.svg);
+}
+.social-icon-25 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-25.svg);
+}
+.social-icon-26 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-26.svg);
+}
+.social-icon-27 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-27.svg);
+}
+.social-icon-28 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-28.svg);
+}
+.social-icon-29 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-29.svg);
+}
+.social-icon-30 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-30.svg);
+}
+.social-icon-31 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-31.svg);
+}
+.social-icon-32 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-32.svg);
+}
+.social-icon-33 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-33.svg);
+}
+.social-icon-34 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-34.svg);
+}
+.social-icon-35 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-35.svg);
+}
+.social-icon-36 {
+  background-image: url(https://static.codia.ai/custom_image/2025-04-20/013852/social-icon-36.svg);
+}
+
+/* Mentor Content */
+.mentor-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  align-self: stretch;
+  flex-wrap: nowrap;
+  gap: 16px;
+  position: relative;
+  min-width: 0;
+  padding: 22px;
+}
+
+/* Mentor Description */
+.mentor-description {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  align-self: stretch;
+  position: relative;
+  width: 100%;
+  height: 48px;
+  color: #777777;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Mentor Actions */
+.mentor-actions {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  flex-wrap: nowrap;
+  gap: 16px;
+  position: relative;
+}
+
+/* Action Button */
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  flex-grow: 1;
+  flex-basis: 0;
+  gap: 6px;
+  position: relative;
+  padding: 8px 12px;
+  border: 2px solid rgba(255, 29, 53, 0.5);
+  border-radius: 6px;
+  color: var(--primary-color);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  text-align: center;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border-color: var(--primary-color);
+}
+
+/* Book Button */
+.book-btn {
+  background-color: rgba(255, 29, 53, 0.05);
+}
+
+/* Details Button */
+.details-btn {
+  background-color: transparent;
+}
+
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+
+/* Responsive Styles for 1440px and Below */
+@media (max-width: 1440px) {
+  .main-container {
+    width: 100%;
+  }
+
+  header {
+    width: 95%;
+  }
+
+  .search-group {
+    width: 95%;
+  }
+
+  .mentors-row {
+    justify-content: center;
+  }
+}
+
+/* Responsive Styles for 992px and Below */
+@media (max-width: 992px) {
+  nav {
+    flex-direction: column;
+    gap: 15px;
+    padding: 12px;
+  }
+
+  .left_Sec,
+  .middleTabs {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .logo img {
+    width: 120px;
+    height: 30px;
+  }
+}
+
+/* Responsive Styles for 768px and Below */
+@media (max-width: 768px) {
+  .main-container {
+    padding: 0 10px 40px;
+  }
+
+  .search-section {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .filter-btn,
+  .search-bar {
+    width: 100%;
+  }
+
+  .search-bar {
+    height: 60px;
+  }
+
+  .filter-btn {
+    height: 50px;
+    justify-content: center;
+  }
+
+  .filter-section {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .filter-categories {
+    order: 3;
+    width: 100%;
+  }
+
+  .filter-toggle,
+  .sort-toggle {
+    order: 1;
+    flex: 0 0 auto;
+  }
+
+  .sort-toggle {
+    order: 2;
+  }
+
+  .mentor-card {
+    width: 100%;
+    max-width: 318px;
+  }
+}
+
+/* Responsive Styles for 576px and Below */
+@media (max-width: 576px) {
+  .left_Sec,
+  .middleTabs {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .signup-btn,
+  .login-btn {
+    width: 100%;
+  }
+
+  .mentor-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+
+  .logo img {
+    width: 100px;
+    height: 25px;
+  }
+}

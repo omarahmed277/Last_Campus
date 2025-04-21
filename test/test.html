@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>منصة الموجهين</title>
+    <link rel="stylesheet" href="../exploreStyles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="main-container">
+      <!-- Header Section -->
+      <header class="header-wrapper">
+        <div class="header-box">
+          <div class="header-section">
+            <div class="logo-group">
+              <div class="logo-container">
+                <div class="logo-wrapper">
+                  <div class="logo-icon"></div>
+                  <div class="nav-icons">
+                    <div class="nav-icon nav-icon-1"></div>
+                    <div class="nav-icon nav-icon-2"></div>
+                    <div class="nav-icon nav-icon-3"></div>
+                    <div class="nav-icon nav-icon-4"></div>
+                    <div class="nav-icon nav-icon-5"></div>
+                    <div class="nav-icon nav-icon-6"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-group">
+              <a class="nav-item active">الموجهين</a>
+              <a class="nav-item" href="./sessions.html">الجلسات</a>
+              <a class="nav-item">إنضم كموجه</a>
+            </div>
+          </div>
+          <!-- Dynamic Auth Section -->
+          <div class="auth-section"></div>
+        </div>
+      </header>
+
+      <!-- Search and Filter Section -->
+      <section class="search-group">
+        <div class="search-container">
+          <div class="search-section">
+            <div class="filter-btn">
+              <div class="filter-text">فلتر</div>
+              <div class="filter-icon">
+                <div class="filter-icon-img"></div>
+              </div>
+            </div>
+            <div class="search-bar">
+              <div class="search-input-group">
+                <span class="search-placeholder"
+                  >البحث حسب الاسم و الشركة و الدور</span
+                >
+                <div class="search-icon">
+                  <div class="search-icon-img"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-container">
+            <div class="filter-section">
+              <div class="filter-toggle">
+                <div class="filter-toggle-icon">
+                  <div class="filter-toggle-img"></div>
+                </div>
+              </div>
+              <div class="filter-categories">
+                <div class="filter-category active">الكل</div>
+                <div class="filter-category">البرمجة</div>
+                <div class="filter-category">التصميم</div>
+                <div class="filter-category small">HR</div>
+                <div class="filter-category large">ريادة اعمال</div>
+              </div>
+              <div class="sort-toggle">
+                <div class="sort-icon">
+                  <div class="sort-icon-img"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mentors Cards Section -->
+        <main class="mentors-container"></main>
+      </section>
+    </div>
+
+    <script src="mentor.js"></script>
+  </body>
+</html>
