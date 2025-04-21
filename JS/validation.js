@@ -781,7 +781,7 @@ document.addEventListener("DOMContentLoaded", function () {
           const response = await window.auth.verifyPhone(userId, code);
           localStorage.removeItem("tempUserId");
           localStorage.setItem("authToken", response.token);
-          window.location.href = "dashboard.html";
+          window.location.href = "explore.html";
         } catch (error) {
           alert(error.message);
         }
