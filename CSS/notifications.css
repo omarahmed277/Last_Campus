@@ -1,0 +1,168 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Baloo Bhaijaan 2", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.notifications-container {
+  position: absolute;
+  top: 70px;
+  left: 20px;
+  width: 350px;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  overflow: hidden;
+  z-index: 1000;
+  direction: rtl;
+}
+
+.notification {
+  background-color: #fff;
+  border-radius: 12px;
+  border: 1px solid #e6e6e6;
+  padding: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.notification-left {
+  display: flex;
+  align-items: center;
+}
+
+.close-button {
+  color: #8f8f8f;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 8px;
+}
+
+.action-button {
+  margin-right: auto;
+  background-color: #f63859;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.action-button.secondary {
+  background-color: #f0f0f0;
+  color: #333;
+  margin-left: 8px;
+}
+
+.notification-content {
+  flex-grow: 1;
+  margin-left: 8px;
+}
+
+.notification-right {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #8cd3c5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.notification-title {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 4px;
+  color: #333;
+  text-align: right;
+}
+
+.notification-text {
+  color: #666;
+  font-size: 14px;
+  text-align: right;
+  line-height: 1.4;
+}
+
+.notification-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.show-more-link {
+  display: block;
+  background: none;
+  border: none;
+  color: #f63859;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  padding: 8px 0;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.notification.compact {
+  padding: 8px 12px;
+}
+
+.arabic {
+  direction: rtl;
+}
+
+.icon-variant .notification-title::after {
+  content: "\f0a2";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  margin-right: 6px;
+  color: #f63859;
+}
+
+.notification-count {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  background-color: #f63859;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonsNav {
+  position: relative;
+}
+
+@media (max-width: 480px) {
+  .notifications-container {
+    width: 90%;
+    left: 5%;
+    top: 80px;
+  }
+}

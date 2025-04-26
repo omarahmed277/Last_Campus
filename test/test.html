@@ -1,98 +1,178 @@
 <!DOCTYPE html>
-<html lang="ar" dir="ltr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>منصة الموجهين</title>
-    <link rel="stylesheet" href="../exploreStyles.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <title>Profile Popup</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .popup-container {
+        background-color: white;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 650px;
+        display: flex;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        position: relative;
+        direction: rtl;
+      }
+
+      .left-section {
+        flex: 1;
+        padding: 20px;
+        position: relative;
+      }
+
+      .right-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+      }
+
+      .profile-name {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .profile-title {
+        color: #777;
+        margin-bottom: 20px;
+      }
+
+      .profile-bio {
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 25px;
+        text-align: right;
+      }
+
+      .profile-image-container {
+        width: 100%;
+        position: relative;
+        cursor: pointer;
+      }
+
+      .profile-image {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        display: block;
+      }
+
+      .video-play-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(255, 255, 255, 0.8);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .video-play-icon::after {
+        content: "";
+        border-style: solid;
+        border-width: 10px 0 10px 20px;
+        border-color: transparent transparent transparent #333;
+        margin-left: 5px;
+      }
+
+      .video-label {
+        text-align: center;
+        margin-top: 10px;
+        font-weight: bold;
+      }
+
+      .buttons-container {
+        display: flex;
+        gap: 10px;
+      }
+
+      .button {
+        flex: 1;
+        padding: 12px;
+        border-radius: 5px;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        text-align: center;
+      }
+
+      .button-outline {
+        border: 1px solid #ff4d67;
+        color: #ff4d67;
+        background-color: white;
+      }
+
+      .button-filled {
+        background-color: #ff4d67;
+        color: white;
+      }
+
+      @media (max-width: 768px) {
+        .popup-container {
+          flex-direction: column;
+        }
+
+        .left-section,
+        .right-section {
+          width: 100%;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div class="main-container">
-      <!-- Header Section -->
-      <header class="header-wrapper">
-        <div class="header-box">
-          <div class="header-section">
-            <div class="logo-group">
-              <div class="logo-container">
-                <div class="logo-wrapper">
-                  <div class="logo-icon"></div>
-                  <div class="nav-icons">
-                    <div class="nav-icon nav-icon-1"></div>
-                    <div class="nav-icon nav-icon-2"></div>
-                    <div class="nav-icon nav-icon-3"></div>
-                    <div class="nav-icon nav-icon-4"></div>
-                    <div class="nav-icon nav-icon-5"></div>
-                    <div class="nav-icon nav-icon-6"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="nav-group">
-              <a class="nav-item active">الموجهين</a>
-              <a class="nav-item" href="./sessions.html">الجلسات</a>
-              <a class="nav-item">إنضم كموجه</a>
-            </div>
-          </div>
-          <!-- Dynamic Auth Section -->
-          <div class="auth-section"></div>
+    <div class="popup-container">
+      <div class="right-section">
+        <h1 class="profile-name">نهال سراج الدين</h1>
+        <p class="profile-title">Product Designer</p>
+        <p class="profile-bio">
+          أنا نهال، مصمم UI/UX شغوف بإنشاء تجارب مستخدم سلسلة وواجهات جذابة تلبي
+          احتياجات المستخدمين. لدي خبرة في تصميم تطبيقات الويب والموبايل، وأمتلك
+          معرفة قوية بمبادئ التصميم والتفكير التصميمي.
+          <br /><br />
+          أحب البحث عن حلول مبتكرة لتحسين تجربة المستخدم، وأمتلك خلفية في
+          التصوير والمونتاج، مما يعزز فهمي للعناصر البصرية والتفاعل. كما أن لدي
+          معرفة بأساسيات الـ Front-End وFlutter، مما يساعدني على التعاون الفعال
+          مع المطورين.
+        </p>
+        <div class="buttons-container">
+          <button class="button button-outline">عرض الملف الشخصي</button>
+          <button class="button button-filled">احجز الآن</button>
         </div>
-      </header>
-
-      <!-- Search and Filter Section -->
-      <section class="search-group">
-        <div class="search-container">
-          <div class="search-section">
-            <div class="filter-btn">
-              <div class="filter-text">فلتر</div>
-              <div class="filter-icon">
-                <div class="filter-icon-img"></div>
-              </div>
-            </div>
-            <div class="search-bar">
-              <div class="search-input-group">
-                <span class="search-placeholder"
-                  >البحث حسب الاسم و الشركة و الدور</span
-                >
-                <div class="search-icon">
-                  <div class="search-icon-img"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="filter-container">
-            <div class="filter-section">
-              <div class="filter-toggle">
-                <div class="filter-toggle-icon">
-                  <div class="filter-toggle-img"></div>
-                </div>
-              </div>
-              <div class="filter-categories">
-                <div class="filter-category active">الكل</div>
-                <div class="filter-category">البرمجة</div>
-                <div class="filter-category">التصميم</div>
-                <div class="filter-category small">HR</div>
-                <div class="filter-category large">ريادة اعمال</div>
-              </div>
-              <div class="sort-toggle">
-                <div class="sort-icon">
-                  <div class="sort-icon-img"></div>
-                </div>
-              </div>
-            </div>
-          </div>
+      </div>
+      <div class="left-section">
+        <div class="video-label">فيديو تعريفي</div>
+        <div class="profile-image-container">
+          <img
+            src="/api/placeholder/400/320"
+            alt="Profile Image"
+            class="profile-image"
+          />
+          <div class="video-play-icon"></div>
         </div>
-
-        <!-- Mentors Cards Section -->
-        <main class="mentors-container"></main>
-      </section>
+      </div>
     </div>
-
-    <script src="mentor.js"></script>
   </body>
 </html>

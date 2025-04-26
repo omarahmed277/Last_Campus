@@ -1,4 +1,13 @@
-// Dummy data with unique certificate IDs
+// Unified dummy user data (for navigation bar)
+const dummyUserData = {
+  id: 1,
+  name: "أحمد فتحي",
+  email: "ahmed@example.com",
+  image_url: "./ahmedphoto.webp",
+  isMentor: true,
+};
+
+// Dummy mentor data (provided)
 const dummyMentorData = {
   success: true,
   message: "User retrieved successfully.",
@@ -178,6 +187,28 @@ const dummyMentorData = {
   },
 };
 
+// Simulated notifications data
+const notificationsData = [
+  {
+    title: "تنبيه!",
+    text: "تم تأكيد جلسة جديدة مع أحمد فتحي.",
+    avatar: "./ahmedphoto.webp",
+    actions: [
+      { label: "عرض التفاصيل", primary: true },
+      { label: "إغلاق", primary: false },
+    ],
+    variant: "icon-variant",
+  },
+  {
+    title: "تنبيه!",
+    text: "تم تحديث ملفك الشخصي بنجاح.",
+    avatar: "./ahmedphoto.webp",
+    actions: [{ label: "عرض", primary: true }],
+    compact: true,
+    variant: "icon-variant",
+  },
+];
+
 // Utility Functions
 function checkInputDirection(input) {
   const value = input.value;
@@ -188,7 +219,11 @@ function checkInputDirection(input) {
 function formatDate(dateString) {
   if (!dateString) return "الحالي";
   const date = new Date(dateString);
-  return date.toLocaleDateString("ar-EG", { year: "numeric", month: "short" });
+  return date.toLocaleDateString("ar-EG", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }
 
 function isValidUrl(string, pattern) {
@@ -266,11 +301,104 @@ function closeModal(modalId) {
     const form = modal.querySelector("form");
     if (form) {
       form.reset();
+      delete form.dataset.editId;
       clearErrors(form);
     }
   } else {
     console.error(`Modal with ID ${modalId} not found`);
   }
+}
+
+function getUserIdFromAuthToken() {
+  const authToken = localStorage.getItem("authToken");
+  if (!authToken) {
+    console.log("No authToken found in local storage");
+    return null;
+  }
+  try {
+    const payload = JSON.parse(atob(authToken.split(".")[1]));
+    return payload.id || payload.userId || payload.sub || null;
+  } catch (error) {
+    console.error("Error decoding authToken:", error);
+    return null;
+  }
+}
+
+function sanitizeHTML(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// Authentication Initialization
+async function initializeAuth() {
+  const authSection = document.querySelector(".auth-section");
+  const accessToken = localStorage.getItem("authToken");
+
+  if (accessToken) {
+    try {
+      const userData = await fetchUserData(accessToken);
+      if (userData) {
+        authSection.innerHTML = `
+          <a class="titel" href="./mentor-veiw.html">
+            <img src="${sanitizeHTML(
+              userData.image_url
+            )}" alt="صورة المرشد" style="width: 60px; height: 60px; border-radius: 50%" />
+            <p class="mentor_name">${sanitizeHTML(
+              userData.name
+            )} <img width="24px" height="24px" src="../images/arrow-down.svg"/></p>
+          </a>
+          <div class="buttonsNav">
+            <button class="messageBtn" aria-label="الرسائل">
+              <img src="./mentor-images/messages-2.svg" alt="رسائل" />
+            </button>
+            <button class="notBtn" aria-label="الإشعارات">
+              <img src="./mentor-images/notification.svg" alt="إشعارات" />
+              <span class="notification-count">${
+                notificationsData.length
+              }</span>
+            </button>
+          </div>
+        `;
+        const notBtn = authSection.querySelector(".notBtn");
+        notBtn.addEventListener("click", toggleNotifications);
+        updateNotificationCount();
+      }
+    } catch (error) {
+      console.error("Auth error:", error);
+      localStorage.removeItem("authToken");
+      initializeAuth();
+    }
+  } else {
+    authSection.innerHTML = `
+      <div class="auth-group">
+        <button class="signup-btn">انشاء حساب جديد</button>
+        <button class="login-btn">تسجيل الدخول</button>
+      </div>
+    `;
+    const signupBtn = authSection.querySelector(".signup-btn");
+    const loginBtn = authSection.querySelector(".login-btn");
+    if (signupBtn) {
+      signupBtn.addEventListener("click", () => {
+        window.location.href = "signup1.html";
+      });
+    }
+    if (loginBtn) {
+      loginBtn.addEventListener("click", () => {
+        window.location.href = "index.html";
+      });
+    }
+    notificationsData.length = 0;
+    updateNotificationCount();
+  }
+}
+
+async function fetchUserData(token) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(dummyUserData);
+    }, 500);
+  });
 }
 
 // Populate Functions
@@ -347,24 +475,17 @@ function populateRatingTab(data) {
   const ratingData = data.ratings;
   const ratingContainer = document.getElementById("ratingContent");
 
-  // Clear existing content
   ratingContainer.innerHTML = "";
 
-  // Generate review entries
   const reviewsHtml = ratingData.reviews
     .map((review, index) => {
-      // Generate stars based on rating
       const starsHtml = generateStars(review.rating);
-
-      // Format date to "DD MMM, YYYY" in Arabic
       const formattedDate = new Date(review.date).toLocaleDateString("ar-EG", {
         day: "numeric",
         month: "short",
         year: "numeric",
       });
-
-      // Generate random likes for demo (replace with actual data if available)
-      const likes = Math.floor(Math.random() * 10) / 10; // e.g., 0.9, 1.2
+      const likes = Math.floor(Math.random() * 10) / 10;
 
       return `
         <div class="session${index + 1} sessionsFormat">
@@ -403,11 +524,9 @@ function populateRatingTab(data) {
     })
     .join("");
 
-  // Append reviews to container
   ratingContainer.innerHTML = reviewsHtml;
 }
 
-// Helper function to generate star icons
 function generateStars(rating) {
   const filledStars = Math.floor(rating);
   const halfStar = rating % 1 >= 0.5 ? 1 : 0;
@@ -428,21 +547,6 @@ function generateStars(rating) {
   `;
 }
 
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  const options = { day: "2-digit", month: "short", year: "numeric" };
-  return date.toLocaleDateString("en-US", options);
-}
-
-function formatDate(date) {
-  if (!date) return "غير متوفر";
-  return new Date(date).toLocaleDateString("ar-EG", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-
 function populateAchievementsTab(data) {
   const achievementsContainer = document.getElementById("achievementsContent");
   if (!achievementsContainer) {
@@ -450,15 +554,12 @@ function populateAchievementsTab(data) {
     return;
   }
 
-  // Validate data
   if (!data || !Array.isArray(data.achievements)) {
     console.error("Invalid or missing achievements data");
     achievementsContainer.innerHTML = "<p>خطأ في تحميل الإنجازات</p>";
-    achievementsContainer.style.display = "block";
     return;
   }
 
-  // Generate HTML for achievements
   achievementsContainer.innerHTML = `
     <div class="sessionSuccess_con">
       ${data.achievements
@@ -497,15 +598,7 @@ function populateAchievementsTab(data) {
         .join("")}
     </div>
   `;
-
-  // Ensure the container is visible when populated
-  // achievementsContainer.style.display = "block";
 }
-
-// Example usage
-document.addEventListener("DOMContentLoaded", () => {
-  populateAchievementsTab(achievementsData);
-});
 
 function populateExperiences(experiences) {
   const container = document.getElementById("experiencesContainer");
@@ -517,46 +610,46 @@ function populateExperiences(experiences) {
     const experienceElement = document.createElement("div");
     experienceElement.className = "second_con";
     experienceElement.innerHTML = `
-            <div class="veiw_con">
-              <img src="./mentor-images/briefcase.svg" alt="أيقونة عمل">
-              <div class="text">
-                <h4>${exp.jobTitle}</h4>
-                <p>${exp.companyName}</p>
-                <p>${exp.description}</p>
-              </div>
-            </div>
-            <div class="date2">
-              <p>${formatDate(exp.startDate)} - ${
+      <div class="veiw_con">
+        <img src="./mentor-images/briefcase.svg" alt="أيقونة عمل">
+        <div class="text">
+          <h4>${exp.jobTitle}</h4>
+          <p>${exp.companyName}</p>
+          <p>${exp.description}</p>
+        </div>
+      </div>
+      <div class="date2">
+        <p>${formatDate(exp.startDate)} - ${
       exp.currentlyWorking ? "الحالي" : formatDate(exp.endDate)
     }</p>
-            </div>
-          `;
+      </div>
+    `;
     container.appendChild(experienceElement);
 
     const listElement = document.createElement("div");
     listElement.className = "second_con";
     listElement.innerHTML = `
-            <div class="veiw_con">
-              <img src="./mentor-images/briefcase.svg" alt="أيقونة عمل">
-              <div class="text">
-                <h4>${exp.jobTitle}</h4>
-                <p>${exp.companyName}</p>
-              </div>
-            </div>
-            <div class="date2_con">
-              <div class="date2">
-                <p>${formatDate(exp.startDate)} - ${
+      <div class="veiw_con">
+        <img src="./mentor-images/briefcase.svg" alt="أيقونة عمل">
+        <div class="text">
+          <h4>${exp.jobTitle}</h4>
+          <p>${exp.companyName}</p>
+        </div>
+      </div>
+      <div class="date2_con">
+        <div class="date2">
+          <p>${formatDate(exp.startDate)} - ${
       exp.currentlyWorking ? "الحالي" : formatDate(exp.endDate)
     }</p>
-              </div>
-              <img src="./mentor-images/edit-2.svg" alt="تعديل" class="edit-exp" data-id="${
-                exp.id
-              }">
-              <img src="./mentor-images/trash.svg" alt="حذف" class="delete-exp" data-id="${
-                exp.id
-              }">
-            </div>
-          `;
+        </div>
+        <img src="./mentor-images/edit-2.svg" alt="تعديل" class="edit-exp" data-id="${
+          exp.id
+        }">
+        <img src="./mentor-images/trash.svg" alt="حذف" class="delete-exp" data-id="${
+          exp.id
+        }">
+      </div>
+    `;
     listContainer.appendChild(listElement);
   });
 }
@@ -586,27 +679,27 @@ function populateCertificates(certificates) {
     const listElement = document.createElement("div");
     listElement.className = "second_con";
     listElement.innerHTML = `
-            <div class="veiw_con">
-              <img src="${cert.image_url}" width="100px" alt="صورة الشهادة">
-              <div class="text">
-                <h4>${cert.name}</h4>
-                <p>${cert.issuingAuthority}</p>
-                <p>${formatDate(cert.issueDate)}</p>
-              </div>
-            </div>
-            <div class="education">
-              <div class="edu_con">
-                <p>عرض الشهادة</p>
-                <img src="./mentor-images/export.svg" alt="عرض">
-              </div>
-              <img src="./mentor-images/edit-2.svg" alt="تعديل" class="edit-cert" data-id="${
-                cert.id
-              }">
-              <img src="./mentor-images/trash.svg" alt="حذف" class="delete-cert" data-id="${
-                cert.id
-              }">
-            </div>
-          `;
+      <div class="veiw_con">
+        <img src="${cert.image_url}" width="100px" alt="صورة الشهادة">
+        <div class="text">
+          <h4>${cert.name}</h4>
+          <p>${cert.issuingAuthority}</p>
+          <p>${formatDate(cert.issueDate)}</p>
+        </div>
+      </div>
+      <div class="education">
+        <div class="edu_con">
+          <p>عرض الشهادة</p>
+          <img src="./mentor-images/export.svg" alt="عرض">
+        </div>
+        <img src="./mentor-images/edit-2.svg" alt="تعديل" class="edit-cert" data-id="${
+          cert.id
+        }">
+        <img src="./mentor-images/trash.svg" alt="حذف" class="delete-cert" data-id="${
+          cert.id
+        }">
+      </div>
+    `;
     listContainer.appendChild(listElement);
   });
 
@@ -634,21 +727,21 @@ function createCertificateElement(cert) {
   const certElement = document.createElement("div");
   certElement.className = "second_con";
   certElement.innerHTML = `
-          <div class="veiw_con">
-            <img src="${cert.image_url}" width="100px" alt="صورة الشهادة">
-            <div class="text">
-              <h4>${cert.name}</h4>
-              <p>${cert.issuingAuthority}</p>
-              <p>${formatDate(cert.issueDate)}</p>
-            </div>
-          </div>
-          <div class="education">
-            <div class="edu_con">
-              <a href="${cert.certificateLink}" target="_blank">عرض الشهادة</a>
-              <img src="./mentor-images/export.svg" alt="عرض">
-            </div>
-          </div>
-        `;
+    <div class="veiw_con">
+      <img src="${cert.image_url}" width="100px" alt="صورة الشهادة">
+      <div class="text">
+        <h4>${cert.name}</h4>
+        <p>${cert.issuingAuthority}</p>
+        <p>${formatDate(cert.issueDate)}</p>
+      </div>
+    </div>
+    <div class="education">
+      <div class="edu_con">
+        <a href="${cert.certificateLink}" target="_blank">عرض الشهادة</a>
+        <img src="./mentor-images/export.svg" alt="عرض">
+      </div>
+    </div>
+  `;
   return certElement;
 }
 
@@ -662,43 +755,141 @@ function populateEducation(education) {
     const eduElement = document.createElement("div");
     eduElement.className = "second_con";
     eduElement.innerHTML = `
-            <div class="veiw_con">
-              <img src="./mentor-images/education.svg" alt="أيقونة تعليم">
-              <div class="text">
-                <h4>${edu.degree}</h4>
-                <p>${edu.institution}</p>
-              </div>
-            </div>
-            <div class="date2">
-              <p>${formatDate(edu.startDate)} - ${formatDate(edu.endDate)}</p>
-            </div>
-          `;
+      <div class="veiw_con">
+        <img src="./mentor-images/education.svg" alt="أيقونة تعليم">
+        <div class="text">
+          <h4>${edu.degree}</h4>
+          <p>${edu.institution}</p>
+        </div>
+      </div>
+      <div class="date2">
+        <p>${formatDate(edu.startDate)} - ${formatDate(edu.endDate)}</p>
+      </div>
+    `;
     container.appendChild(eduElement);
 
     const listElement = document.createElement("div");
     listElement.className = "second_con";
     listElement.innerHTML = `
-            <div class="veiw_con">
-              <img src="./mentor-images/education.svg" alt="أيقونة تعليم">
-              <div class="text">
-                <h4>${edu.degree}</h4>
-                <p>${edu.institution}</p>
-              </div>
-            </div>
-            <div class="date2_con">
-              <div class="date2">
-                <p>${formatDate(edu.startDate)} - ${formatDate(edu.endDate)}</p>
-              </div>
-              <img src="./mentor-images/edit-2.svg" alt="تعديل" class="edit-edu" data-id="${
-                edu.id
-              }">
-              <img src="./mentor-images/trash.svg" alt="حذف" class="delete-edu" data-id="${
-                edu.id
-              }">
-            </div>
-          `;
+      <div class="veiw_con">
+        <img src="./mentor-images/education.svg" alt="أيقونة تعليم">
+        <div class="text">
+          <h4>${edu.degree}</h4>
+          <p>${edu.institution}</p>
+        </div>
+      </div>
+      <div class="date2_con">
+        <div class="date2">
+          <p>${formatDate(edu.startDate)} - ${formatDate(edu.endDate)}</p>
+        </div>
+        <img src="./mentor-images/edit-2.svg" alt="تعديل" class="edit-edu" data-id="${
+          edu.id
+        }">
+        <img src="./mentor-images/trash.svg" alt="حذف" class="delete-edu" data-id="${
+          edu.id
+        }">
+      </div>
+    `;
     listContainer.appendChild(listElement);
   });
+}
+
+// Notification Functions
+function renderNotifications() {
+  const notificationsContainer = document.querySelector(
+    ".notifications-container"
+  );
+  if (!notificationsContainer) return;
+  notificationsContainer.innerHTML = "";
+
+  notificationsData.forEach((notification, index) => {
+    const notificationEl = document.createElement("div");
+    notificationEl.className = `notification ${
+      notification.compact ? "compact" : ""
+    } ${notification.variant || ""}`;
+    notificationEl.innerHTML = `
+      <div class="notification-left">
+        <button class="close-button">×</button>
+        ${
+          notification.actions && notification.actions.length === 1
+            ? `<button class="action-button">${notification.actions[0].label}</button>`
+            : ""
+        }
+      </div>
+      <div class="notification-content">
+        <h3 class="notification-title">${notification.title}</h3>
+        ${
+          notification.text
+            ? `<p class="notification-text">${notification.text}</p>`
+            : ""
+        }
+        ${
+          notification.actions && notification.actions.length > 1
+            ? `<div class="notification-actions">
+                ${notification.actions
+                  .map(
+                    (action) => `
+                  <button class="action-button ${
+                    action.primary ? "" : "secondary"
+                  }">${action.label}</button>
+                `
+                  )
+                  .join("")}
+              </div>`
+            : ""
+        }
+      </div>
+      ${
+        notification.avatar
+          ? `<div class="notification-right">
+              <div class="avatar">
+                <img src="${notification.avatar}" alt="Avatar" class="avatar-image" />
+              </div>
+            </div>`
+          : ""
+      }
+    `;
+
+    const closeBtn = notificationEl.querySelector(".close-button");
+    closeBtn.addEventListener("click", () => {
+      notificationsData.splice(index, 1);
+      renderNotifications();
+      updateNotificationCount();
+    });
+
+    const actionButtons = notificationEl.querySelectorAll(".action-button");
+    actionButtons.forEach((btn, btnIndex) => {
+      btn.addEventListener("click", () => {
+        console.log(`Action clicked: ${notification.actions[btnIndex].label}`);
+      });
+    });
+
+    notificationsContainer.appendChild(notificationEl);
+  });
+
+  const showMoreLink = document.createElement("a");
+  showMoreLink.className = "show-more-link arabic";
+  showMoreLink.textContent = "عرض المزيد";
+  showMoreLink.href = "#";
+  notificationsContainer.appendChild(showMoreLink);
+}
+
+function updateNotificationCount() {
+  const notificationCountEl = document.querySelector(".notification-count");
+  if (notificationCountEl) {
+    notificationCountEl.textContent = notificationsData.length;
+    notificationCountEl.style.display =
+      notificationsData.length > 0 ? "block" : "none";
+  }
+}
+
+function toggleNotifications() {
+  const notificationsContainer = document.querySelector(
+    ".notifications-container"
+  );
+  if (!notificationsContainer) return;
+  const isVisible = notificationsContainer.style.display === "block";
+  notificationsContainer.style.display = isVisible ? "none" : "block";
 }
 
 // Form Submissions
@@ -760,7 +951,6 @@ function setupFormSubmissions() {
         dummyMentorData.data.experiences.push(newExp);
       }
       alert(`تم ${expId ? "تحديث" : "إضافة"} الخبرة بنجاح (بيانات تجريبية)`);
-      delete form.dataset.editId;
       closeModal("editProfileEx_edit2");
       populateDynamicSections(dummyMentorData.data);
     }
@@ -781,6 +971,7 @@ function setupFormSubmissions() {
         certificateNumber: document.getElementById("certificateNumber").value,
         certificateLink: document.getElementById("certificateLink").value,
         image_url:
+          document.getElementById("certificateImage")?.value ||
           "https://i.pinimg.com/736x/18/c6/e0/18c6e05ccc51b8e8e8385d0b38105d83.jpg",
       };
       if (certId) {
@@ -792,7 +983,6 @@ function setupFormSubmissions() {
         dummyMentorData.data.certificates.push(newCert);
       }
       alert(`تم ${certId ? "تحديث" : "إضافة"} الشهادة بنجاح (بيانات تجريبية)`);
-      delete form.dataset.editId;
       closeModal("editProfileSp_add");
       populateDynamicSections(dummyMentorData.data);
     }
@@ -819,7 +1009,6 @@ function setupFormSubmissions() {
         dummyMentorData.data.education.push(newEdu);
       }
       alert(`تم ${eduId ? "تحديث" : "إضافة"} التعليم بنجاح (بيانات تجريبية)`);
-      delete form.dataset.editId;
       closeModal("editProfileEdu_add");
       populateDynamicSections(dummyMentorData.data);
     }
@@ -835,57 +1024,64 @@ function setupFileUploads() {
   const videoInput = document.getElementById("videoInput");
   const removeProfileImage = document.getElementById("removeProfileImage");
 
-  uploadImage.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (file && file.size <= 2 * 1024 * 1024) {
-      dummyMentorData.data.image_url = URL.createObjectURL(file);
-      document.getElementById("image1").src = dummyMentorData.data.image_url;
-      document.getElementById("image2").src = dummyMentorData.data.image_url;
-      document.getElementById("profileImagePreview").src =
-        dummyMentorData.data.image_url;
-      alert("تم تحديث صورة الملف الشخصي بنجاح (بيانات تجريبية)");
-    } else {
-      alert("حجم الملف يجب أن يكون أقل من 2 ميجابايت");
-    }
-  });
+  if (uploadImage) {
+    uploadImage.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file && file.size <= 2 * 1024 * 1024) {
+        dummyMentorData.data.image_url = URL.createObjectURL(file);
+        document.getElementById("image1").src = dummyMentorData.data.image_url;
+        document.getElementById("image2").src = dummyMentorData.data.image_url;
+        document.getElementById("profileImagePreview").src =
+          dummyMentorData.data.image_url;
+        alert("تم تحديث صورة الملف الشخصي بنجاح (بيانات تجريبية)");
+      } else {
+        alert("حجم الملف يجب أن يكون أقل من 2 ميجابايت");
+      }
+    });
+  }
 
-  uploadImageBackground.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      dummyMentorData.data.background_image_url = URL.createObjectURL(file);
-      document.getElementById("background_image").src =
-        dummyMentorData.data.background_image_url;
-      alert("تم تحديث صورة الخلفية بنجاح (بيانات تجريبية)");
-    }
-  });
+  if (uploadImageBackground) {
+    uploadImageBackground.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        dummyMentorData.data.background_image_url = URL.createObjectURL(file);
+        document.getElementById("background_image").src =
+          dummyMentorData.data.background_image_url;
+        alert("تم تحديث صورة الخلفية بنجاح (بيانات تجريبية)");
+      }
+    });
+  }
 
-  videoInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.includes("mp4") && file.size <= 25 * 1024 * 1024) {
-      dummyMentorData.data.video_url = URL.createObjectURL(file);
-      const videoPlayer = document.getElementById("videoPlayer");
-      videoPlayer.src = dummyMentorData.data.video_url;
-      videoPlayer.style.display = "block";
-      document.getElementById("uplodimage").style.display = "none";
-      document.getElementById("uplodeBtn").style.display = "none";
-      document.getElementById("size").style.display = "none";
-      alert("تم تحديث الفيديو التعريفي بنجاح (بيانات تجريبية)");
-    } else {
-      alert("يجب أن يكون الفيديو بصيغة MP4 وحجمه أقل من 25 ميجابايت");
-    }
-  });
+  if (videoInput) {
+    videoInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file && file.type.includes("mp4") && file.size <= 25 * 1024 * 1024) {
+        dummyMentorData.data.video_url = URL.createObjectURL(file);
+        const videoPlayer = document.getElementById("videoPlayer");
+        videoPlayer.src = dummyMentorData.data.video_url;
+        videoPlayer.style.display = "block";
+        document.getElementById("uplodimage").style.display = "none";
+        document.getElementById("uplodeBtn").style.display = "none";
+        document.getElementById("size").style.display = "none";
+        alert("تم تحديث الفيديو التعريفي بنجاح (بيانات تجريبية)");
+      } else {
+        alert("يجب أن يكون الفيديو بصيغة MP4 وحجمه أقل من 25 ميجابايت");
+      }
+    });
+  }
 
-  removeProfileImage.addEventListener("click", () => {
-    if (confirm("هل أنت متأكد من حذف صورة الملف الشخصي؟")) {
-      dummyMentorData.data.image_url =
-        "./mentor-images/freepik__adjust__7471.svg";
-      document.getElementById("image1").src = dummyMentorData.data.image_url;
-      document.getElementById("image2").src = dummyMentorData.data.image_url;
-      document.getElementById("profileImagePreview").src =
-        dummyMentorData.data.image_url;
-      alert("تم حذف صورة الملف الشخصي بنجاح (بيانات تجريبية)");
-    }
-  });
+  if (removeProfileImage) {
+    removeProfileImage.addEventListener("click", () => {
+      if (confirm("هل أنت متأكد من حذف صورة الملف الشخصي؟")) {
+        dummyMentorData.data.image_url = "./ahmedphoto.webp";
+        document.getElementById("image1").src = dummyMentorData.data.image_url;
+        document.getElementById("image2").src = dummyMentorData.data.image_url;
+        document.getElementById("profileImagePreview").src =
+          dummyMentorData.data.image_url;
+        alert("تم حذف صورة الملف الشخصي بنجاح (بيانات تجريبية)");
+      }
+    });
+  }
 }
 
 // Date Pickers
@@ -919,15 +1115,16 @@ function initDatePickers() {
       },
     });
 
-    document
-      .getElementById("currentlyWorking")
-      ?.addEventListener("change", (e) => {
+    const currentlyWorking = document.getElementById("currentlyWorking");
+    if (currentlyWorking) {
+      currentlyWorking.addEventListener("change", (e) => {
         const endDateInput = document.getElementById("expEndDate");
         endDateInput.disabled = e.target.checked;
         if (e.target.checked) {
           endDateInput.value = "";
         }
       });
+    }
   });
 }
 
@@ -939,37 +1136,26 @@ function switchTab(tabName) {
     achievements: { content: "achievementsContent", tab: "achievementsTab" },
   };
 
-  // Hide all tab contents and remove 'checked' class from all tabs
   Object.values(tabs).forEach(({ content, tab }) => {
     const contentElement = document.getElementById(content);
     if (contentElement) {
       contentElement.style.display = "none";
-    } else {
-      console.warn(`Content element not found: ${content}`);
     }
     const tabElement = document.getElementById(tab);
     if (tabElement) {
       tabElement.classList.remove("checked");
-    } else {
-      console.warn(`Tab element not found: ${tab}`);
     }
   });
 
-  // Show the selected tab content and add 'checked' class
   const selectedContent = document.getElementById(tabs[tabName].content);
   const selectedTab = document.getElementById(tabs[tabName].tab);
   if (selectedContent) {
     selectedContent.style.display = "block";
-  } else {
-    console.error(`Cannot display content: ${tabs[tabName].content} not found`);
   }
   if (selectedTab) {
     selectedTab.classList.add("checked");
-  } else {
-    console.error(`Cannot mark tab as checked: ${tabs[tabName].tab} not found`);
   }
 
-  // Populate content for the selected tab
   if (tabName === "rating") {
     populateRatingTab(dummyMentorData.data);
   } else if (tabName === "achievements") {
@@ -990,14 +1176,11 @@ function setupModalTabSwitching() {
     const tab = document.getElementById(tabId);
     if (tab) {
       tab.addEventListener("click", () => {
-        // Remove 'checked' class from all tabs
         document
           .querySelectorAll(".infolist p")
           .forEach((t) => t.classList.remove("checked"));
-        // Add 'checked' class to clicked tab
         tab.classList.add("checked");
 
-        // Hide all forms and lists
         document
           .querySelectorAll(
             ".form_contaner, #experienceList, #certificateList, #educationList"
@@ -1006,13 +1189,11 @@ function setupModalTabSwitching() {
             el.style.display = "none";
           });
 
-        // Show relevant content
         content.forEach((id) => {
           const element = document.getElementById(id);
           if (element) element.style.display = "block";
         });
 
-        // Show "Add" buttons for non-BasicInfo tabs
         const addButtons = {
           ExperienceTab: "moreExBtn_EX",
           CertificatesTab: "moreExBtn_SP",
@@ -1030,10 +1211,14 @@ function setupModalTabSwitching() {
     }
   });
 
-  // Set default tab to Basic Info
-  document.getElementById("BasicInfoTab").classList.add("checked");
-  document.getElementById("professionalForm").style.display = "block";
-  document.getElementById("socialForm").style.display = "block";
+  const basicInfoTab = document.getElementById("BasicInfoTab");
+  if (basicInfoTab) {
+    basicInfoTab.classList.add("checked");
+  }
+  const professionalForm = document.getElementById("professionalForm");
+  const socialForm = document.getElementById("socialForm");
+  if (professionalForm) professionalForm.style.display = "block";
+  if (socialForm) socialForm.style.display = "block";
 }
 
 // Handle Modal Interactions
@@ -1078,8 +1263,6 @@ function setupModalEventListeners() {
           config.action();
         }
       });
-    } else {
-      console.warn(`Open modal button not found: ${config.btnId}`);
     }
   });
 
@@ -1090,8 +1273,6 @@ function setupModalEventListeners() {
         e.preventDefault();
         closeModal(config.modalId);
       });
-    } else {
-      console.warn(`Close modal button not found: ${config.btnId}`);
     }
   });
 
@@ -1136,6 +1317,7 @@ function setupModalEventListeners() {
         document.getElementById("certificateNumber").value =
           cert.certificateNumber;
         document.getElementById("certificateLink").value = cert.certificateLink;
+        document.getElementById("certificateImage").value = cert.image_url;
         openModal("editProfileSp_add");
       }
     } else if (e.target.classList.contains("delete-cert")) {
@@ -1195,48 +1377,41 @@ function setupModalEventListeners() {
 
   document
     .getElementById("overviewTab")
-    .addEventListener("click", () => switchTab("overview"));
+    ?.addEventListener("click", () => switchTab("overview"));
   document
     .getElementById("ratingTab")
-    .addEventListener("click", () => switchTab("rating"));
+    ?.addEventListener("click", () => switchTab("rating"));
   document
     .getElementById("achievementsTab")
-    .addEventListener("click", () => switchTab("achievements"));
+    ?.addEventListener("click", () => switchTab("achievements"));
 }
 
+// Initialize Page
 function initMentorPage() {
-  // Set default tab to overview
+  initializeAuth();
+  renderNotifications();
+
   const overviewContent = document.getElementById("overviewContent");
   const overviewTab = document.getElementById("overviewTab");
-  if (overviewContent) {
-    overviewContent.style.display = "block";
-  } else {
-    console.error("Overview content not found");
-  }
-  if (overviewTab) {
-    overviewTab.classList.add("checked");
-  } else {
-    console.error("Overview tab not found");
-  }
+  if (overviewContent) overviewContent.style.display = "block";
+  if (overviewTab) overviewTab.classList.add("checked");
 
-  // Ensure other tabs are hidden
   const ratingContent = document.getElementById("ratingContent");
   const achievementsContent = document.getElementById("achievementsContent");
-  if (ratingContent) {
-    ratingContent.style.display = "none";
-  }
-  if (achievementsContent) {
-    achievementsContent.style.display = "none";
-  }
+  if (ratingContent) ratingContent.style.display = "none";
+  if (achievementsContent) achievementsContent.style.display = "none";
 
-  // Populate initial page data
   populatePageWithMentorData(dummyMentorData.data);
-
-  // Setup event listeners and other initializations
   setupFormSubmissions();
   setupFileUploads();
   initDatePickers();
   setupModalEventListeners();
   setupModalTabSwitching();
+
+  document.querySelectorAll("input, textarea").forEach((input) => {
+    input.addEventListener("input", () => checkInputDirection(input));
+    checkInputDirection(input);
+  });
 }
+
 document.addEventListener("DOMContentLoaded", initMentorPage);

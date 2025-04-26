@@ -17,8 +17,8 @@
       <div id="arrowRightS2" class="arrowRight">
         <img src="./images/arrow-right.svg" alt="" />
       </div>
-      <h1>تأكيد رقم الهاتف</h1>
-      <p>من فضلك أدخل الكود المرسل إلى رقم هاتفك لتأكيده.</p>
+      <h1>تأكيد حساب الجيميل</h1>
+      <p>من فضلك أدخل الكود المرسل إلى حسابك الالكتروني لتأكيده.</p>
 
       <form
         action="/verify-phone"
@@ -60,40 +60,6 @@
         </div>
       </form>
     </div>
-
-    <!-- <script>
-let arrowRightS2 = document.getElementById('arrowRightS2')
-arrowRightS2.addEventListener('click' , function(){
-                    signup3.style.display = 'none'
-                    window.location.href = 'signup2.html'
-                })
-
-               
-                document.addEventListener('DOMContentLoaded', function() {
-                    const inputs = document.querySelectorAll('.code-input');
-                    
-                    inputs.forEach((input, index) => {
-                        input.addEventListener('input', function() {
-                            if (this.value.length === this.maxLength) {
-                                const nextInput = inputs[index + 1];
-                                if (nextInput) {
-                                    nextInput.focus();
-                                }
-                            }
-                        });
-            
-                        input.addEventListener('keydown', function(e) {
-                            if (e.key === 'Backspace' && this.value.length === 0) {
-                                const prevInput = inputs[index - 1];
-                                if (prevInput) {
-                                    prevInput.focus();
-                                }
-                            }
-                        });
-                    });
-                });
-            </script> -->
-
     <script src="./JS/APIs.js"></script>
     <script src="./JS/validation.js"></script>
     <script src="./JS/login.js"></script>

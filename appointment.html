@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>جدول المواعيد</title>
+    <style>
+      :root {
+        --primary-color: #ff4d4d;
+        --secondary-color: #f5f5f5;
+        --border-color: #e0e0e0;
+        --text-color: #333;
+        --light-text: #777;
+        --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        --radius: 8px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #f9f9f9;
+        color: var(--text-color);
+        direction: rtl;
+      }
+
+      .container {
+        display: flex;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+        gap: 20px;
+      }
+
+      /* Calendar Section */
+      .calendar-section {
+        flex: 3;
+        background: white;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .calendar-header {
+        display: grid;
+        grid-template-columns: 60px repeat(7, 1fr);
+        background-color: white;
+        border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
+
+      .time-label {
+        padding: 10px;
+        text-align: center;
+        font-weight: bold;
+        color: #666;
+        background-color: #f8f8f8;
+      }
+
+      .day-label {
+        padding: 10px;
+        text-align: center;
+        font-weight: bold;
+        border-bottom: 1px solid var(--border-color);
+        border-left: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f8f8f8;
+      }
+
+      .day-name {
+        margin-bottom: 5px;
+        font-size: 0.9em;
+      }
+
+      .day-date {
+        font-size: 0.8em;
+        color: var(--light-text);
+      }
+
+      .calendar-body {
+        display: grid;
+        grid-template-columns: 60px repeat(7, 1fr);
+        grid-auto-rows: 60px;
+      }
+
+      .time-cell {
+        padding: 10px;
+        text-align: center;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 0.85em;
+        color: #666;
+        background-color: #f8f8f8;
+      }
+
+      .calendar-cell {
+        border-left: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+        position: relative;
+        padding: 2px;
+      }
+
+      .appointment {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 5px;
+        border-radius: 4px;
+        font-size: 0.8em;
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        right: 2px;
+        height: calc(100% - 4px);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .appointment-time {
+        font-weight: bold;
+        margin-bottom: 2px;
+      }
+
+      .appointment-duration {
+        font-size: 0.8em;
+        opacity: 0.8;
+      }
+
+      .appointment.inactive {
+        background-color: #999;
+      }
+
+      /* Settings Section */
+      .settings-section {
+        flex: 2;
+        background: white;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .settings-header {
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .settings-header h2 {
+        font-size: 1.5em;
+        color: #444;
+      }
+
+      .settings-group {
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .settings-title {
+        font-size: 1.1em;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #444;
+      }
+
+      .settings-description {
+        color: var(--light-text);
+        font-size: 0.85em;
+        margin-bottom: 15px;
+        line-height: 1.4;
+      }
+
+      .availability-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px dashed #eee;
+      }
+
+      .day-name-label {
+        font-weight: bold;
+        font-size: 0.9em;
+      }
+
+      .availability-status {
+        color: var(--light-text);
+        font-size: 0.85em;
+      }
+
+      /* Form Elements */
+      .form-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .form-label {
+        font-size: 0.9em;
+        color: #555;
+      }
+
+      .dropdown {
+        background-color: white;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 8px 12px;
+        min-width: 120px;
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85em;
+      }
+
+      .dropdown:after {
+        content: "▼";
+        font-size: 0.7em;
+        margin-right: 5px;
+        color: #777;
+      }
+
+      .add-button {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: white;
+        border: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1.2em;
+        color: #777;
+      }
+
+      .radio-option {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+      }
+
+      .radio-option input[type="radio"] {
+        margin-left: 10px;
+      }
+
+      .radio-option label {
+        font-size: 0.9em;
+      }
+
+      .input-number {
+        width: 60px;
+        padding: 8px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        text-align: center;
+        font-size: 0.85em;
+      }
+
+      .form-input {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .form-input span {
+        font-size: 0.85em;
+        color: #555;
+      }
+
+      .checkbox-container {
+        display: flex;
+        align-items: center;
+      }
+
+      .checkbox-container input[type="checkbox"] {
+        margin-right: 10px;
+      }
+
+      /* Responsive Design */
+      @media screen and (max-width: 1200px) {
+        .container {
+          flex-direction: column;
+        }
+      }
+
+      @media screen and (max-width: 768px) {
+        .day-date {
+          display: none;
+        }
+
+        .calendar-header,
+        .calendar-body {
+          grid-template-columns: 50px repeat(7, 1fr);
+          font-size: 0.9em;
+        }
+
+        .appointment {
+          font-size: 0.7em;
+        }
+      }
+
+      @media screen and (max-width: 480px) {
+        .calendar-header,
+        .calendar-body {
+          grid-template-columns: 40px repeat(3, 1fr);
+        }
+
+        .calendar-header .day-label:nth-child(n + 5),
+        .calendar-body .calendar-cell:nth-child(8n + 5),
+        .calendar-body .calendar-cell:nth-child(8n + 6),
+        .calendar-body .calendar-cell:nth-child(8n + 7),
+        .calendar-body .calendar-cell:nth-child(8n + 8) {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Settings Section -->
+      <div class="settings-section">
+        <div class="settings-header">
+          <h2>إعدادات المواعيد</h2>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-title">مدى التوفر العام</div>
+          <div class="settings-description">
+            يمكنك تحديد المواعيد التي تكون فيها متاحًا بانتظام للمواعيد
+          </div>
+
+          <div class="form-row">
+            <div class="form-label">التكرار</div>
+            <div class="dropdown">أسبوعيًا</div>
+          </div>
+
+          <div class="availability-row">
+            <div class="day-name-label">الأحد</div>
+            <div class="availability-status">غير متاح</div>
+          </div>
+
+          <div class="availability-row">
+            <div class="day-name-label">الإثنين</div>
+            <div class="availability-status">غير متاح</div>
+          </div>
+
+          <div class="availability-row">
+            <div class="day-name-label">الثلاثاء</div>
+            <div class="availability-status">غير متاح</div>
+          </div>
+
+          <div class="availability-row">
+            <div class="day-name-label">الأربعاء</div>
+            <div class="availability-status">غير متاح</div>
+          </div>
+
+          <div class="availability-row">
+            <div class="day-name-label">الخميس</div>
+            <div class="availability-status">غير متاح</div>
+          </div>
+
+          <div class="availability-row">
+            <div class="day-name-label">الجمعة</div>
+            <div class="availability-status">غير متاح</div>
+          </div>
+
+          <div class="availability-row">
+            <div class="day-name-label">السبت</div>
+            <div class="availability-status">غير متاح</div>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-title">الإطار الزمني لتحديد المواعيد</div>
+          <div class="settings-description">
+            تحديد النطاق الزمني الذي يمكن حجز المواعيد من خلاله
+          </div>
+
+          <div class="radio-option">
+            <input
+              type="radio"
+              id="available-now"
+              name="availability-time"
+              checked
+            />
+            <label for="available-now">متاح الآن</label>
+          </div>
+
+          <div class="radio-option">
+            <input type="radio" id="date-range" name="availability-time" />
+            <label for="date-range">تاريخ البدء و تاريخ الانتهاء</label>
+          </div>
+
+          <div class="settings-description">
+            تحديد النطاق الزمني لجميع المواعيد
+          </div>
+
+          <div class="form-row">
+            <div class="form-label">الحد الأقصى للحجز المسبق</div>
+            <div class="form-input">
+              <input type="text" class="input-number" value="3" />
+              <span>أيام</span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-label">الحد الأدنى للوقت قبل الموعد</div>
+            <div class="form-input">
+              <input type="text" class="input-number" value="4" />
+              <span>ساعات</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-title">إعدادات المواعيد المحجوزة</div>
+          <div class="settings-description">
+            إدارة المواعيد المحجوزة التي ستظهر في تقويمك
+          </div>
+
+          <div class="form-row">
+            <div class="form-label">المدة الفاصلة</div>
+            <div class="form-input">
+              <input type="text" class="input-number" value="30" />
+              <div class="dropdown">دقيقة</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-title">الحد الأقصى من الحجوزات يوميا</div>
+          <div class="settings-description">
+            الحد الأقصى من عدد المواعيد المحجوزة في يوم واحد
+          </div>
+
+          <div class="form-row">
+            <div class="form-input" style="margin-left: auto">
+              <input type="text" class="input-number" value="4" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Calendar Section -->
+      <div class="calendar-section">
+        <div class="calendar-header">
+          <div class="time-label">الوقت</div>
+          <div class="day-label">
+            <div class="day-name">الأحد</div>
+            <div class="day-date">1 مايو</div>
+          </div>
+          <div class="day-label">
+            <div class="day-name">السبت</div>
+            <div class="day-date">30 أبريل</div>
+          </div>
+          <div class="day-label">
+            <div class="day-name">الجمعة</div>
+            <div class="day-date">29 أبريل</div>
+          </div>
+          <div class="day-label">
+            <div class="day-name">الخميس</div>
+            <div class="day-date">28 أبريل</div>
+          </div>
+          <div class="day-label">
+            <div class="day-name">الأربعاء</div>
+            <div class="day-date">27 أبريل</div>
+          </div>
+          <div class="day-label">
+            <div class="day-name">الثلاثاء</div>
+            <div class="day-date">26 أبريل</div>
+          </div>
+          <div class="day-label">
+            <div class="day-name">الإثنين</div>
+            <div class="day-date">25 أبريل</div>
+          </div>
+        </div>
+
+        <div class="calendar-body">
+          <!-- Time Labels -->
+          <div class="time-cell">07:00</div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+
+          <div class="time-cell">08:00</div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+
+          <div class="time-cell">09:00</div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+
+          <div class="time-cell">10:00</div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+
+          <div class="time-cell">11:00</div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+
+          <div class="time-cell">12:00</div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+
+          <div class="time-cell">13:00</div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell">
+            <div class="appointment">
+              <div class="appointment-time">13:00</div>
+              <div class="appointment-duration">(60 دقيقة)</div>
+            </div>
+          </div>
+          <div class="calendar-cell">
+            <div class="appointment">
+              <div class="appointment-time">13:00</div>
+              <div class="appointment-duration">(60 دقيقة)</div>
+            </div>
+          </div>
+
+          <div class="time-cell">14:00</div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell">
+            <div class="appointment">
+              <div class="appointment-time">13:00</div>
+              <div class="appointment-duration">(60 دقيقة)</div>
+            </div>
+          </div>
+          <div class="calendar-cell">
+            <div class="appointment inactive">
+              <div class="appointment-time">13:00</div>
+              <div class="appointment-duration">(60 دقيقة)</div>
+            </div>
+          </div>
+
+          <div class="time-cell">15:00</div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell">
+            <div class="appointment">
+              <div class="appointment-time">13:00</div>
+              <div class="appointment-duration">(60 دقيقة)</div>
+            </div>
+          </div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+
+          <div class="time-cell">16:00</div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell">
+            <div class="appointment">
+              <div class="appointment-time">13:00</div>
+              <div class="appointment-duration">(60 دقيقة)</div>
+            </div>
+          </div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+
+          <div class="time-cell">17:00</div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell">
+            <div class="appointment">
+              <div class="appointment-time">13:00</div>
+              <div class="appointment-duration">(60 دقيقة)</div>
+            </div>
+          </div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+
+          <div class="time-cell">18:00</div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell">
+            <div class="appointment">
+              <div class="appointment-time">13:00</div>
+              <div class="appointment-duration">(60 دقيقة)</div>
+            </div>
+          </div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+
+          <div class="time-cell">19:00</div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+
+          <div class="time-cell">20:00</div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+
+          <div class="time-cell">21:00</div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+          <div class="calendar-cell"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

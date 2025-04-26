@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Popup</title>
+    <link rel="stylesheet" href="../CSS/join_as.css" />
+    <style>
+      .mentor-application-popup-container {
+        display: none;
+        background-color: #fff;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 500px;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2000;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      }
+      .mentor-application-popup-container.show {
+        display: block;
+      }
+      .mentor-application-popup-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1999;
+      }
+      .mentor-application-popup-overlay.show {
+        display: block;
+      }
+      .mentor-application-popup-close {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="#" class="join-as-mentor">انضم كموجه</a>
+    <div class="mentor-application-popup-container">
+      <div class="overlay" id="instructions">
+        <div class="mainContaner">
+          <h1>هل تريد الانضمام كموجه؟</h1>
+          <button class="joinBtn" id="joinBtn">موافق</button>
+        </div>
+      </div>
+      <div class="overlay" id="joinAs" style="display: none">
+        <div class="mainContaner_2">
+          <h1>انضم كموجه مهني</h1>
+          <form class="content_joinAs">
+            <input type="submit" value="انضم" class="joinBtn" id="submitBtn" />
+          </form>
+        </div>
+      </div>
+      <button class="mentor-application-popup-close">×</button>
+    </div>
+    <div class="mentor-application-popup-overlay"></div>
+    <script src="../JS/join_as.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const link = document.querySelector(".join-as-mentor");
+        const popup = document.querySelector(
+          ".mentor-application-popup-container"
+        );
+        const overlay = document.querySelector(
+          ".mentor-application-popup-overlay"
+        );
+        const closeBtn = document.querySelector(
+          ".mentor-application-popup-close"
+        );
+
+        console.log(
+          "Link:",
+          link,
+          "Popup:",
+          popup,
+          "Overlay:",
+          overlay,
+          "CloseBtn:",
+          closeBtn
+        );
+
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          console.log("Link clicked");
+          popup.classList.add("show");
+          popup.style.display = "block";
+          overlay.classList.add("show");
+          overlay.style.display = "block";
+        });
+
+        closeBtn.addEventListener("click", () => {
+          console.log("Close clicked");
+          popup.classList.remove("show");
+          popup.style.display = "none";
+          overlay.classList.remove("show");
+          overlay.style.display = "none";
+        });
+
+        overlay.addEventListener("click", () => {
+          console.log("Overlay clicked");
+          popup.classList.remove("show");
+          popup.style.display = "none";
+          overlay.classList.remove("show");
+          overlay.style.display = "none";
+        });
+      });
+    </script>
+  </body>
+</html>

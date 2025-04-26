@@ -213,7 +213,8 @@ input[type="button"] {
   width: 100%;
   background-color: var(--praimary-color);
 }
-button {
+.linkedinBtn,
+.GoogleBtn {
   border: none;
   cursor: pointer;
   background-color: #fff;

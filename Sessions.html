@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus - الجلسات</title>
+    <link rel="stylesheet" href="./CSS/sessions.css" />
+    <link rel="stylesheet" href="./exploreStyles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a class="logo" href="explore.html">
+          <img src="./mentor-images/logo_campus.svg" alt="شعار كامبس" />
+        </a>
+        <div class="middleTabs">
+          <a href="./explore.html">الموجهين</a>
+          <a href="./sessions.html" class="active">الجلسات</a>
+          <a href="./joinasmentor.html">إنضم كموجه</a>
+        </div>
+        <div class="left_Sec auth-section">
+          <!-- Dynamically populated by JavaScript -->
+        </div>
+      </nav>
+    </header>
+    <!-- Notifications Popup -->
+    <div class="notifications-container" style="display: none">
+      <!-- Dynamically populated by JavaScript -->
+    </div>
+    <div class="main-container">
+      <!-- Header Section -->
+
+      <!-- Sessions Section -->
+      <h1 class="page-title">الجلسات</h1>
+      <p class="page-description">
+        تحقق من تفاصيل الجلسات و احصل على تجربة سلسة في تنظيم مواعيدك القادمة
+      </p>
+
+      <div class="tab-menu">
+        <div class="tab active" data-tab="upcoming">الجلسات القادمة</div>
+        <div class="tab" data-tab="pending">الجلسات المعلقة</div>
+        <div class="tab" data-tab="history">السجل</div>
+      </div>
+
+      <div class="sessions-container">
+        <!-- Session cards will be dynamically populated by JavaScript -->
+      </div>
+    </div>
+
+    <script src="./sessions.js"></script>
+    <script
+      src="https://kit.fontawesome.com/a076d05399.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </body>
+</html>

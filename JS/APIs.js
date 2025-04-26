@@ -67,18 +67,21 @@ async function handleApiError(response) {
 window.auth = {
   login: async function (email, password) {
     try {
+      console.log("Sending login request:", { email, password });
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: getHeaders(),
         body: JSON.stringify({ email, password }),
       });
-
+      console.log("Login response status:", response.status);
       await handleApiError(response);
       const data = await response.json();
-
+      console.log("Login response data:", data);
+      if (data.user && !data.user.phoneVerified) {
+        throw new Error("يرجى التحقق من رقم الهاتف قبل تسجيل الدخول");
+      }
       localStorage.setItem("authToken", data.access_token);
       localStorage.setItem("userData", JSON.stringify(data.user));
-
       return data;
     } catch (error) {
       console.error("Login error:", error);

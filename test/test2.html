@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>نظام حجز المواعيد</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+        color: #333;
+      }
+
+      .container {
+        display: flex;
+        direction: rtl;
+        max-width: 1200px;
+        margin: 20px auto;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .calendar-container {
+        flex: 1;
+        border-left: 1px solid #e0e0e0;
+      }
+
+      .settings-container {
+        width: 380px;
+        padding: 25px;
+        background-color: #fff;
+        border-right: 1px solid #e0e0e0;
+        overflow-y: auto;
+        max-height: 800px;
+      }
+
+      .time-column {
+        width: 70px;
+        background-color: #f8f9fa;
+        border-left: 1px solid #e0e0e0;
+      }
+
+      .header {
+        display: flex;
+        padding: 15px;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .header-title {
+        flex: 1;
+        text-align: right;
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .calendar-header {
+        display: flex;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: #fdfdfd;
+      }
+
+      .calendar-day {
+        flex: 1;
+        text-align: center;
+        padding: 15px 10px;
+        border-left: 1px solid #e0e0e0;
+        font-weight: 500;
+        transition: background-color 0.2s;
+      }
+
+      .calendar-day:hover {
+        background-color: #f5f5f5;
+      }
+
+      .calendar-day-number {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .calendar-day-name {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .calendar-grid {
+        display: flex;
+      }
+
+      .time-slots {
+        width: 70px;
+        display: flex;
+        flex-direction: column;
+        background-color: #f8f9fa;
+      }
+
+      .time-slot {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid #e0e0e0;
+        color: #666;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .day-column {
+        flex: 1;
+        border-left: 1px solid #e0e0e0;
+      }
+
+      .slot {
+        height: 60px;
+        border-bottom: 1px solid #e0e0e0;
+        position: relative;
+        transition: background-color 0.2s;
+      }
+
+      .slot:hover {
+        background-color: #f9f9f9;
+        cursor: pointer;
+      }
+
+      .appointment {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        right: 5px;
+        bottom: 5px;
+        background: linear-gradient(135deg, #ff4d6d, #ff758f);
+        color: white;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(255, 77, 109, 0.3);
+        transition: all 0.2s;
+      }
+
+      .appointment:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(255, 77, 109, 0.4);
+      }
+
+      .setting-section {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .setting-section:last-child {
+        border-bottom: none;
+      }
+
+      .setting-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 12px;
+        color: #333;
+      }
+
+      .setting-description {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 18px;
+        line-height: 1.5;
+      }
+
+      .form-control {
+        margin-bottom: 15px;
+      }
+
+      .form-control label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #555;
+        font-weight: 500;
+      }
+
+      .form-control input,
+      .form-control select {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+
+      .form-control input:focus,
+      .form-control select:focus {
+        border-color: #4d9fff;
+        box-shadow: 0 0 0 3px rgba(77, 159, 255, 0.1);
+        outline: none;
+      }
+
+      .form-row {
+        display: flex;
+        margin: 0 -5px;
+        align-items: center;
+      }
+
+      .form-row .form-control {
+        flex: 1;
+        margin: 0 5px;
+      }
+
+      .availability-day {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+        transition: all 0.2s;
+      }
+
+      .availability-day:hover {
+        background-color: #f9f9f9;
+      }
+
+      .availability-day-name {
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .availability-status {
+        color: #999;
+        font-size: 14px;
+      }
+
+      .btn {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 16px;
+      }
+
+      .btn:hover {
+        background-color: #f0f7ff;
+        border-color: #4d9fff;
+        color: #4d9fff;
+      }
+
+      .radio-control {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+        cursor: pointer;
+      }
+
+      .radio-control input {
+        margin-left: 10px;
+        cursor: pointer;
+      }
+
+      .dropdown {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+      }
+
+      .dropdown-toggle {
+        border: 1px solid #ddd;
+        padding: 10px 14px;
+        border-radius: 6px;
+        background-color: #fff;
+        width: 100%;
+        text-align: right;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.2s;
+      }
+
+      .dropdown-toggle:hover {
+        border-color: #bbb;
+      }
+
+      .dropdown-toggle::after {
+        content: "▼";
+        font-size: 10px;
+        color: #666;
+      }
+
+      .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 100%;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        display: none;
+        margin-top: 5px;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+
+      .dropdown-menu.show {
+        display: block;
+      }
+
+      .dropdown-item {
+        padding: 10px 14px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .dropdown-item:hover {
+        background-color: #f0f7ff;
+      }
+
+      .checkbox-control {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-top: 5px;
+      }
+
+      .checkbox-control input {
+        margin-left: 8px;
+        width: auto;
+        cursor: pointer;
+      }
+
+      /* Custom styling for checkboxes and radio buttons */
+      input[type="checkbox"],
+      input[type="radio"] {
+        accent-color: #4d9fff;
+        width: 16px;
+        height: 16px;
+      }
+
+      /* Badge for current day */
+      .current-day {
+        position: relative;
+      }
+
+      .current-day::after {
+        content: "";
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #4d9fff;
+      }
+
+      /* Booked slot indicator */
+      .booked-indicator {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #ddd;
+      }
+
+      /* Today highlight */
+      .today {
+        background-color: rgba(77, 159, 255, 0.05);
+      }
+
+      .today .calendar-day-number {
+        color: #4d9fff;
+        position: relative;
+      }
+
+      .today .calendar-day-number::after {
+        content: "اليوم";
+        position: absolute;
+        top: -18px;
+        right: 50%;
+        transform: translateX(50%);
+        font-size: 10px;
+        background: #4d9fff;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 10px;
+        font-weight: normal;
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #bbb;
+      }
+
+      /* Time format badge */
+      .time-format {
+        font-size: 11px;
+        color: #999;
+        position: absolute;
+        top: 5px;
+        left: 10px;
+      }
+
+      /* Make the layout responsive */
+      @media (max-width: 992px) {
+        .container {
+          flex-direction: column;
+          max-width: 100%;
+          margin: 0;
+          border-radius: 0;
+        }
+
+        .settings-container {
+          width: 100%;
+          order: 2;
+          max-height: none;
+        }
+
+        .calendar-container {
+          order: 1;
+          overflow-x: auto;
+        }
+
+        .calendar-grid {
+          min-width: 800px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="settings-container">
+        <div class="setting-section">
+          <div class="setting-title">العنوان</div>
+          <div class="form-control">
+            <input type="text" id="title" placeholder="العنوان" />
+          </div>
+        </div>
+
+        <div class="setting-section">
+          <div class="setting-title">مدى التوفر العام</div>
+          <div class="setting-description">
+            يمكنك تحديد المواعيد التي تكون فيها متاحاً بانتظام للمواعيد
+          </div>
+
+          <div class="form-control">
+            <div class="dropdown">
+              <div class="dropdown-toggle" id="recurrenceDropdown">
+                <span>التكرار اسبوعياً</span>
+              </div>
+              <div class="dropdown-menu" id="recurrenceMenu">
+                <div class="dropdown-item">مرة واحدة</div>
+                <div class="dropdown-item">يومياً</div>
+                <div class="dropdown-item">اسبوعياً</div>
+                <div class="dropdown-item">شهرياً</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="availability-day">
+            <div class="btn">+</div>
+            <div class="availability-status">غير متاح</div>
+            <div class="availability-day-name">الاحد</div>
+          </div>
+          <div class="availability-day">
+            <div class="btn">+</div>
+            <div class="availability-status">غير متاح</div>
+            <div class="availability-day-name">الاثنين</div>
+          </div>
+          <div class="availability-day">
+            <div class="btn">+</div>
+            <div class="availability-status">غير متاح</div>
+            <div class="availability-day-name">الثلاثاء</div>
+          </div>
+          <div class="availability-day">
+            <div class="btn">+</div>
+            <div class="availability-status">غير متاح</div>
+            <div class="availability-day-name">الاربعاء</div>
+          </div>
+          <div class="availability-day">
+            <div class="btn">+</div>
+            <div class="availability-status">غير متاح</div>
+            <div class="availability-day-name">الخميس</div>
+          </div>
+          <div class="availability-day">
+            <div class="btn">+</div>
+            <div class="availability-status">غير متاح</div>
+            <div class="availability-day-name">الجمعة</div>
+          </div>
+          <div class="availability-day">
+            <div class="btn">+</div>
+            <div class="availability-status">غير متاح</div>
+            <div class="availability-day-name">السبت</div>
+          </div>
+        </div>
+
+        <div class="setting-section">
+          <div class="setting-title">الإطار الزمني لتحديد المواعيد</div>
+          <div class="setting-description">
+            تحديد النطاق الزمني الذي يمكن حجز المواعيد من خلاله
+          </div>
+
+          <div class="form-control">
+            <div class="radio-control">
+              <input type="radio" name="timeframe" id="availableNow" checked />
+              <label for="availableNow">متاح الآن</label>
+            </div>
+            <div class="radio-control">
+              <input type="radio" name="timeframe" id="dateRange" />
+              <label for="dateRange">تاريخ البدء و تاريخ الانتهاء</label>
+            </div>
+          </div>
+
+          <div class="setting-description">
+            الحد الأقصى الذي يمكن حجز موعد خلاله مسبقا
+          </div>
+          <div class="form-control">
+            <div class="form-row">
+              <div class="form-control">
+                <input type="number" id="maxDaysAhead" value="3" />
+              </div>
+              <div class="form-control">
+                <div class="dropdown">
+                  <div class="dropdown-toggle">
+                    <span>أيام</span>
+                  </div>
+                </div>
+              </div>
+              <div class="checkbox-control">
+                <input type="checkbox" id="enableMaxDays" />
+              </div>
+            </div>
+          </div>
+
+          <div class="setting-description">
+            الحد الأدنى للوقت الذي يمكن إجراء حجز خلاله قبل بدء الموعد
+          </div>
+          <div class="form-control">
+            <div class="form-row">
+              <div class="form-control">
+                <input type="number" id="minHoursBefore" value="4" />
+              </div>
+              <div class="form-control">
+                <div class="dropdown">
+                  <div class="dropdown-toggle">
+                    <span>ساعات</span>
+                  </div>
+                </div>
+              </div>
+              <div class="checkbox-control">
+                <input type="checkbox" id="enableMinHours" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="setting-section">
+          <div class="setting-title">إعدادات المواعيد المحجوزة</div>
+          <div class="setting-description">
+            إدارة المواعيد المحجوزة التي ستظهر في تقويمك
+          </div>
+
+          <div class="setting-title">المدة الفاصلة</div>
+          <div class="setting-description">إضافة الوقت بين خانات المواعيد</div>
+          <div class="form-control">
+            <div class="form-row">
+              <div class="form-control">
+                <div class="dropdown">
+                  <div class="dropdown-toggle">
+                    <span>دقيقة</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-control">
+                <input type="number" id="bufferTime" value="30" />
+              </div>
+              <div class="checkbox-control">
+                <input type="checkbox" id="enableBufferTime" />
+              </div>
+            </div>
+          </div>
+
+          <div class="setting-title">الحد الأقصى من الحجوزات يوميا</div>
+          <div class="setting-description">
+            الحد الأقصى من عدد المواعيد المحجوزة في يوم واحد
+          </div>
+          <div class="form-control">
+            <div class="form-row">
+              <div class="form-control">
+                <input type="number" id="maxBookingsPerDay" value="4" />
+              </div>
+              <div class="checkbox-control">
+                <input type="checkbox" id="enableMaxBookings" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <div class="calendar-day">
+            <div class="calendar-day-number">25</div>
+            <div class="calendar-day-name">أبريل، الإثنين</div>
+          </div>
+          <div class="calendar-day">
+            <div class="calendar-day-number">26</div>
+            <div class="calendar-day-name">أبريل، الثلاثاء</div>
+          </div>
+          <div class="calendar-day">
+            <div class="calendar-day-number">27</div>
+            <div class="calendar-day-name">أبريل، الأربعاء</div>
+          </div>
+          <div class="calendar-day today">
+            <div class="calendar-day-number">28</div>
+            <div class="calendar-day-name">أبريل، الخميس</div>
+          </div>
+          <div class="calendar-day">
+            <div class="calendar-day-number">29</div>
+            <div class="calendar-day-name">مايو، الجمعة</div>
+          </div>
+          <div class="calendar-day">
+            <div class="calendar-day-number">30</div>
+            <div class="calendar-day-name">مايو، السبت</div>
+          </div>
+          <div class="calendar-day">
+            <div class="calendar-day-number">01</div>
+            <div class="calendar-day-name">مايو، الأحد</div>
+          </div>
+          <div class="time-column">
+            <div>GMT +5</div>
+          </div>
+        </div>
+
+        <div class="calendar-grid">
+          <div class="day-column">
+            <!-- Monday -->
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot">
+              <div class="appointment">13:00 (60 min)</div>
+            </div>
+            <div class="slot">
+              <div class="appointment">13:00 (60 min)</div>
+            </div>
+            <div class="slot">
+              <div class="appointment">13:00 (60 min)</div>
+            </div>
+            <div class="slot">
+              <div class="appointment">13:00 (60 min)</div>
+            </div>
+            <div class="slot">
+              <div class="appointment">13:00 (60 min)</div>
+            </div>
+            <div class="slot">
+              <div class="appointment">13:00 (60 min)</div>
+            </div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+          </div>
+          <div class="day-column">
+            <!-- Tuesday -->
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot">
+              <div class="appointment">13:00 (60 min)</div>
+            </div>
+            <div class="slot">
+              <div class="appointment">13:00 (60 min)</div>
+            </div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+          </div>
+          <div class="day-column">
+            <!-- Wednesday -->
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot">
+              <div class="appointment">13:00 (60 min)</div>
+            </div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+          </div>
+          <div class="day-column">
+            <!-- Thursday (Today) -->
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot current-slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+          </div>
+          <div class="day-column">
+            <!-- Friday -->
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+          </div>
+          <div class="day-column">
+            <!-- Saturday -->
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+          </div>
+          <div class="day-column">
+            <!-- Sunday -->
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+          </div>
+          <div class="time-slots">
+            <div class="time-slot">07:00</div>
+            <div class="time-slot">08:00</div>
+            <div class="time-slot">09:00</div>
+            <div class="time-slot">10:00</div>
+            <div class="time-slot">11:00</div>
+            <div class="time-slot">12:00</div>
+            <div class="time-slot">13:00</div>
+            <div class="time-slot">14:00</div>
+            <div class="time-slot">15:00</div>
+            <div class="time-slot">16:00</div>
+            <div class="time-slot">17:00</div>
+            <div class="time-slot">18:00</div>
+            <div class="time-slot">19:00</div>
+            <div class="time-slot">20:00</div>
+            <div class="time-slot">21:00</div>
+            <div class="time-slot">21:00</div>
+            <div class="time-slot">21:00</div>
+            <div class="time-slot">21:00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
