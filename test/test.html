@@ -1,98 +1,132 @@
 <!DOCTYPE html>
-<html lang="ar" dir="ltr">
+<html dir="rtl" lang="ar">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>منصة الموجهين</title>
-    <link rel="stylesheet" href="../exploreStyles.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <title>Arabic Sidebar Menu</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Cairo", sans-serif;
+      }
+
+      body {
+        background-color: #f5f5f5;
+        direction: rtl;
+        padding: 20px;
+      }
+
+      .sidebar {
+        width: 180px;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .sidebar-menu {
+        list-style: none;
+      }
+
+      .sidebar-menu li {
+        border-bottom: 1px solid #f5f5f5;
+      }
+
+      .sidebar-menu li:last-child {
+        border-bottom: none;
+      }
+
+      .sidebar-menu a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 15px;
+        color: #333;
+        text-decoration: none;
+        transition: background-color 0.3s;
+      }
+
+      .sidebar-menu a:hover {
+        background-color: #f5f5f5;
+      }
+
+      .icon {
+        width: 20px;
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
   </head>
   <body>
-    <div class="main-container">
-      <!-- Header Section -->
-      <header class="header-wrapper">
-        <div class="header-box">
-          <div class="header-section">
-            <div class="logo-group">
-              <div class="logo-container">
-                <div class="logo-wrapper">
-                  <div class="logo-icon"></div>
-                  <div class="nav-icons">
-                    <div class="nav-icon nav-icon-1"></div>
-                    <div class="nav-icon nav-icon-2"></div>
-                    <div class="nav-icon nav-icon-3"></div>
-                    <div class="nav-icon nav-icon-4"></div>
-                    <div class="nav-icon nav-icon-5"></div>
-                    <div class="nav-icon nav-icon-6"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="nav-group">
-              <a class="nav-item active">الموجهين</a>
-              <a class="nav-item" href="./sessions.html">الجلسات</a>
-              <a class="nav-item">إنضم كموجه</a>
-            </div>
-          </div>
-          <!-- Dynamic Auth Section -->
-          <div class="auth-section"></div>
-        </div>
-      </header>
-
-      <!-- Search and Filter Section -->
-      <section class="search-group">
-        <div class="search-container">
-          <div class="search-section">
-            <div class="filter-btn">
-              <div class="filter-text">فلتر</div>
-              <div class="filter-icon">
-                <div class="filter-icon-img"></div>
-              </div>
-            </div>
-            <div class="search-bar">
-              <div class="search-input-group">
-                <span class="search-placeholder"
-                  >البحث حسب الاسم و الشركة و الدور</span
-                >
-                <div class="search-icon">
-                  <div class="search-icon-img"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="filter-container">
-            <div class="filter-section">
-              <div class="filter-toggle">
-                <div class="filter-toggle-icon">
-                  <div class="filter-toggle-img"></div>
-                </div>
-              </div>
-              <div class="filter-categories">
-                <div class="filter-category active">الكل</div>
-                <div class="filter-category">البرمجة</div>
-                <div class="filter-category">التصميم</div>
-                <div class="filter-category small">HR</div>
-                <div class="filter-category large">ريادة اعمال</div>
-              </div>
-              <div class="sort-toggle">
-                <div class="sort-icon">
-                  <div class="sort-icon-img"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Mentors Cards Section -->
-        <main class="mentors-container"></main>
-      </section>
+    <div class="sidebar">
+      <ul class="sidebar-menu">
+        <li>
+          <a href="#">
+            <span class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </span>
+            <span>حسابي</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="3"></circle>
+                <path
+                  d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+                ></path>
+              </svg>
+            </span>
+            <span>الإعدادات</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+            </span>
+            <span>تسجيل خروج</span>
+          </a>
+        </li>
+      </ul>
     </div>
-
-    <script src="mentor.js"></script>
   </body>
 </html>

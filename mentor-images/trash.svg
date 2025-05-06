@@ -1,8 +1,11 @@
-<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="40" height="40" rx="20" fill="white" fill-opacity="0.5"/>
-<path d="M29 13.98C25.67 13.65 22.32 13.48 18.98 13.48C17 13.48 15.02 13.58 13.04 13.78L11 13.98" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M16.5 12.97L16.72 11.66C16.88 10.71 17 10 18.69 10H21.31C23 10 23.13 10.75 23.28 11.67L23.5 12.97" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M26.8499 17.1401L26.1999 27.2101C26.0899 28.7801 25.9999 30.0001 23.2099 30.0001H16.7899C13.9999 30.0001 13.9099 28.7801 13.7999 27.2101L13.1499 17.1401" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M18.3301 24.5H21.6601" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M17.5 20.5H22.5" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="vuesax/linear/trash">
+<g id="trash">
+<path id="Vector" d="M14 3.98665C11.78 3.76665 9.54667 3.65332 7.32 3.65332C6 3.65332 4.68 3.71999 3.36 3.85332L2 3.98665" stroke="#F82548" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_2" d="M5.6665 3.3135L5.81317 2.44016C5.91984 1.80683 5.99984 1.3335 7.1265 1.3335H8.87317C9.99984 1.3335 10.0865 1.8335 10.1865 2.44683L10.3332 3.3135" stroke="#F82548" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_3" d="M12.5664 6.09326L12.1331 12.8066C12.0598 13.8533 11.9998 14.6666 10.1398 14.6666H5.85977C3.99977 14.6666 3.93977 13.8533 3.86644 12.8066L3.43311 6.09326" stroke="#F82548" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_4" d="M6.88672 11H9.10672" stroke="#F82548" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_5" d="M6.3335 8.3335H9.66683" stroke="#F82548" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
 </svg>

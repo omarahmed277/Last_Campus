@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus Service Form</title>
+    <link rel="stylesheet" href="../CSS/Services.css" />
+    <!-- <link rel="stylesheet" href="../CSS/common.css" /> -->
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a class="logo" href="../index.html">
+          <img src="../mentor-images/logo_campus.svg" alt="شعار كامبس" />
+        </a>
+        <div class="middleTabs">
+          <a href="../index.html">الموجهين</a>
+          <a href="./Sessions.html" class="active">الجلسات</a>
+          <a href="#" id="joinAsMentorLink">إنضم كموجه</a>
+        </div>
+        <div class="left_Sec auth-section">
+          <!-- Dynamically populated by JavaScript -->
+        </div>
+      </nav>
+    </header>
+    <div class="container">
+      <div class="form-container">
+        <h1>اخبرنا عن خدمتك</h1>
+        <h2>معلومات أساسية للسماح للمستخدمين بفهم عرضك</h2>
+
+        <div class="form-group">
+          <label class="form-label">اسم الخدمة</label>
+          <input type="text" class="form-control" placeholder="خدمة التوجيه" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">وقت الخدمة</label>
+          <input type="text" class="form-control" placeholder="30" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">وصف الخدمة</label>
+          <textarea
+            class="form-control"
+            rows="3"
+            placeholder="خدمة التوجيه"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <div class="questions-container">
+            <div class="questions-header">
+              <label class="form-label">حدد الأسئلة</label>
+            </div>
+            <div class="questions-list">
+              <div class="right-side">
+                <div class="question-item">
+                  <span>هل اشتغلت قبل كدا ؟</span>
+                  <span class="question-icon"
+                    ><img src="../images/edit-2.svg" alt=""
+                  /></span>
+                  <span class="question-icon"
+                    ><img src="../images/close-circle.svg" alt=""
+                  /></span>
+                </div>
+                <div class="question-item">
+                  <span>هل اشتغلت قبل كدا ؟</span>
+                  <span class="question-icon"
+                    ><img src="../images/edit-2.svg" alt=""
+                  /></span>
+                  <span class="question-icon"
+                    ><img src="../images/close-circle.svg" alt=""
+                  /></span>
+                </div>
+                <div class="question-item">
+                  <span>هل اشتغلت قبل كدا ؟</span>
+                  <span class="question-icon"
+                    ><img src="../images/edit-2.svg" alt=""
+                  /></span>
+                  <span class="question-icon"
+                    ><img src="../images/close-circle.svg" alt=""
+                  /></span>
+                </div>
+                <div class="question-item">
+                  <span>هل اشتغلت قبل كدا ؟</span>
+                  <span class="question-icon"
+                    ><img src="../images/edit-2.svg" alt=""
+                  /></span>
+                  <span class="question-icon"
+                    ><img src="../images/close-circle.svg" alt=""
+                  /></span>
+                </div>
+              </div>
+              <div class="left-side">
+                <button class="add-btn">
+                  <span>+</span>
+                  <span>أضف سؤال</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="questions-container">
+            <label class="form-label">حدد مواعيد الخدمة</label>
+            <div class="schedules-container">
+              <div class="right-side">
+                <div class="schedule-item">
+                  <input type="checkbox" />
+                  <span>مواعيد شغلي</span>
+                </div>
+                <div class="schedule-item">
+                  <input type="checkbox" />
+                  <span>مواعيد شغلي</span>
+                  <span class="question-icon"
+                    ><img src="../images/edit-2.svg" alt=""
+                  /></span>
+                </div>
+                <div class="schedule-item">
+                  <input type="checkbox" />
+                  <span>مواعيد شغلي</span>
+                  <span class="question-icon"
+                    ><img src="../images/edit-2.svg" alt=""
+                  /></span>
+                </div>
+                <div class="schedule-item">
+                  <input type="checkbox" />
+                  <span>مواعيد شغلي</span>
+                  <span class="question-icon"
+                    ><img src="../images/edit-2.svg" alt=""
+                  /></span>
+                </div>
+                <div class="schedule-item">
+                  <input type="checkbox" />
+                  <span>مواعيد شغلي</span>
+                  <span class="question-icon"
+                    ><img src="../images/edit-2.svg" alt=""
+                  /></span>
+                </div>
+                <div class="schedule-item">
+                  <input type="checkbox" />
+                  <span>مواعيد شغلي</span>
+                  <span class="question-icon"
+                    ><img src="../images/edit-2.svg" alt=""
+                  /></span>
+                </div>
+              </div>
+              <div class="left-side">
+                <button class="add-btn">
+                  <span>+</span>
+                  <span>أضف قالب</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <span style="font-weight: bold"
+              >عرض الخدمة على ملفك الشخصي العام</span
+            >
+            <label class="switch">
+              <input type="checkbox" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button class="cancel-btn">إلغاء</button>
+          <button class="save-btn">حفظ</button>
+        </div>
+      </div>
+    </div>
+    <script src="../JS/common.js"></script>
+  </body>
+</html>

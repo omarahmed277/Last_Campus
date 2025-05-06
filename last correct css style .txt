@@ -1,8 +1,6 @@
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
+/* ==========================================================================
+   Global Reset and Base Styles
+   ========================================================================== */
 
 @font-face {
   font-family: "Baloo Bhaijaan 2";
@@ -10,55 +8,87 @@
 }
 
 :root {
-  --mainColor: #101828;
+  --default-font-family: "Baloo Bhaijaan 2", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Helvetica, Arial,
+    "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei",
+    "Source Han Sans CN", sans-serif;
+  --primary-color: #f82548;
+  --secondary-color: #0000b8;
+  --text-color: #333333;
+  --light-text: #8e8e8e;
+  --lighter-text: #bbbbbb;
+  --border-color: #d2d2d2;
+  --background-color: #f2f2f2;
+  --white: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.12);
+  --card-shadow: 0 16px 32px 0 rgba(88, 92, 95, 0.1);
+  --main-color: #101828;
   --second-color: #a4a4a4;
-  --praimary-color: #f82548;
-  --Colors-Neutral-300: #d2d2d2;
-  --white: #fff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
   font-family: "Baloo Bhaijaan 2";
   margin-inline: 62px;
   margin-block: 32px;
+  direction: rtl;
 }
 
-.middleTabs a {
-  color: var(--Colors-Neutral-700, #777);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 27px;
-  padding: 0px 16px;
-  transition: all 0.3s ease;
-  /* border-radius: 8px; */
-  cursor: pointer;
-  text-decoration: none;
+/* Main Container */
+.main-container {
+  position: relative;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding-bottom: 40px;
 }
 
-.middleTabs a:hover {
-  background-color: #f5f5f5;
-}
-
-.middleTabs .active {
-  color: var(--praimary-color);
-  border-bottom: 3px solid var(--Colors-Primary-500, #f82548);
-  background-color: #fff;
-}
-
-button {
+/* Reset Form Elements */
+button,
+input,
+select,
+textarea {
+  outline: 0;
   border: none;
+  background: none;
+  font-family: var(--default-font-family);
+}
+
+/* General Button Styles */
+button {
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
 }
 
-button:active,
-input[type="submit"]:active {
-  transform: scale(0.98);
+button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
 }
 
+/* Reset Headings and Paragraphs */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+/* ==========================================================================
+       Header Section (from sessions.css)
+       ========================================================================== */
+
+/* Header */
+
+/* Navigation */
 nav {
   display: flex;
   justify-content: space-between;
@@ -73,1115 +103,787 @@ nav {
   margin-bottom: 19px;
 }
 
+/* Logo */
+.logo {
+  display: block;
+}
+
+.logo img {
+  width: 146px;
+  height: 36px;
+  object-fit: contain;
+}
+
+/* Middle Tabs (Navigation) */
+.middleTabs {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.middleTabs a {
+  color: var(--text-color);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 34px;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.middleTabs a:hover:not(.active) {
+  color: var(--primary-color);
+}
+
+.middleTabs a.active {
+  color: var(--primary-color);
+  font-weight: 600;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+/* Left Section (User/Auth) */
 .left_Sec {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-direction: row-reverse;
 }
 
+/* Title (User Profile Link) */
 .titel {
   display: flex;
-  flex-direction: row-reverse;
-  gap: 13px;
   align-items: center;
+  gap: 13px;
   text-decoration: none;
 }
 
-.titel:active {
-  text-decoration: none;
+.titel img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .titel p {
-  color: var(--Colors-Neutral-1000, #333);
-  text-align: right;
+  color: var(--text-color);
   font-size: 16px;
-  font-style: normal;
   font-weight: 600;
   line-height: normal;
+  text-align: right;
+  display: flex;
+  align-items: center;
 }
 
+.titel p img {
+  width: 24px;
+  height: 24px;
+  margin-left: 2px;
+}
+
+/* Navigation Buttons (Notifications, Messages) */
 .buttonsNav {
   display: flex;
   gap: 8px;
 }
 
 .buttonsNav .notBtn,
-.messageBtn {
+.buttonsNav .messageBtn {
   padding: 8px;
-  gap: 8px;
   border-radius: 8px;
-  border: 1px solid var(--Colors-Neutral-200, #e8e8e8);
-  background-color: #fff;
+  border: 1px solid var(--border-color);
+  background: var(--white);
   display: flex;
   align-items: center;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-}
-
-main {
-  padding: 1.7vw 5.6vw;
-  overflow: hidden;
-}
-
-.bg-img #background_image {
-  width: 100%;
-  max-height: 283px;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-}
-
-.edit_bigimage {
-  background-color: transparent;
-  position: absolute;
-  top: 145px;
-  left: 72px;
-}
-
-.mentor_con {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row-reverse;
-  transform: translateY(-31%);
-}
-
-.mentorinfo {
-  display: inline-flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  gap: 23px;
-}
-
-.mentor_titele {
-  display: flex;
-  flex-direction: column;
-  text-align: right;
-  gap: 4px;
-}
-
-.mentor_titele h4 {
-  color: #000;
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 39px;
-}
-
-.mentor_titele p {
-  color: var(--Colors-Neutral-700, #777);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 27px;
-}
-
-#image1 {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  border: 5px solid var(--Colors-Neutral-100, #fff);
-  transition: transform 0.3s ease;
-}
-
-#image1:hover {
-  transform: scale(1.05);
-}
-
-#image2 {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-}
-
-.mentorButons {
-  display: inline-flex;
-  align-items: center;
-  gap: 16px;
-  flex-direction: row-reverse;
-  font-family: "Baloo Bhaijaan 2";
-}
-
-.mentorButons .timeBtn {
-  display: flex;
-  padding: 8px 12px;
   justify-content: center;
-  align-items: center;
-  border-radius: 0.25rem;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 24px;
-  background: var(--Colors-Primary-500, #f82548);
-  color: #fff;
-  font-family: "Baloo Bhaijaan 2";
-}
-
-.mentorButons .editBtn {
-  display: flex;
-  padding: 8px 16px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
-  border: 1.5px solid #bbb;
-  color: var(--Colors-Neutral-700, #777);
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 24px;
-  background-color: #fff;
-  transition: all 0.3s ease;
-}
-
-.mentorButons .editBtn:hover {
-  background-color: #f5f5f5;
-  transform: translateY(-2px);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.mentor_sec2 {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 12px;
-  border-top: 1px solid var(--Colors-Neutral-200, #e8e8e8);
-  padding: 16px 0;
-  margin-bottom: 24px;
-}
-
-.mentor_sec2 p {
-  color: var(--Colors-Neutral-700, #777);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 27px;
-  padding: 8px 16px;
-  transition: all 0.3s ease;
-  border-radius: 8px;
   cursor: pointer;
-}
-
-.mentor_sec2 p:hover {
-  background-color: #f5f5f5;
-}
-
-.mentor_sec2 .checked {
-  color: var(--praimary-color);
-  border-bottom: 3px solid var(--Colors-Primary-500, #f82548);
-  background-color: #fff;
-}
-.sessionSuccess h1 {
-  color: var(--Warm-black, #333);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  margin-block: 12px;
-}
-
-.sessionsFormat {
-  display: flex;
-  padding: 16px;
-  justify-content: space-between;
-  align-items: flex-start;
-  align-self: stretch;
-  border-bottom: 1px solid #a6a6a6;
-  flex-direction: row-reverse;
-}
-
-.session_con {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 16px;
-  flex-direction: row-reverse;
-  width: 100%;
-}
-
-.session_con .menteePhoto {
-  width: 112px;
-  height: 112px;
-  border-radius: 50%;
-}
-.sessionSuccess h1 {
-  color: var(--Warm-black, #333);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  margin-block: 12px;
-}
-
-.sessionsFormat {
-  display: flex;
-  padding: 16px;
-  justify-content: space-between;
-  align-items: center;
-  align-self: stretch;
-  border-bottom: 1px solid #a6a6a6;
-  flex-direction: row-reverse;
-}
-
-.session_con {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  flex-direction: row-reverse;
-}
-
-.time {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 5px;
-}
-
-.time h4 {
-  color: var(--Colors-Neutral-1000, #333);
-  text-align: right;
-  font-size: 22px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 27px;
-}
-
-.time p {
-  color: var(--Colors-Neutral-700, #777);
-  text-align: right;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 27px;
-}
-
-.date p {
-  color: var(--Colors-Neutral-1000, #333);
-  text-align: right;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 27px;
-}
-
-.sessionSuccess_con {
-  display: flex;
-  padding: 16px;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-  align-self: stretch;
-  border-radius: 8px;
-}
-.tab-content {
-  display: none;
-  animation: fadeIn 0.5s ease;
-}
-
-.tab-content.active {
-  display: block;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.rating-section {
-  background: #fff;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 24px;
-}
-
-.rating-section .title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.rating-section .title h3 {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--mainColor);
-}
-
-.rating-card {
-  background: #f9f9f9;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
-}
-
-.rating-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.rating-user {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.rating-user img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.rating-user h4 {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0;
-}
-
-.rating-stars {
-  color: #ffd700;
-  font-size: 18px;
-}
-
-.rating-date {
-  color: var(--second-color);
-  font-size: 14px;
-}
-
-.rating-comment {
-  color: var(--mainColor);
-  line-height: 1.6;
-  font-size: 16px;
-}
-
-/* Achievements Section */
-.achievements-section {
-  background: #fff;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.achievements-section h3 {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--mainColor);
-  margin-bottom: 24px;
-  text-align: right;
-}
-
-.achievement-card {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px;
-  border-bottom: 1px solid #eee;
-}
-
-.achievement-icon {
-  width: 48px;
-  height: 48px;
-  background: #f82548;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 24px;
-}
-
-.achievement-details h4 {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0 0 4px 0;
-}
-
-.achievement-details p {
-  color: var(--second-color);
-  margin: 0;
-}
-
-.contact {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.contact a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #f5f5f5;
+  position: relative;
   transition: all 0.3s ease;
 }
 
-.mentor_con_rate {
-  transform: translateY(-20%);
+.buttonsNav .notBtn:hover,
+.buttonsNav .messageBtn:hover {
+  border-color: var(--primary-color);
+  background: rgba(248, 37, 72, 0.05);
 }
 
-.personal-image {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.personal-image span {
-  position: absolute;
-  right: 155px;
-  bottom: 12px;
-  display: flex;
+.buttonsNav img {
   width: 24px;
   height: 24px;
-  padding: 8px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  border-radius: 16px;
-  background: var(--Colors-Neutral-200, #e8e8e8);
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.personal-image span:hover {
-  background: #ddd;
+/* Notification Count */
+.notification-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--white);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  transition: transform 0.2s ease;
+}
+
+.notBtn:hover .notification-count {
   transform: scale(1.1);
 }
 
-.mentorButonsR {
-  transform: translateY(-13%);
-}
-.rette-con {
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: flex-start; /* Aligns content to the left */
-  gap: 8px;
-  min-width: 120px; /* Ensures it has enough space for content */
-}
-
-.ratte {
+/* Auth Group (Signup/Login Buttons) */
+.auth-group {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   flex-direction: row-reverse;
 }
 
-.ratte span {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.dateR p {
-  color: #565656;
+/* Signup Button */
+.signup-btn {
+  padding: 8px 12px;
+  background: var(--primary-color);
+  border-radius: 6px;
+  color: var(--white);
   font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  text-align: left; /* Aligns date text to the left */
-}
-
-.stars_con {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  flex-direction: row-reverse;
-}
-
-.stars {
-  display: flex;
-}
-
-.stars_con p {
-  color: #565656;
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-}
-.timeR {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 5px;
-  flex: 1; /* Allows timeR to take available space */
-}
-
-.timeR p {
-  color: #454545;
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  align-self: stretch;
-}
-
-.veiw_mentorFormat {
-  display: flex;
-  padding: 16px 16px 8px 16px;
-  flex-direction: column;
-  gap: 8px;
-  align-self: stretch;
-  border-radius: 8px;
-  border: 1px solid var(--Colors-Neutral-300, #d2d2d2);
-  background: #fff;
-}
-
-.mentor_veiw_con {
-  display: flex;
-  gap: 16px;
-  flex-direction: column;
-  width: 100%;
-}
-
-.veiwMentor h5 {
-  color: var(--Colors-Neutral-1000, #333);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 27px;
-  margin-top: 16px;
-}
-
-.veiw_con {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  flex-direction: row-reverse;
-}
-
-.top_con {
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  align-items: center;
-  align-self: stretch;
-}
-
-.editIcons {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.editIcons img:first-child {
-  width: 20px;
-  height: 20px;
-}
-
-.veiw_con .text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 5px;
-}
-
-.veiw_con .text h4 {
-  color: var(--Colors-Neutral-1000, #333);
-  text-align: right;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 27px;
-}
-
-.veiw_con .text p {
-  color: var(--Colors-Neutral-700, #777);
-  text-align: right;
-  font-size: 20px;
-  font-style: normal;
   font-weight: 400;
-  line-height: 27px;
-}
-
-.second_con {
-  display: flex;
-  padding: 8px 0px;
-  justify-content: space-between;
-  align-items: center;
-  align-self: stretch;
-  flex-direction: row-reverse;
-}
-
-.second_con img {
-  border-radius: 10px;
-}
-
-.second_con .date2 {
-  display: flex;
-  padding: 4px 8px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  border-radius: 8px;
-  background: var(--Colors-Neutral-Alpha-10, rgba(51, 51, 51, 0.1));
-}
-
-.second_con .date2 p {
-  color: var(--Colors-Neutral-1000, #333);
-  text-align: right;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 27px;
-  margin-top: 0;
-}
-
-.education {
-  display: flex;
-  height: 40px;
-  padding: 4px 16px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  border-radius: 48px;
-  border: 1px solid var(--Gray300, #d0d5dd);
-}
-
-.edu_con {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  align-self: stretch;
-  flex-direction: row-reverse;
-}
-
-.rtl {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f0f1f3;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 16px;
-  cursor: pointer;
-  width: 100%;
-  font-family: "Baloo Bhaijaan 2";
-  margin-top: 12px;
-  transition: background-color 0.2s;
-}
-
-.rtl:hover {
-  background-color: #e6e7e9;
-}
-
-.more-icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 6px;
-  transition: transform 0.3s ease;
-}
-
-.btn-text {
-  font-size: 14px;
-  font-weight: 500;
-  color: #e53e3e;
-}
-
-.main {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  align-self: stretch;
-  flex-direction: row-reverse;
-  gap: 16px;
-}
-
-.left_section {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 24px;
-  margin-top: 16px;
-  min-width: 429px;
-}
-
-.video {
-  display: flex;
-  padding: 12px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  align-self: stretch;
-  border-radius: 8px;
-  border: 1px solid var(--Colors-Neutral-200, #e8e8e8);
-  background: var(--Background-Color-White, #fdfdfe);
-  width: 429px;
-}
-
-.video div {
-  cursor: pointer;
-}
-
-.video_con {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-}
-
-.video h1 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  align-self: stretch;
-  color: var(--Text-Primary, #00001d);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 27px;
-  flex-direction: row-reverse;
-}
-
-.video_con #uplodeBtn {
-  color: var(--Colors-Primary-500, #f82548);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 21px;
-  cursor: pointer;
-}
-
-.video_con p {
-  color: var(--Text-Secondary, #667);
+  line-height: 24px;
   text-align: center;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 18px;
+  transition: all 0.3s ease;
 }
 
-.statistics {
+.signup-btn:hover {
+  background: #e01e3c;
+  box-shadow: 0 4px 8px rgba(248, 37, 72, 0.2);
+}
+
+/* Login Button */
+.login-btn {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: rgba(248, 37, 72, 0.05);
+}
+
+/* Logout Button */
+.logout-btn {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+  background: var(--white);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: rgba(248, 37, 72, 0.05);
+}
+
+/* ==========================================================================
+   Notifications
+   ========================================================================== */
+
+.notifications-container {
+  display: none;
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 350px;
+  background-color: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  padding: 16px;
+  overflow: hidden;
+  z-index: 1000;
+  direction: rtl;
+}
+
+.notification {
+  background-color: var(--white);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  padding: 12px;
+  margin-bottom: 12px;
   display: flex;
-  padding: 13px 18px;
-  flex-direction: column;
+  flex-direction: row-reverse;
   align-items: flex-start;
-  gap: 16px;
-  align-self: stretch;
-  border-radius: 8px;
-  border: 1px solid var(--Colors-Neutral-200, #e8e8e8);
-  background: #fff;
-}
-
-.top_con h1 {
-  color: #000;
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 27px;
-}
-
-.top_con h3 {
-  color: #000;
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 32px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 48px;
-  margin: 0 !important;
-}
-
-.top_con img {
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
-}
-
-.statisticsIcons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-}
-
-.statisticsIcons p {
-  color: var(--Colors-Neutral-700, #777);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 27px;
-}
-
-.statistics_con {
-  display: flex;
   justify-content: space-between;
-  align-self: stretch;
-  flex-direction: row-reverse;
 }
 
-.veiw_conS {
+.notification-left {
   display: flex;
-  align-items: flex-start;
-  gap: 7px;
+  align-items: center;
   flex-direction: row-reverse;
+  justify-content: space-between;
 }
 
-.veiw_conS .text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
+.close-button {
+  color: var(--light-text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 8px;
 }
 
-.veiw_conS .text h4 {
-  color: var(--Colors-Neutral-1000, #333);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 27px;
-}
-
-.veiw_conS .text p {
-  color: var(--Colors-Neutral-700, #777);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
+.action-button {
+  margin-left: 8px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: 6px;
+  padding: 2px 12px;
   font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 27px;
 }
 
-.overlay {
+.action-button:hover {
+  background-color: #e01e3c;
+  transform: translateY(-2px);
+}
+
+.action-button.secondary {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.action-button.secondary:hover {
+  background-color: #e0e0e0;
+}
+
+.notification-content {
+  flex-grow: 1;
+  margin-left: 8px;
+}
+
+.notification-right {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #8cd3c5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.notification-title {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 4px;
+  margin-right: 8px;
+  color: var(--text-color);
+  text-align: right;
+}
+
+.notification-text {
+  color: var(--light-text);
+  font-size: 14px;
+  text-align: right;
+  line-height: 1.4;
+  margin-right: 8px;
+}
+
+.notification-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 40px;
+  margin-top: 8px;
+}
+
+.show-more-link {
+  display: block;
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  padding: 8px 0;
+  font-weight: 500;
+}
+
+.show-more-link:hover {
+  color: #e01e3c;
+}
+
+.notification.compact {
+  padding: 8px 12px;
+}
+
+.icon-variant .notification-title::after {
+  content: "🔔";
+  margin-left: 6px;
+  color: var(--primary-color);
+}
+
+/* ==========================================================================
+   Mentor Application Popup
+   ========================================================================== */
+
+.mentor-application-popup-container {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 445px;
+  background: var(--white);
+  border-radius: 16px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  z-index: 2000;
+  direction: rtl;
+}
+
+.mentor-application-popup-container.show {
+  display: flex;
+}
+
+.mentor-application-popup-overlay {
   display: none;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(51, 51, 51, 0.5);
-  z-index: 1;
-  justify-content: center;
-  align-items: center;
-  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1999;
+}
+
+.mentor-application-popup-overlay.show {
+  display: block;
+}
+
+.mentor-application-content {
+  /* padding: 20px; */
+  width: 100%;
+}
+
+.mentor-application-popup-close {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--text-color);
+}
+
+.mentor-application-popup-close:hover {
+  color: var(--primary-color);
 }
 
 .mainContaner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   display: flex;
-  padding: 24px;
+  padding: 24px 16px;
   flex-direction: column;
-  border-radius: 16px;
-  background: #fff;
-  border: 1px solid #d2d2d2;
-  z-index: 1;
-}
-
-.mainContaner_Info {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  padding: 24px;
-  flex-direction: column;
-  border-radius: 16px;
-  background: #fff;
-  border: 1px solid #d2d2d2;
-  z-index: 1;
-  max-height: 87vh;
-  padding-right: 15px;
-}
-
-.mainContaner .closeBtn,
-.mainContaner_Info .closeBtn {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
-  background: #e8e8e8;
-  border-radius: 50%;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  transition: background 0.3s ease;
+  gap: 24px;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  background: var(--white);
+  box-shadow: 0 4px 15px var(--shadow-color);
 }
 
-.mainContaner .closeBtn:hover,
-.mainContaner_Info .closeBtn:hover {
-  background: #ddd;
+.mainContaner h1 {
+  color: #333;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 600;
 }
 
-.mainContaner h1,
-.mainContaner_Info h1 {
-  color: var(--Colors-Neutral-1000, #333);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 27px;
-  margin-top: 40px;
-  margin-bottom: 16px;
-}
-
-.mainContaner .form_contaner,
-.mainContaner_Info .form_contaner {
+.mainContaner_2,
+.penddingScreen_container {
   display: flex;
+  padding: 32px 24px;
   flex-direction: column;
   gap: 16px;
-  align-self: stretch;
+  border-radius: 16px;
+  border: 1px solid #e8e8e8;
+  background: var(--white);
+  box-shadow: 0 2px 15px var(--shadow-color);
 }
 
-.mainContaner .form_group,
-.mainContaner_Info .form_group {
+.mainContaner_2 h1,
+.penddingScreen_container h1 {
+  color: #00001d;
+  text-align: right;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.content .text h4 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.content .text p {
+  font-size: 14px;
+  color: var(--light-text);
+  line-height: 1.5;
+}
+
+.joinBtn {
+  background: var(--primary-color);
+  color: var(--white);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  width: 100%;
+  text-align: center;
+}
+
+.joinBtn:hover {
+  background: #e01e3c;
+}
+
+.form_content {
   display: flex;
   flex-direction: column;
+  gap: 20px;
+}
+
+.form_group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.label {
   text-align: right;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+select,
+input,
+textarea {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  width: 100%;
+  background: var(--white);
+  direction: rtl;
+}
+
+select:focus,
+input:focus,
+textarea:focus {
+  border-color: var(--primary-color);
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.select-icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.error {
+  color: #d32f2f;
+  font-size: 12px;
+  margin-top: 4px;
+  text-align: right;
+}
+
+.penddingScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+}
+
+.penddingScreenContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.penddingScreenContent p {
+  color: #667;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+/* ==========================================================================
+   Login Popup
+   ========================================================================== */
+
+.login-popup-container {
+  display: none;
+  background-color: var(--white);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2000;
+  direction: ltr;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.login-popup-container.show {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-popup-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1999;
+}
+
+.login-popup-overlay.show {
+  display: block;
+}
+
+.login-popup-close {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text-color);
+}
+
+.login-popup-close:hover {
+  color: var(--primary-color);
+}
+
+/* ==========================================================================
+   Signup Popup Section
+   ========================================================================== */
+
+.signup-popup-container {
+  display: none;
+  background-color: var(--white);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 450px;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2000;
+  direction: rtl;
+}
+
+.signup-popup-container.show {
+  display: flex;
+}
+
+.signup-popup-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1999;
+}
+
+.signup-popup-overlay.show {
+  display: block;
+}
+
+.signup-popup-close {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+/* Main Container within Signup Popup */
+.signup-popup-container .main_contaner {
+  position: static;
+  transform: none;
+  display: flex;
+  padding: 32px;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  border: 1.5px solid var(--border-color);
+  background: var(--white);
+  box-shadow: 0px 16px 32px -12px rgba(88, 92, 95, 0.1);
+  width: 100%;
+  max-width: 415px;
+  margin: 0;
+}
+
+/* Progress Indicators */
+.con {
+  display: flex;
+  gap: 2px;
+  text-align: center;
+  flex-direction: row-reverse;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.conformat {
+  border: 1px solid #ececec;
+  border-radius: 8px;
+  width: 38px;
+  height: 8px;
+  background-color: #ececec;
+}
+
+.conChecked {
+  background-color: var(--primary-color);
+}
+
+/* Form Container */
+.form_contaner {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Input Container */
+.input_contaner {
+  display: flex;
+  flex-direction: column;
+  text-align: end;
   color: var(--mainColor);
   gap: 1px;
 }
 
-.mainContaner .form_group .label,
-.mainContaner_Info .form_group .label {
+/* Form Labels */
+.input_contaner .label {
   font-size: 18px;
   font-style: normal;
   font-weight: 500;
 }
 
-.mainContaner .input,
-.mainContaner_Info .input,
-.mainContaner textarea,
-.mainContaner_Info textarea,
-.mainContaner select,
-.mainContaner_Info select {
-  padding: 12px;
-  border: 1.5px solid var(--Colors-Neutral-300, #d2d2d2);
+/* Form Inputs */
+.input_contaner input,
+.input_contaner select,
+.input_contaner textarea {
+  padding-block: 12px;
+  padding-right: 12px;
+  border: 1.5px solid var(--border-color);
   border-radius: 0.25rem;
-  font-family: "Baloo Bhaijaan 2";
   font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  background: #fff;
-  transition: border-color 0.3s ease;
-  text-align: right;
+  color: var(--mainColor);
+  background: var(--white);
+  width: 100%;
+  direction: ltr;
+  font-family: var(--default-font-family);
 }
 
-.mainContaner .input:focus,
-.mainContaner_Info .input:focus,
-.mainContaner textarea:focus,
-.mainContaner_Info textarea:focus,
-.mainContaner select:focus,
-.mainContaner_Info select:focus {
-  border-color: var(--praimary-color);
+/* Input Focus States */
+.input_contaner input:focus,
+.input_contaner select:focus,
+.input_contaner textarea:focus {
+  border-color: var(--primary-color);
   outline: none;
 }
 
-.mainContaner .input::placeholder,
-.mainContaner_Info .input::placeholder,
-.mainContaner #startDate,
-.mainContaner_Info #startDate,
-.mainContaner #endDate,
-.mainContaner_Info #endDate {
+/* Input Placeholders */
+.input_contaner input::placeholder,
+.input_contaner textarea::placeholder {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
   color: var(--second-color);
   text-align: right;
-}
-
-.mainContaner textarea,
-.mainContaner_Info textarea {
-  width: 100%;
-  color: var(--second-color);
-  height: 6rem;
-  resize: none;
-  padding-right: 16px;
-}
-
-.mainContaner textarea::placeholder,
-.mainContaner_Info textarea::placeholder {
   position: relative;
-  top: 8px;
-  text-align: right;
+  right: 12px;
 }
 
-.mainContaner select,
-.mainContaner_Info select {
+.input_contaner textarea::placeholder {
+  top: 8px;
+}
+
+/* Select Elements */
+select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  width: 100%;
-  padding-block: 12px;
-  padding-right: 12px;
-  color: var(--second-color);
-  cursor: pointer;
 }
 
-.mainContaner select:focus,
-.mainContaner_Info select:focus {
-  border-color: var(--praimary-color);
-}
-
-.mainContaner select::-ms-expand,
-.mainContaner_Info select::-ms-expand {
-  display: none;
-}
-
-.mainContaner .select-wrapper,
-.mainContaner_Info .select-wrapper {
+.select-wrapper {
   position: relative;
   width: 100%;
 }
 
-.mainContaner .select-wrapper::after,
-.mainContaner_Info .select-wrapper::after {
-  display: none;
-}
-
-.mainContaner .select-icon,
-.mainContaner_Info .select-icon {
+.select-icon {
   position: absolute;
   left: 1rem;
   top: 50%;
@@ -1190,502 +892,672 @@ main {
   height: 1.2rem;
   pointer-events: none;
   transition: transform 0.3s ease;
-  cursor: pointer;
 }
 
-.mainContaner .select-icon.rotate,
-.mainContaner_Info .select-icon.rotate {
-  transform: translateY(-50%) rotate(180deg);
+.select-icon.rotate {
+  transform: rotate(180deg);
 }
 
-.mainContaner .date_ConF,
-.mainContaner_Info .date_ConF {
+/* Textarea */
+textarea {
+  height: 6rem;
+  resize: none;
+}
+
+/* Error and Success Messages */
+.error {
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+  color: red;
+}
+
+.success {
+  color: green;
+}
+
+/* Hidden Elements */
+.hidden {
+  display: none;
+}
+
+/* Button Container */
+.btn_contaner {
   display: flex;
-  gap: 16px;
-  flex-direction: row-reverse;
-}
-
-.mainContaner .form_groupD,
-.mainContaner_Info .form_groupD {
+  flex-direction: column;
+  gap: 12px;
   width: 100%;
 }
 
-.mainContaner .check,
-.mainContaner_Info .check {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
+/* Buttons */
+.btn {
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  font-family: var(--default-font-family);
+  cursor: pointer;
 }
 
-.mainContaner .check label,
-.mainContaner_Info .check label {
+.btn_filled {
+  background: var(--primary-color);
+  color: var(--white);
+  border: 1px solid var(--primary-color);
+}
+
+.btn_filled:hover {
+  background: #ad0012;
+}
+
+.btn_outline {
+  border: 1.5px solid var(--Colors-Neutral-400);
+  color: var(--mainColor);
+  background: var(--white);
+}
+
+/* Back Arrow */
+.back_arrow {
+  position: absolute;
+  right: 32px;
+  top: 32px;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+}
+
+/* Verification Code Inputs */
+.code_contaner {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.code-input {
+  width: 74px;
+  height: 74px;
+  text-align: center;
+  font-size: 18px;
+  border: none;
+  border-bottom: 1px solid var(--mainColor);
+}
+
+.code-input:focus {
+  outline: none;
+}
+
+/* Social Login Buttons */
+.linkedinBtn {
+  background-color: #1275b1;
+  border: 1.5px solid #1275b1;
+  color: var(--white);
+  border-radius: 8px;
+  padding: 8px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.GoogleBtn {
+  background-color: var(--white);
+  border: 1.5px solid var(--Colors-Neutral-400);
+  color: var(--mainColor);
+  border-radius: 8px;
+  padding: 8px;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Signup/Login Links */
+.signup_con {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  justify-content: center;
+}
+
+.signup_con h4 {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 27px;
+  color: var(--mainColor);
+  cursor: pointer;
+}
+
+.signup_con h4:hover {
+  color: var(--primary-color);
+}
+
+.signup_con p {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: var(--second-color);
+  cursor: pointer;
+}
+
+/* Or Divider */
+.or {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.or p {
+  color: var(--Colors-Neutral-500);
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 160%;
+}
+
+.or span {
+  width: 100%;
+  background: var(--border-color);
+  height: 1px;
+}
+
+/* Checkbox */
+.check {
+  display: flex;
+  gap: 8px;
+  justify-content: end;
+}
+
+.check label {
   line-height: 24px;
   font-weight: 400;
   cursor: pointer;
 }
 
-.mainContaner .check input[type="checkbox"],
-.mainContaner_Info .check input[type="checkbox"] {
+.check input[type="checkbox"] {
   width: 20px;
   height: 20px;
   cursor: pointer;
 }
 
-.mainContaner .check input[type="checkbox"]:checked,
-.mainContaner_Info .check input[type="checkbox"]:checked {
-  accent-color: var(--praimary-color);
+.check input[type="checkbox"]:checked {
+  accent-color: var(--primary-color);
 }
 
-.mainContaner .password_con,
-.mainContaner_Info .password_con {
+/* ==========================================================================
+   Authentication Modal Styles (Sign In and Sign Up)
+   ========================================================================== */
+
+/*
+ * Form Feedback Styling
+ * Styles for error and success messages to provide user feedback.
+ */
+.error {
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+  color: red;
+}
+
+.success {
+  color: green;
+}
+
+.hidden {
+  display: none;
+}
+
+/*
+ * Container Indicator Styling
+ * Styling for progress or step indicators in the login/signup process.
+ */
+.con {
+  display: flex;
+  gap: 2px;
+  text-align: center;
+  flex-direction: row-reverse;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.conformat {
+  border: 1px solid #ececec;
+  border-radius: 8px;
+  width: 38px;
+  height: 8px;
+  background-color: #ececec;
+}
+
+.conChecked {
+  background-color: var(--primary-color);
+}
+
+/*
+ * Main Authentication Container
+ * Positioning and styling the main sign-in/sign-up form container for centering and visual appeal.
+ */
+.main_contaner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  padding: 32px;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  border: 1.5px solid var(--border-color);
+  background: var(--white);
+  font-family: "Baloo Bhaijaan 2";
+  box-shadow: 0px 16px 32px -12px rgba(88, 92, 95, 0.1);
+  z-index: 1000;
+  width: 415px;
+}
+
+.main_contanerS {
+  top: 70% !important;
+}
+
+.main_contaner h1 {
+  font-size: 24px;
+  color: var(--main-color);
+  text-align: center;
+}
+
+.main_contaner p {
+  text-align: center;
+}
+
+.login4 p {
+  color: #646262;
+}
+
+/*
+ * Form Container and Grouping
+ * Structuring the form layout for clear input grouping and spacing.
+ */
+.form_contaner {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.secon_con {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form_group {
+  display: flex;
+  flex-direction: column;
+  text-align: end;
+  color: var(--main-color);
+  gap: 1px;
+}
+
+.form_group .label {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.form_group .input {
+  padding-block: 12px;
+  border-radius: 0.25rem;
+  border: 1.5px solid var(--border-color);
+  width: 100%;
+  gap: 8px;
+  direction: ltr;
+}
+
+.input::placeholder {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: var(--second-color);
+  font-family: "Baloo Bhaijaan 2";
+  position: relative;
+  right: 1.11vw;
+  text-align: right;
+}
+
+.wrapper {
+  width: 100%;
+}
+
+/*
+ * Checkbox and Password Visibility Controls
+ * Styling for interactive elements like checkboxes and password visibility toggles.
+ */
+.check {
+  display: flex;
+  gap: 8px;
+  justify-content: end;
+}
+
+.check label {
+  line-height: 24px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.password_con {
   flex-direction: row;
   justify-content: space-between;
   cursor: pointer;
 }
 
-.mainContaner .updateBtn,
-.mainContaner_Info .updateBtn {
-  display: flex;
-  padding: 8px 12px;
-  justify-content: center;
+.check input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.check input[type="checkbox"]:checked {
+  accent-color: var(--primary-color);
+}
+
+/*
+ * Separator Styling
+ * Visual separator for alternative login options or form sections.
+ */
+.or {
   align-items: center;
+  flex-direction: row;
   gap: 8px;
-  border-radius: 0.25rem;
-  background: var(--Colors-Primary-500, #f82548);
-  color: #fff;
-  border: 1px solid transparent;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 18px;
+}
+
+.or p {
+  color: var(--second-color);
+  text-align: center;
+  font-size: 14px;
   font-style: normal;
   font-weight: 500;
-  line-height: 27px;
-  margin-top: 24px;
+  line-height: 160%;
+}
+
+.or span {
+  width: 100%;
+  background: var(--border-color);
+}
+
+/*
+ * Button Styles for Authentication
+ */
+.buttons_con {
+  flex-direction: row;
+  gap: 8px;
+}
+
+input[type="button"] {
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 16px;
+  width: 100%;
+  background-color: var(--primary-color);
+}
+
+.linkedinBtn,
+.GoogleBtn {
+  border: none;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  border: 1.5px solid var(--border-color);
   width: 100%;
 }
 
-.mainContaner .removeBtn,
-.mainContaner_Info .removeBtn {
-  color: var(--Colors-Neutral-600, #8e8e8e);
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 700;
-  background: #fff;
-  border-radius: 0.25rem;
-  border: 1px solid var(--Colors-Neutral-400, #bbb);
+.linkedinBtn {
+  background-color: #1275b1 !important;
+  border-color: #1275b1 !important;
 }
 
-.mainContaner .buttons_con,
-.mainContaner_Info .buttons_con {
-  display: flex;
-  flex-direction: row-reverse;
-  padding: 8px 12px;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  flex: 1 0 0;
+.GoogleBtn {
+  background-color: var(--white) !important;
 }
 
-.scrollableContent {
-  overflow-y: auto;
-  max-height: 80vh;
-}
-
-.scrollableContent::-webkit-scrollbar {
-  width: 8px;
-}
-
-.infolist {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  align-self: stretch;
-  border-bottom: 1px solid var(--Colors-Neutral-200, #e8e8e8);
-  flex-direction: row-reverse;
-}
-
-.infolist p {
-  text-decoration: none;
-  display: block;
-  color: var(--Colors-Neutral-700, #777);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 27px;
+.loginbtn {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  border: 1px solid var(--primary-color);
   padding: 8px;
+}
+
+.loginbtn:hover {
+  background: #ad0012;
+}
+
+/*
+ * Sign Up and Alternative Action Links
+ * Styling for links or buttons prompting users to sign up or take alternative actions.
+ */
+.signup_con {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  justify-content: center;
+}
+
+.signup_con h4 {
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  color: var(--main-color);
   cursor: pointer;
 }
 
-.infolist p.checked {
-  display: flex;
-  padding: 8px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  border-bottom: 3px solid var(--Colors-Neutral-800, #606060);
+.signup_con h4:hover {
+  color: var(--primary-color);
 }
 
-.uplodimage {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  align-self: stretch;
-  justify-content: end;
-  flex-direction: row-reverse;
-  margin-bottom: 24px;
+.signup_con p {
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+  cursor: pointer;
 }
 
-.uplodimage .image {
-  display: flex;
+/*
+ * Additional Form Elements
+ * Styling for additional form elements like select boxes and textareas.
+ */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  padding: 12px;
+  font-family: var(--default-font-family);
+  font-size: 16px;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23333333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 12px center;
+  padding-left: 40px;
+  outline: none;
+  cursor: pointer;
+}
+
+select:focus {
+  border-color: var(--border-color);
+}
+
+textarea {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  font-family: var(--default-font-family);
+  font-size: 16px;
+  color: var(--text-color);
+  outline: none;
+  height: 6rem;
+  resize: none;
+}
+
+textarea::placeholder {
   position: relative;
-}
-
-.uplodimage .image img:last-child {
-  position: absolute;
-  top: 35%;
-  right: 5%;
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
-  background: #fff;
-  border-radius: 50%;
-  padding: 4px;
-}
-
-.uplodimage .text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 7px;
-}
-
-.uplodimage .text h4 {
-  color: var(--Colors-Primary-500, #f82548);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 20px;
+  right: 12px;
+  top: 12px;
+  color: var(--second-color);
+  font-family: var(--default-font-family);
+  font-size: 14px;
   font-style: normal;
-  font-weight: 600;
-  line-height: 27px;
+  font-weight: 400;
+  line-height: normal;
 }
 
-.uplodimage .text p {
-  color: var(--Colors-Neutral-600, #8e8e8e);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
+.code-input {
+  padding: 12px;
+  font-family: var(--default-font-family);
   font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 27px;
-}
-
-.form_contaner h2 {
-  color: var(--Colors-Neutral-1000, #333);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 33px;
-  margin-top: 24px;
-}
-
-.moreExBtn {
-  display: flex;
-  width: 500px;
-  padding: 8px 16px;
-  justify-content: center;
-  align-items: center;
-  gap: 19px;
-  border-radius: 8px;
-  border: 1px solid var(--Colors-Neutral-300, #d2d2d2);
-  background: var(--Colors-Neutral-100, #fff);
-  color: var(--Colors-Neutral-1000, #333);
-  text-align: right;
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 27px;
-}
-
-.infolistEX {
-  margin-bottom: 16px;
-}
-
-.calendar {
-  top: 58px;
-}
-
-.date2_con {
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 12px;
-  align-self: stretch;
-}
-
-.education {
-  display: flex;
-  padding: 4px 16px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  border-radius: 48px;
-  border: 1px solid var(--Gray300, #d0d5dd);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.education:hover {
-  background: var(--Colors-Neutral-100, #f5f5f5);
-}
-
-.edu_con {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.edu_con a {
-  text-decoration: none;
-  color: var(--Gray-900, #101828);
-  font-family: "Baloo Bhaijaan 2";
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 22px; /* 137.5% */
-}
-
-#moreBtn {
-  display: flex;
-  padding: 8px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  align-self: stretch;
-  border-radius: 8px;
-  background: var(--Gray-100, #f2f4f7);
-  color: var(--Colors-Primary-500, #f82548);
-  text-align: right;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 24px;
+  color: var(--text-color);
   border: none;
+  border-bottom: 1px solid #000;
+}
+
+.code-input:focus {
+  outline: none;
+}
+
+.arrowRight {
+  position: absolute;
+  right: 2.22vw;
+  top: 32px;
   cursor: pointer;
-  margin-top: 8px;
 }
 
-#moreBtn:hover {
-  background: var(--Gray-200, #eaecf0);
+.form_contanerP {
+  gap: 16px;
 }
 
-.error {
-  display: block;
-  color: #dc3545;
-  font-size: 0.85rem;
-  margin-top: 0.25rem;
-  text-align: right;
-  padding-right: 0.5rem;
-  animation: fadeIn 0.3s ease-in-out;
+.group2 {
+  gap: 16px !important;
 }
 
-.error-border {
-  border-color: #dc3545 !important;
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+
+@media (max-width: 1440px) {
+  nav {
+    width: 96%;
+    margin-right: auto;
+    margin-left: auto;
+  }
 }
 
-@media (max-width: 1024px) {
-  .main {
+@media (max-width: 992px) {
+  nav {
     flex-direction: column;
-  }
-  .left_section {
-    width: 100%;
-    min-width: auto;
-  }
-  .video {
-    width: 100%;
-  }
-  body {
-    margin-inline: 24px;
-  }
-  .mentor_con {
-    flex-direction: column;
-    align-items: flex-end;
-    transform: translateY(-15%);
-  }
-  .mentorButonsR {
-    transform: none;
-    margin-top: 16px;
-    justify-content: flex-end;
-    width: 100%;
-  }
-  .mentor_sec2 {
-    overflow-x: auto;
-    white-space: nowrap;
-    padding-bottom: 8px;
-  }
-  .mentor_sec2 p {
-    font-size: 18px;
+    gap: 15px;
     padding: 8px 12px;
+  }
+
+  .logo,
+  .middleTabs,
+  .left_Sec {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .logo img {
+    width: 120px;
+    height: 30px;
   }
 }
 
 @media (max-width: 768px) {
-  body {
-    margin-inline: 16px;
-  }
-  nav {
-    padding-inline: 12px;
-  }
-  .titel p {
-    display: none;
-  }
-  #image1 {
-    width: 150px;
-    height: 150px;
-  }
-  .edit_bigimage {
-    top: 100px;
-    left: 20px;
-  }
-  .mentor_titele h4 {
-    font-size: 20px;
-  }
-  .mentor_titele p {
-    font-size: 16px;
-  }
-  .mentorButons .editBtn {
-    font-size: 16px;
-    padding: 6px 12px;
-  }
-  .veiw_mentorFormat {
-    padding: 12px;
-  }
-  .veiw_con .text h4,
-  .veiw_con .text p {
-    font-size: 16px;
-  }
-  .second_con .date2 p {
+  .notification-count {
+    width: 18px;
+    height: 18px;
     font-size: 10px;
+    top: -6px;
+    right: -6px;
+    border-width: 1px;
   }
-  .video h1,
-  .statistics h1 {
-    font-size: 16px;
+
+  .notifications-container {
+    width: 90%;
+    left: 5%;
+    top: 80px;
   }
-  .veiw_conS .text h4 {
-    font-size: 16px;
-  }
-  .mainContaner {
-    width: 90% !important;
-    padding: 16px !important;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-  .mainContaner_Info {
+
+  .mentor-application-popup-container {
     width: 95%;
   }
-  .overlay {
-    align-items: flex-start;
-    padding-top: 20px;
+
+  .mainContaner,
+  .mainContaner_2,
+  .penddingScreen_container {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .mainContaner h1,
+  .mainContaner_2 h1,
+  .penddingScreen_container h1 {
+    font-size: 24px;
+  }
+
+  .penddingScreenContent p {
+    font-size: 16px;
+  }
+
+  .login-popup-container {
+    max-width: 95%;
+  }
+}
+
+@media (max-width: 576px) {
+  .logo,
+  .middleTabs,
+  .left_Sec {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .signup-btn,
+  .login-btn {
+    width: 100%;
+  }
+
+  .logo img {
+    width: 100px;
+    height: 25px;
+  }
+
+  .mentor-application-popup-container {
+    max-width: 95%;
+  }
+
+  .mentor-application-popup-container .mainContaner,
+  .mentor-application-popup-container .mainContaner_2,
+  .mentor-application-popup-container .penddingScreen_container {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .login-popup-container .main_contaner {
+    padding: 24px;
   }
 }
 
 @media (max-width: 480px) {
-  body {
-    margin-inline: 12px;
-  }
-  .buttonsNav {
+  .nav-buttons {
     display: none;
-  }
-  #image1 {
-    width: 120px;
-    height: 120px;
-  }
-  .edit_bigimage {
-    top: 80px;
-    left: 10px;
-  }
-  .mentor_titele h4 {
-    font-size: 18px;
-    line-height: 24px;
-  }
-  .mentor_titele p {
-    font-size: 14px;
-    line-height: 20px;
-  }
-  .contact a {
-    width: 28px;
-    height: 28px;
-  }
-  .contact img {
-    width: 14px;
-    height: 14px;
-  }
-  .mentor_sec2 p {
-    font-size: 16px;
-    padding: 6px 10px;
-  }
-  .veiw_mentorFormat {
-    padding: 8px;
-  }
-  .veiw_con {
-    gap: 8px;
-  }
-  .veiw_con img {
-    width: 24px;
-    height: 24px;
-  }
-  .veiw_con .text h4,
-  .veiw_con .text p {
-    font-size: 14px;
-    line-height: 20px;
-  }
-  .second_con {
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 8px;
-  }
-  .education {
-    width: 100%;
-  }
-  .edu_con {
-    justify-content: space-between;
-  }
-  .form_group {
-    margin-bottom: 12px;
-  }
-  .input,
-  textarea,
-  select {
-    padding: 10px;
-    font-size: 14px;
-  }
-  .updateBtn {
-    padding: 10px;
-    font-size: 16px;
-  }
-  .infolist {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .infolist p {
-    font-size: 14px;
-    padding: 6px 10px;
-  }
-}
-
-@media (max-width: 360px) {
-  .mentor_titele h4 {
-    font-size: 16px;
-  }
-  .mentor_titele p {
-    font-size: 13px;
-  }
-  .mentor_sec2 p {
-    font-size: 14px;
   }
 }

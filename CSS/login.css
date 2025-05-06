@@ -1,34 +1,56 @@
+/*
+ * Global Reset and Font Import
+ * Resetting default styles and importing custom font for consistent typography.
+ */
 * {
   padding: 0;
   margin: 0;
 }
+
 @font-face {
   font-family: "Baloo Bhaijaan 2";
   src: url("/font/BalooBhaijaan2-VariableFont_wght.ttf") format("truetype");
 }
 
+/*
+ * CSS Variables and Body Styling
+ * Defining color variables for consistent theming and setting the base font for the body.
+ */
 :root {
   --mainColor: #101828;
   --second-color: #a4a4a4;
   --praimary-color: #f82548;
   --Colors-Neutral-300: #d2d2d2;
 }
+
 body {
   font-family: "Baloo Bhaijaan 2";
   height: 1000px;
 }
+
+/*
+ * Form Feedback Styling
+ * Styles for error and success messages to provide user feedback.
+ */
 .error {
   font-size: 12px;
   margin-top: 5px;
   display: block;
   color: red;
 }
+
 .success {
   color: green;
 }
+
 .hidden {
   display: none;
 }
+
+/*
+ * Container Indicator Styling
+ * Styling for progress or step indicators in the login process.
+ */
 .con {
   display: flex;
   gap: 2px;
@@ -37,6 +59,7 @@ body {
   justify-content: center;
   margin-bottom: 8px;
 }
+
 .conformat {
   border: 1px solid #ececec;
   border-radius: 8px;
@@ -44,25 +67,15 @@ body {
   height: 8px;
   background-color: #ececec;
 }
+
 .conChecked {
   background-color: var(--praimary-color);
 }
 
-/* .main_contaner{
-    position: absolute;
-    top: 5.33vw;
-    left: 34.65vw;
-    display: flex;
-    padding: 32px;
-    flex-direction: column;
-    gap: 8px;
-    flex-shrink: 0;
-    border-radius: 16px;
-    border: 1.5px solid var(--Colors-Neutral-300, #D2D2D2);
-    background: #FFF;
-    font-family: "Baloo Bhaijaan 2";
-    box-shadow: 0px 16px 32px -12px rgba(88, 92, 95, 0.10);
-  } */
+/*
+ * Main Login Container
+ * Positioning and styling the main login form container for centering and visual appeal.
+ */
 .main_contaner {
   position: absolute;
   top: 50%;
@@ -79,32 +92,43 @@ body {
   font-family: "Baloo Bhaijaan 2";
   box-shadow: 0px 16px 32px -12px rgba(88, 92, 95, 0.1);
   z-index: 1000;
-  width: 355px;
+  width: 415px;
 }
+
 .main_contanerS {
   top: 70% !important;
 }
+
 .main_contaner h1 {
   font-size: 24px;
   color: var(--mainColor);
   text-align: center;
 }
+
 .main_contaner p {
   text-align: center;
 }
+
 .login4 p {
   color: #646262;
 }
+
+/*
+ * Form Container and Grouping
+ * Structuring the form layout for clear input grouping and spacing.
+ */
 .form_contaner {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
+
 .secon_con {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
+
 .form_group {
   display: flex;
   flex-direction: column;
@@ -112,11 +136,13 @@ body {
   color: var(--mainColor);
   gap: 1px;
 }
+
 .form_group .label {
   font-size: 18px;
   font-style: normal;
   font-weight: 500;
 }
+
 .form_group .input {
   padding-block: 12px;
   border-radius: 0.25rem;
@@ -138,20 +164,27 @@ body {
   right: 1.11vw;
   text-align: right;
 }
+
 .wrapper {
   width: 100%;
 }
 
+/*
+ * Checkbox and Password Visibility Controls
+ * Styling for interactive elements like checkboxes and password visibility toggles.
+ */
 .check {
   display: flex;
   gap: 8px;
   justify-content: end;
 }
+
 .check label {
   line-height: 24px;
   font-weight: 400;
   cursor: pointer;
 }
+
 .password_con {
   flex-direction: row;
   justify-content: space-between;
@@ -168,42 +201,36 @@ body {
   accent-color: var(--praimary-color);
 }
 
-/* .check input[type="checkbox"]:checked::after {
-    content: "✔";
-    display: block;
-    text-align: center;
-    color: white;
-    font-size: 16px;
-    position: relative;
-    top: -3px;
-    /* bottom: 0; */
-/* right: 0;
-    left: 0;
-        } */
-
+/*
+ * Separator Styling
+ * Visual separator for alternative login options or form sections.
+ */
 .or {
   align-items: center;
   flex-direction: row;
   gap: 8px;
 }
+
 .or p {
   color: var(--COLORS-Neutral-500, #a4a4a4);
   text-align: center;
-
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
   line-height: 160%;
 }
+
 .or span {
   width: 100%;
   background: var(--Colors-Neutral-300, #d2d2d2);
   height: 1px;
 }
+
 .buttons_con {
   flex-direction: row;
   gap: 8px;
 }
+
 input[type="button"] {
   border: none;
   cursor: pointer;
@@ -213,7 +240,9 @@ input[type="button"] {
   width: 100%;
   background-color: var(--praimary-color);
 }
-button {
+
+.linkedinBtn,
+.GoogleBtn {
   border: none;
   cursor: pointer;
   background-color: #fff;
@@ -221,13 +250,16 @@ button {
   border: 1.5px solid var(--Colors-Neutral-400, #bbb);
   width: 100%;
 }
+
 .linkedinBtn {
   background-color: #1275b1 !important;
   border-color: #1275b1 !important;
 }
+
 .GoogleBtn {
   background-color: #fff !important;
 }
+
 .loginbtn {
   background-color: var(--praimary-color);
   color: #fff;
@@ -237,15 +269,22 @@ button {
   border: 1px solid var(--praimary-color);
   padding: 8px;
 }
+
 .loginbtn:hover {
   background: #ad0012;
 }
+
+/*
+ * Sign Up and Alternative Action Links
+ * Styling for links or buttons prompting users to sign up or take alternative actions.
+ */
 .signup_con {
   display: flex;
   flex-direction: row;
   gap: 4px;
   justify-content: center;
 }
+
 .signup_con h4 {
   font-family: "Baloo Bhaijaan 2";
   font-size: 18px;
@@ -255,12 +294,11 @@ button {
   color: var(--mainColor);
   cursor: pointer;
 }
-.password_con h4:hover {
-  color: var(--praimary-color);
-}
+
 .signup_con h4:hover {
   color: var(--praimary-color);
 }
+
 .signup_con p {
   font-size: 16px;
   font-style: normal;
@@ -270,25 +308,10 @@ button {
   cursor: pointer;
 }
 
-/* .passwordScreen */
-
-.arrowRight {
-  position: absolute;
-  right: 2.22vw;
-  top: 32px;
-  cursor: pointer;
-}
-.form_contanerP {
-  gap: 16px;
-}
-
-/* login2 */
-.group2 {
-  gap: 16px !important;
-}
-
-/* login3 */
-
+/*
+ * Additional Form Elements
+ * Styling for additional form elements like select boxes and textareas.
+ */
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -305,11 +328,12 @@ select {
   line-height: normal;
   color: var(--second-color);
   font-family: "Baloo Bhaijaan 2";
-  text-align: end;
+  text-align: right;
   position: relative;
   outline: none;
   cursor: pointer;
 }
+
 select:focus {
   border-color: var(--Colors-Neutral-300);
 }
@@ -362,6 +386,7 @@ textarea {
   height: 6rem;
   resize: none;
 }
+
 textarea::placeholder {
   position: relative;
   right: 12px;
@@ -382,6 +407,22 @@ textarea::placeholder {
   border: none;
   border-bottom: 1px solid #000;
 }
+
 .code-input:focus {
   outline: none;
+}
+
+.arrowRight {
+  position: absolute;
+  right: 2.22vw;
+  top: 32px;
+  cursor: pointer;
+}
+
+.form_contanerP {
+  gap: 16px;
+}
+
+.group2 {
+  gap: 16px !important;
 }

@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus Chat</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../CSS/common.css" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap");
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        max-width: 1440px;
+        margin: 0 auto;
+        height: 100vh;
+        width: 100%;
+      }
+
+      /* Main Content */
+      .main-content {
+        display: flex;
+        flex: 1;
+        height: calc(100vh - 70px);
+        direction: ltr;
+      }
+
+      /* Chat Area */
+      .chat-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background-color: var(--white);
+        margin: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .new-chat-icon {
+        font-size: 50px;
+        color: var(--Colors-Neutral-400);
+        margin-bottom: 20px;
+      }
+
+      .new-chat-icon img {
+        width: 50px;
+        height: 50px;
+      }
+
+      .start-chat-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--main-color);
+        margin-bottom: 10px;
+      }
+
+      .chat-hint {
+        color: var(--Colors-Neutral-500);
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .start-chat-btn {
+        display: flex;
+        padding: 8px 12px;
+        align-items: center;
+        gap: 6px;
+        border: none;
+        border-radius: 4px;
+        background: var(--primary-color);
+      }
+
+      .start-chat-btn span {
+        color: var(--white);
+        font-family: var(--default-font-family);
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 24px; /* 150% */
+      }
+
+      .start-chat-btn img {
+        width: 20px;
+        height: 20px;
+      }
+
+      .start-chat-btn:hover {
+        background-color: #e03870;
+      }
+
+      /* Chat Area (when there are chats) */
+      .chat-area.active-chat {
+        justify-content: flex-start;
+        align-items: stretch;
+      }
+
+      .chat-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 16px 24px;
+        border-bottom: 1px solid var(--Colors-Neutral-200);
+        background-color: var(--white);
+        height: 72px;
+      }
+
+      .contact-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .contact-info img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .contact-details {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .contact-name {
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--main-color);
+      }
+
+      .online-status {
+        color: #4caf50; /* Keeping the green online status as in the original design */
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #4caf50;
+        border-radius: 50%;
+      }
+
+      .chat-messages {
+        flex-grow: 1;
+        padding: 24px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        background-color: var(--background-color);
+      }
+
+      .message-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .message {
+        max-width: 70%;
+        padding: 12px 16px;
+        border-radius: 16px;
+        position: relative;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .message.received {
+        background-color: var(--Colors-Neutral-200);
+        color: var(--main-color);
+        align-self: flex-start;
+        border-bottom-right-radius: 4px;
+      }
+
+      .message.sent {
+        background-color: var(--primary-color);
+        color: var(--white);
+        align-self: flex-end;
+        border-bottom-left-radius: 4px;
+      }
+
+      .message .time {
+        font-size: 12px;
+        margin-top: 4px;
+        text-align: left;
+      }
+
+      .message.received .time {
+        color: var(--Colors-Neutral-500);
+      }
+
+      .message.sent .time {
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .reaction {
+        position: absolute;
+        bottom: -10px;
+        left: -10px;
+        background-color: #ff9800; /* Keeping the reaction color as in the original design */
+        color: var(--white);
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .chat-input-container {
+        padding: 16px 24px;
+        border-top: 1px solid var(--Colors-Neutral-200);
+        background-color: var(--white);
+      }
+
+      .chat-input {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background-color: var(--background-color);
+        border-radius: 24px;
+        padding: 0 16px;
+      }
+
+      .chat-input input {
+        flex-grow: 1;
+        padding: 12px 0;
+        border: none;
+        background-color: transparent;
+        font-size: 14px;
+        outline: none;
+      }
+
+      .chat-input input::placeholder {
+        color: var(--Colors-Neutral-500);
+      }
+
+      .attachment-icon,
+      .send-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--Colors-Neutral-500);
+      }
+
+      .send-icon {
+        color: var(--primary-color);
+      }
+
+      /* Sidebar */
+      .sidebar {
+        width: 280px;
+        background-color: var(--white);
+        border-right: 1px solid var(--Colors-Neutral-200);
+        padding: 15px;
+      }
+
+      .sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        height: 72px;
+      }
+
+      .sidebar-title {
+        font-weight: 600;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        color: var(--main-color);
+      }
+
+      .sidebar-title img {
+        margin-left: 5px;
+      }
+
+      .new-message-btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: var(--background-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        color: var(--Colors-Neutral-500);
+      }
+
+      .new-message-btn img {
+        width: 20px;
+        height: 20px;
+      }
+
+      .dropdown-icon {
+        color: var(--Colors-Neutral-500);
+      }
+
+      .contacts-list {
+        overflow-y: auto;
+        height: calc(100% - 72px);
+      }
+
+      .contact-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 16px 24px;
+        border-bottom: 1px solid var(--Colors-Neutral-200);
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .contact-item:hover {
+        background-color: rgba(0, 0, 0, 0.02);
+      }
+
+      .contact-item.active {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      .contact-item-details {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .contact-item-details img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .contact-text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .contact-item-name {
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--main-color);
+      }
+
+      .last-message {
+        font-size: 12px;
+        color: var(--Colors-Neutral-500);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 160px;
+      }
+
+      .contact-info-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+      }
+
+      .message-time {
+        font-size: 12px;
+        color: var(--Colors-Neutral-500);
+      }
+
+      .unread-indicator {
+        width: 20px;
+        height: 20px;
+        background-color: var(--primary-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      /* Extra styling for reactions and emoji */
+      .emoji-reaction {
+        width: 40px;
+        height: 40px;
+        background-color: var(--white);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Dropdown caret icon */
+      .caret-icon {
+        font-size: 12px;
+        color: var(--Colors-Neutral-500);
+      }
+
+      /* Loading spinner */
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s ease-in-out infinite;
+        margin: 20px auto;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Error message */
+      .error-message {
+        color: var(--primary-color);
+        text-align: center;
+        padding: 20px;
+        font-size: 14px;
+      }
+
+      /* Responsive adjustments */
+      @media screen and (max-width: 768px) {
+        .sidebar {
+          display: none;
+        }
+
+        .nav-tabs {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header>
+        <nav>
+          <a class="logo" href="../index.html">
+            <img src="./mentor-images/logo_campus.svg" alt="شعار كامبس" />
+          </a>
+          <div class="middleTabs">
+            <a href="#" class="active">الموجهين</a>
+            <a href="./pages/Sessions.html" id="sessionsLink">الجلسات</a>
+            <a href="#" id="joinAsMentorLink">إنضم كموجه</a>
+          </div>
+          <div class="left_Sec auth-section">
+            <!-- Dynamically populated by JavaScript -->
+          </div>
+        </nav>
+      </header>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Chat Area -->
+        <div class="chat-area">
+          <div class="new-chat-icon">
+            <img
+              src="../mentor-images/messages-black.svg"
+              alt="Messages Icon"
+            />
+          </div>
+          <h2 class="start-chat-title">ابدأ محادثة جديدة</h2>
+          <p class="chat-hint">
+            ستظهر الرسائل هنا بعد التواصل مع الموجهين أو المنتج.
+          </p>
+          <button class="start-chat-btn" id="startChatBtn">
+            <span>ابدأ المحادثة</span>
+            <img
+              src="../mentor-images/messages-white.svg"
+              alt="Messages Icon"
+            />
+          </button>
+        </div>
+
+        <!-- Sidebar - Messages -->
+        <div class="sidebar">
+          <div class="sidebar-header">
+            <span id="newChatBtn"
+              ><img src="../mentor-images/add-circle.svg" alt=""
+            /></span>
+            <span class="sidebar-title">
+              <span><img src="../mentor-images/arrow-down.svg" alt="" /></span>
+              <span> الرسائل الواردة </span>
+            </span>
+            <span id="totalMessagesCount" class="message-count">0</span>
+          </div>
+          <div id="contactsList" class="contacts-list">
+            <!-- Empty messages list -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Global variables
+      let currentUser = null;
+      let currentChatId = null;
+      let chats = [];
+      let contacts = [];
+      let messages = {};
+      let unreadCounts = {};
+
+      // DOM elements
+      const chatAreaEl = document.querySelector(".chat-area");
+      const chatMessagesEl = document.createElement("div");
+      chatMessagesEl.id = "chatMessages";
+      chatMessagesEl.className = "chat-messages";
+
+      const contactsListEl = document.getElementById("contactsList");
+      const messageInputEl = document.createElement("input");
+      messageInputEl.id = "messageInput";
+      messageInputEl.type = "text";
+      messageInputEl.placeholder = "اكتب رسالة";
+
+      const sendMessageBtn = document.createElement("div");
+      sendMessageBtn.id = "sendMessageBtn";
+      sendMessageBtn.className = "send-icon";
+      sendMessageBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+
+      const newChatBtn = document.getElementById("newChatBtn");
+      const startChatBtn = document.getElementById("startChatBtn");
+      const currentChatNameEl = document.createElement("div");
+      currentChatNameEl.id = "currentChatName";
+      currentChatNameEl.className = "contact-name";
+
+      const currentChatAvatarEl = document.createElement("img");
+      currentChatAvatarEl.id = "currentChatAvatar";
+      currentChatAvatarEl.src = "/api/placeholder/40/40";
+      currentChatAvatarEl.alt = "Contact Profile";
+
+      const currentChatStatusEl = document.createElement("span");
+      currentChatStatusEl.id = "currentChatStatus";
+      currentChatStatusEl.textContent = "متصل الآن";
+
+      const totalMessagesCountEl = document.getElementById("totalMessagesCount");
+
+      // API configuration
+      const API_BASE_URL = "https://tawgeeh-v1-production.up.railway.app";
+      const AUTH_TOKEN = localStorage.getItem("authToken"); // Assuming token is stored after login
+
+      // Initialize the chat application
+      document.addEventListener("DOMContentLoaded", async () => {
+        try {
+          // Load current user data
+          await loadCurrentUser();
+
+          // Load chats list
+          await loadChats();
+
+          // Set up event listeners
+          setupEventListeners();
+
+          // If there are chats, load the first one
+          if (chats.length > 0) {
+            await loadChat(chats[0].id);
+          } else {
+            showNoChatsMessage();
+          }
+        } catch (error) {
+          console.error("Initialization error:", error);
+          showError("حدث خطأ أثناء تحميل الدردشة. يرجى المحاولة مرة أخرى.");
+        }
+      });
+
+      // Load current user data
+      async function loadCurrentUser() {
+        // In a real app, fetch this from your authentication system
+        currentUser = {
+          id: 1, // Replace with actual user ID from auth
+          name: "المستخدم الحالي",
+          avatar: "/api/placeholder/48/48",
+        };
+      }
+
+      // Load user's chats
+      async function loadChats() {
+        try {
+          showLoading(contactsListEl);
+
+          const response = await fetch(
+            `${API_BASE_URL}/chat/${currentUser.id}/chats`,
+            {
+              headers: {
+                Authorization: `Bearer ${AUTH_TOKEN}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Failed to load chats");
+          }
+
+          const data = await response.json();
+
+          if (data.success && data.data) {
+            chats = data.data;
+            renderChatsList();
+            totalMessagesCountEl.textContent = chats.length;
+          } else {
+            throw new Error(data.message || "Failed to load chats");
+          }
+        } catch (error) {
+          console.error("Error loading chats:", error);
+          showErrorInList("حدث خطأ أثناء تحميل المحادثات.", contactsListEl);
+        }
+      }
+
+      // Load a specific chat's messages
+      async function loadChat(chatId) {
+        try {
+          currentChatId = chatId;
+          showLoading(chatMessagesEl);
+
+          // Mark messages as read
+          await markMessagesAsRead(chatId);
+
+          // Fetch messages
+          const response = await fetch(
+            `${API_BASE_URL}/chat/${chatId}/messages`,
+            {
+              headers: {
+                Authorization: `Bearer ${AUTH_TOKEN}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Failed to load messages");
+          }
+
+          const data = await response.json();
+
+          if (data.success && data.data) {
+            messages[chatId] = data.data;
+
+            // Update chat area to active state
+            chatAreaEl.innerHTML = "";
+            chatAreaEl.classList.add("active-chat");
+
+            // Create chat header
+            const chatHeader = document.createElement("div");
+            chatHeader.className = "chat-header";
+            const contactInfo = document.createElement("div");
+            contactInfo.className = "contact-info";
+            const contactDetails = document.createElement("div");
+            contactDetails.className = "contact-details";
+            const onlineStatus = document.createElement("div");
+            onlineStatus.className = "online-status";
+            const statusDot = document.createElement("div");
+            statusDot.className = "status-dot";
+
+            onlineStatus.appendChild(statusDot);
+            onlineStatus.appendChild(currentChatStatusEl);
+            contactDetails.appendChild(currentChatNameEl);
+            contactDetails.appendChild(onlineStatus);
+            contactInfo.appendChild(currentChatAvatarEl);
+            contactInfo.appendChild(contactDetails);
+            chatHeader.appendChild(contactInfo);
+            chatAreaEl.appendChild(chatHeader);
+
+            // Add messages area
+            chatAreaEl.appendChild(chatMessagesEl);
+
+            // Add input area
+            const chatInputContainer = document.createElement("div");
+            chatInputContainer.className = "chat-input-container";
+            const chatInput = document.createElement("div");
+            chatInput.className = "chat-input";
+            const attachmentIcon = document.createElement("div");
+            attachmentIcon.className = "attachment-icon";
+            attachmentIcon.innerHTML = '<i class="fas fa-paperclip"></i>';
+
+            chatInput.appendChild(attachmentIcon);
+            chatInput.appendChild(messageInputEl);
+            chatInput.appendChild(sendMessageBtn);
+            chatInputContainer.appendChild(chatInput);
+            chatAreaEl.appendChild(chatInputContainer);
+
+            renderMessages();
+
+            // Update the active chat in the sidebar
+            updateActiveChatInList(chatId);
+
+            // Update the chat header with the other participant's info
+            updateChatHeader(chatId);
+          } else {
+            throw new Error(data.message || "Failed to load messages");
+          }
+        } catch (error) {
+          console.error("Error loading chat:", error);
+          showErrorInChat("حدث خطأ أثناء تحميل الرسائل.", chatMessagesEl);
+        }
+      }
+
+      // Send a new message
+      async function sendMessage() {
+        const messageText = messageInputEl.value.trim();
+
+        if (!messageText) {
+          return;
+        }
+
+        if (!currentChatId) {
+          alert("الرجاء تحديد محادثة أولاً");
+          return;
+        }
+
+        try {
+          // Optimistically add the message to the UI
+          const tempMessage = {
+            id: "temp-" + Date.now(),
+            content: messageText,
+            senderId: currentUser.id,
+            createdAt: new Date().toISOString(),
+            isTemp: true,
+          };
+
+          if (!messages[currentChatId]) {
+            messages[currentChatId] = [];
+          }
+
+          messages[currentChatId].push(tempMessage);
+          renderMessages();
+          messageInputEl.value = "";
+
+          // Scroll to bottom
+          scrollToBottom();
+
+          // Send to server
+          const response = await fetch(`${API_BASE_URL}/chat/send`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${AUTH_TOKEN}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              chatId: currentChatId,
+              senderId: currentUser.id,
+              content: messageText,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to send message");
+          }
+
+          const data = await response.json();
+
+          if (data.success && data.data) {
+            // Replace the temp message with the real one from server
+            const messageIndex = messages[currentChatId].findIndex(
+              (m) => m.id === tempMessage.id
+            );
+            if (messageIndex !== -1) {
+              messages[currentChatId][messageIndex] = data.data;
+              renderMessages();
+            }
+          } else {
+            throw new Error(data.message || "Failed to send message");
+          }
+        } catch (error) {
+          console.error("Error sending message:", error);
+
+          // Show error on the temp message
+          const messageIndex = messages[currentChatId].findIndex(
+            (m) => m.id === tempMessage.id
+          );
+          if (messageIndex !== -1) {
+            messages[currentChatId][messageIndex].error = true;
+            renderMessages();
+          }
+        }
+      }
+
+      // Mark messages as read
+      async function markMessagesAsRead(chatId) {
+        try {
+          const response = await fetch(`${API_BASE_URL}/chat/mark-read`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${AUTH_TOKEN}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              chatId: chatId,
+              userId: currentUser.id,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to mark messages as read");
+          }
+
+          const data = await response.json();
+          if (data.success) {
+            // Update unread counts locally
+            if (unreadCounts[chatId]) {
+              unreadCounts[chatId] = 0;
+              updateUnreadCountsInUI();
+            }
+          } else {
+            throw new Error(data.message || "Failed to mark messages as read");
+          }
+        } catch (error) {
+          console.error("Error marking messages as read:", error);
+        }
+      }
+
+      // Create a new chat
+      async function createNewChat(userId) {
+        try {
+          const response = await fetch(`${API_BASE_URL}/chat/create`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${AUTH_TOKEN}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              user1Id: currentUser.id,
+              user2Id: userId,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to create chat");
+          }
+
+          const data = await response.json();
+
+          if (data.success && data.data) {
+            // Add the new chat to our list and load it
+            chats.unshift(data.data);
+            renderChatsList();
+            await loadChat(data.data.id);
+            totalMessagesCountEl.textContent = chats.length;
+          } else {
+            throw new Error(data.message || "Failed to create chat");
+          }
+        } catch (error) {
+          console.error("Error creating chat:", error);
+          alert("حدث خطأ أثناء إنشاء المحادثة. يرجى المحاولة مرة أخرى.");
+        }
+      }
+
+      // Render the chats list
+      function renderChatsList() {
+        contactsListEl.innerHTML = "";
+
+        if (chats.length === 0) {
+          showNoChatsMessage();
+          return;
+        }
+
+        chats.forEach((chat) => {
+          const otherParticipant = getOtherParticipant(chat);
+          const lastMessage = getLastMessage(chat.id);
+          const unreadCount = unreadCounts[chat.id] || 0;
+
+          const chatEl = document.createElement("div");
+          chatEl.className = `contact-item ${
+            chat.id === currentChatId ? "active" : ""
+          }`;
+          chatEl.dataset.chatId = chat.id; // Add data attribute for tracking
+          chatEl.innerHTML = `
+            <div class="contact-item-details">
+              <img src="${
+                otherParticipant.avatar || "/api/placeholder/48/48"
+              }" alt="Contact" />
+              <div class="contact-text">
+                <div class="contact-item-name">${otherParticipant.name}</div>
+                <div class="last-message">${
+                  lastMessage ? lastMessage.content : "لا توجد رسائل"
+                }</div>
+              </div>
+            </div>
+            <div class="contact-info-right">
+              <div class="message-time">${
+                lastMessage ? formatTime(lastMessage.createdAt) : ""
+              }</div>
+              ${
+                unreadCount > 0
+                  ? `<div class="unread-indicator">${unreadCount}</div>`
+                  : ""
+              }
+            </div>
+          `;
+
+          chatEl.addEventListener("click", () => loadChat(chat.id));
+          contactsListEl.appendChild(chatEl);
+        });
+      }
+
+      // Render messages for the current chat
+      function renderMessages() {
+        if (!currentChatId || !messages[currentChatId]) {
+          chatMessagesEl.innerHTML =
+            '<div class="error-message">لا توجد رسائل في هذه المحادثة</div>';
+          return;
+        }
+
+        chatMessagesEl.innerHTML = "";
+
+        messages[currentChatId].forEach((message) => {
+          const isSent = message.senderId === currentUser.id;
+          const messageClass = isSent ? "sent" : "received";
+          const time = formatTime(message.createdAt);
+
+          const messageEl = document.createElement("div");
+          messageEl.className = "message-group";
+
+          if (message.error) {
+            messageEl.innerHTML = `
+              <div class="message ${messageClass}" style="border: 1px solid var(--primary-color)">
+                <div>فشل إرسال الرسالة: ${message.content}</div>
+                <div class="time">${time}</div>
+              </div>
+            `;
+          } else {
+            messageEl.innerHTML = `
+              <div class="message ${messageClass}">
+                <div>${message.content}</div>
+                <div class="time">${time}</div>
+                ${
+                  message.reaction
+                    ? `<div class="reaction">${message.reaction}</div>`
+                    : ""
+                }
+              </div>
+            `;
+          }
+
+          chatMessagesEl.appendChild(messageEl);
+        });
+
+        scrollToBottom();
+      }
+
+      // Update the active chat in the sidebar list
+      function updateActiveChatInList(chatId) {
+        const chatItems = contactsListEl.querySelectorAll(".contact-item");
+        chatItems.forEach((item) => {
+          item.classList.remove("active");
+          if (item.dataset.chatId === chatId) {
+            item.classList.add("active");
+          }
+        });
+      }
+
+      // Update the chat header with participant info
+      function updateChatHeader(chatId) {
+        const chat = chats.find((c) => c.id === chatId);
+        if (!chat) return;
+
+        const otherParticipant = getOtherParticipant(chat);
+        currentChatNameEl.textContent = otherParticipant.name;
+        currentChatAvatarEl.src =
+          otherParticipant.avatar || "/api/placeholder/40/40";
+        currentChatStatusEl.textContent = "متصل الآن"; // In a real app, you'd check actual status
+      }
+
+      // Get the other participant in a chat
+      function getOtherParticipant(chat) {
+        return {
+          id: chat.user1Id === currentUser.id ? chat.user2Id : chat.user1Id,
+          name: chat.user1Id === currentUser.id ? "سارة عبدالله" : "أحمد محمد",
+          avatar: "/api/placeholder/48/48",
+        };
+      }
+
+      // Get the last message in a chat
+      function getLastMessage(chatId) {
+        if (!messages[chatId] || messages[chatId].length === 0) {
+          return null;
+        }
+        return messages[chatId][messages[chatId].length - 1];
+      }
+
+      // Format time for display
+      function formatTime(isoString) {
+        const date = new Date(isoString);
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? "م" : "ص";
+        const formattedHours = hours % 12 || 12;
+        return `${formattedHours}:${
+          minutes < 10 ? "0" + minutes : minutes
+        } ${ampm}`;
+      }
+
+      // Scroll chat to bottom
+      function scrollToBottom() {
+        chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+      }
+
+      // Show loading spinner
+      function showLoading(element) {
+        element.innerHTML = '<div class="spinner"></div>';
+      }
+
+      // Show error message
+      function showError(message) {
+        chatMessagesEl.innerHTML = `<div class="error-message">${message}</div>`;
+      }
+
+      function showErrorInList(message, element) {
+        element.innerHTML = `<div class="error-message">${message}</div>`;
+      }
+
+      function showErrorInChat(message, element) {
+        element.innerHTML = `<div class="error-message">${message}</div>`;
+      }
+
+      // Show no chats message
+      function showNoChatsMessage() {
+        contactsListEl.innerHTML = "";
+        chatAreaEl.innerHTML = `
+          <div class="new-chat-icon">
+            <img src="../mentor-images/messages-black.svg" alt="Messages Icon" />
+          </div>
+          <h2 class="start-chat-title">ابدأ محادثة جديدة</h2>
+          <p class="chat-hint">
+            ستظهر الرسائل هنا بعد التواصل مع الموجهين أو المنتج.
+          </p>
+          <button class="start-chat-btn" id="startChatBtn">
+            <span>ابدأ المحادثة</span>
+            <img src="../mentor-images/messages-white.svg" alt="Messages Icon" />
+          </button>
+        `;
+        // Reattach event listener for the new button
+        document
+          .getElementById("startChatBtn")
+          .addEventListener("click", () => createNewChat(2));
+      }
+
+      // Update unread counts in UI
+      function updateUnreadCountsInUI() {
+        const chatItems = contactsListEl.querySelectorAll(".contact-item");
+        chatItems.forEach((item) => {
+          const chatId = item.dataset.chatId;
+          const unreadIndicator = item.querySelector(".unread-indicator");
+
+          if (unreadCounts[chatId] > 0) {
+            if (!unreadIndicator) {
+              const infoRight = item.querySelector(".contact-info-right");
+              if (infoRight) {
+                infoRight.innerHTML += `<div class="unread-indicator">${unreadCounts[chatId]}</div>`;
+              }
+            } else {
+              unreadIndicator.textContent = unreadCounts[chatId];
+            }
+          } else if (unreadIndicator) {
+            unreadIndicator.remove();
+          }
+        });
+      }
+
+      // Set up event listeners
+      function setupEventListeners() {
+        // Send message on button click
+        sendMessageBtn.addEventListener("click", sendMessage);
+
+        // Send message on Enter key
+        messageInputEl.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        });
+
+        // New chat button
+        newChatBtn.addEventListener("click", () => {
+          createNewChat(2); // Replace with dynamic user selection in a real app
+        });
+
+        // Start chat button
+        startChatBtn.addEventListener("click", () => {
+          createNewChat(2); // Replace with dynamic user selection in a real app
+        });
+      }
+    </script>
+  </body>
+</html>
