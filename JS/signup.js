@@ -11,6 +11,13 @@ common.validatePassword = function (password) {
   return password.length >= 8;
 };
 
+// Validate Egyptian phone number
+common.validateEgyptianPhone = function (phone) {
+  const digitsOnly = phone.replace(/\D/g, "");
+  const egyptianMobileRegex = /^(010|011|012|015)\d{8}$/;
+  return egyptianMobileRegex.test(digitsOnly);
+};
+
 // Show error message
 common.showError = function (element, message) {
   if (element) {
@@ -71,8 +78,11 @@ common.validateForm1 = function (form) {
     common.showError(emailError, "البريد الإلكتروني غير صحيح");
     isValid = false;
   }
-  if (!phone || !/^\d{10,15}$/.test(phone)) {
-    common.showError(phoneError, "رقم الهاتف غير صحيح");
+  if (!phone || !common.validateEgyptianPhone(phone)) {
+    common.showError(
+      phoneError,
+      "رقم الهاتف غير صحيح: يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015 ويتكون من 11 رقمًا"
+    );
     isValid = false;
   }
   if (!common.validatePassword(password)) {
@@ -152,6 +162,57 @@ common.validateForm2 = function (form) {
 };
 
 // Form validation for signup step 3
+document.addEventListener("DOMContentLoaded", function () {
+  const codeInputs = document.querySelectorAll(".code-input.resetCode");
+
+  codeInputs.forEach((input, index) => {
+    input.addEventListener("input", function () {
+      // Ensure only a single digit is entered
+      if (this.value.length > 1) {
+        this.value = this.value.slice(0, 1);
+      }
+
+      // If a digit is entered, move to the next input
+      if (this.value.length === 1 && index < codeInputs.length - 1) {
+        codeInputs[index + 1].focus();
+      }
+    });
+
+    input.addEventListener("keydown", function (event) {
+      // Handle backspace to move to the previous input
+      if (event.key === "Backspace" && this.value === "" && index > 0) {
+        codeInputs[index - 1].focus();
+      }
+    });
+
+    // Optional: Handle paste event to distribute code across inputs
+    input.addEventListener("paste", function (event) {
+      event.preventDefault();
+      const pastedData = (event.clipboardData || window.clipboardData)
+        .getData("text")
+        .trim();
+      if (pastedData.length === codeInputs.length) {
+        codeInputs.forEach((inp, i) => {
+          inp.value = pastedData[i] || "";
+        });
+        codeInputs[codeInputs.length - 1].focus();
+      }
+    });
+  });
+
+  // Attach form validation to the submit button
+  const form = document.getElementById("signupForm3");
+  const submitBtn = document.getElementById("loginbtn3");
+
+  submitBtn.addEventListener("click", function () {
+    if (common.validateForm3(form)) {
+      // Proceed with form submission or further logic
+      console.log("Form is valid, proceed with submission");
+    }
+  });
+});
+
+// Your existing validateForm3 function
 common.validateForm3 = function (form) {
   let isValid = true;
   const codes = form.querySelectorAll(".code-input");
@@ -170,4 +231,26 @@ common.validateForm3 = function (form) {
   }
 
   return isValid;
+};
+
+// Utility functions (ensure these are defined in your common object)
+common.showError = function (element, message) {
+  if (element) {
+    element.textContent = message;
+    element.style.display = "block";
+  }
+};
+
+common.clearError = function (element) {
+  if (element) {
+    element.textContent = "";
+    element.style.display = "none";
+  }
+};
+
+common.scrollToFirstError = function (form) {
+  const firstError = form.querySelector(".error:not(:empty)");
+  if (firstError) {
+    firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
 };

@@ -1,36 +1,25 @@
-let instructions = document.getElementById("instructions");
-let joinAs = document.getElementById("joinAs");
-let penddingScreen = document.getElementById("penddingScreen");
-let sucssesScreen = document.getElementById("sucssesScreen");
-let feildScreen = document.getElementById("feildScreen");
-let joinBtn = document.getElementById("joinBtn");
-let submitBtn = document.getElementById("submitBtn");
-let joinBtn_Pendding = document.getElementById("joinBtn_Pendding");
-let joinBtn_Sucsess = document.getElementById("joinBtn_Sucsess");
-let joinBtn_Feild = document.getElementById("joinBtn_Feild");
-joinAs.style.display = "none";
-penddingScreen.style.display = "none";
-sucssesScreen.style.display = "none";
-feildScreen.style.display = "none";
-joinBtn.addEventListener("click", () => {
-  joinAs.style.display = "block";
-  instructions.style.display = "none";
-});
-submitBtn.addEventListener("click", () => {
-  joinAs.style.display = "none";
-  penddingScreen.style.display = "block";
-});
-joinBtn_Pendding.addEventListener("click", () => {
-  penddingScreen.style.display = "none";
-  sucssesScreen.style.display = "block";
-});
-joinBtn_Sucsess.addEventListener("click", () => {
-  sucssesScreen.style.display = "none";
-  instructions.style.display = "block";
-});
-
 document.addEventListener("DOMContentLoaded", function () {
   window.common = window.common || {};
+
+  // API base URL
+  const API_BASE_URL = "https://tawgeeh-v1-production.up.railway.app";
+
+  // Logger utility
+  const logger = {
+    info: (message, data = {}) => console.log(`[INFO] ${message}`, data),
+    error: (message, data = {}) => console.error(`[ERROR] ${message}`, data),
+    warn: (message, data = {}) => console.warn(`[WARN] ${message}`, data),
+  };
+
+  // Retrieve the authorization token
+  // Replace this with your actual token retrieval logic, e.g.:
+  // - From localStorage: const token = localStorage.getItem('authToken');
+  // - From a global variable: const token = window.authToken;
+  // - From a login response: Ensure token is set after login
+  const token = localStorage.getItem("authToken") || ""; // Placeholder
+  if (!token) {
+    logger.warn("Authorization token not found. API calls may fail.");
+  }
 
   // Show mentor application popup
   common.showMentorApplicationPopup = function () {
@@ -40,8 +29,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const popupOverlay = document.querySelector(
       ".mentor-application-popup-overlay"
     );
+
     if (!popupContainer || !popupOverlay) {
-      console.warn("Mentor application popup elements not found");
+      logger.warn("Mentor application popup elements not found", {
+        popupContainer: !!popupContainer,
+        popupOverlay: !!popupOverlay,
+      });
       return;
     }
 
@@ -54,9 +47,11 @@ document.addEventListener("DOMContentLoaded", function () {
     common.resetMentorApplicationPopup();
     common.setCurrentScreen("instructions");
 
-    common.hideLoginPopup();
-    common.hideSignupPopup();
-    common.hidePasswordResetPopup();
+    logger.info("Mentor application popup shown");
+
+    common.hideLoginPopup?.();
+    common.hideSignupPopup?.();
+    common.hidePasswordResetPopup?.();
   };
 
   // Hide mentor application popup
@@ -67,7 +62,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const popupOverlay = document.querySelector(
       ".mentor-application-popup-overlay"
     );
-    if (!popupContainer || !popupOverlay) return;
+
+    if (!popupContainer || !popupOverlay) {
+      logger.warn("Mentor application popup elements not found", {
+        popupContainer: !!popupContainer,
+        popupOverlay: !!popupOverlay,
+      });
+      return;
+    }
 
     popupContainer.classList.remove("show");
     popupContainer.style.display = "none";
@@ -76,6 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
     popupOverlay.style.display = "none";
 
     common.resetMentorApplicationPopup();
+    logger.info("Mentor application popup hidden");
   };
 
   // Reset mentor application popup
@@ -89,6 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
       inputs.forEach((input) => input.blur());
     }
     common.setCurrentScreen("instructions");
+    logger.info("Mentor application popup reset");
   };
 
   // Set current screen for mentor application
@@ -106,6 +110,136 @@ document.addEventListener("DOMContentLoaded", function () {
         screen.style.display = id === screenId ? "block" : "none";
       }
     });
+    logger.info(`Current screen set to: ${screenId}`);
+  };
+
+  // Validate LinkedIn URL
+  common.isValidLinkedInUrl = function (url) {
+    try {
+      // Prepend https:// if no protocol is specified
+      let normalizedUrl = url;
+      if (!url.startsWith("http://") && !url.startsWith("https://")) {
+        normalizedUrl = `https://${url}`;
+      }
+
+      const urlObj = new URL(normalizedUrl);
+      const isValid =
+        urlObj.hostname === "www.linkedin.com" &&
+        urlObj.pathname.startsWith("/in/");
+      logger.info(`LinkedIn URL validation: ${isValid}`, {
+        originalUrl: url,
+        normalizedUrl,
+      });
+      return isValid;
+    } catch (error) {
+      logger.error("Invalid LinkedIn URL format", { originalUrl: url, error });
+      return false;
+    }
+  };
+
+  // Validation functions
+  common.validateField = function (input) {
+    const id = input.id;
+    const value = input.value.trim();
+    const errorSpan = document.getElementById(`${id}Error`);
+
+    if (!errorSpan) return;
+
+    common.clearError(errorSpan);
+
+    const validations = {
+      specialization: () => (!value ? "يرجى اختيار التخصص" : ""),
+      target_audience: () => (!value ? "يرجى اختيار الفئة المستهدفة" : ""),
+      experience: () => (!value ? "يرجى اختيار عدد سنوات الخبرة" : ""),
+      linkedin_url: () =>
+        !value || !common.isValidLinkedInUrl(value)
+          ? "يرجى إدخال رابط LinkedIn صالح (مثال: https://www.linkedin.com/in/username)"
+          : "",
+      about_me: () =>
+        !value || value.length < 20 || value.length > 500
+          ? "يرجى إدخال نبذة عنك (20-500 حرفًا)"
+          : "",
+    };
+
+    const errorMessage = validations[id]?.() || "";
+    if (errorMessage) {
+      common.showError(errorSpan, errorMessage);
+      logger.warn(`Validation failed for ${id}`, { value, errorMessage });
+    }
+
+    return !errorMessage;
+  };
+
+  // API call to submit mentor application
+  common.submitMentorApplication = async function (data) {
+    try {
+      const mappedData = {
+        specialization: data.specialization,
+        experienceLevel: data.experience,
+        TargetMentees: data.targetAudience,
+        linkedin: data.linkedinUrl,
+        bio: data.aboutMe,
+      };
+
+      logger.info("Submitting mentor application", mappedData);
+
+      const response = await fetch(`${API_BASE_URL}/mentor-requests`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(mappedData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Unauthorized: Invalid or missing token");
+        }
+        throw new Error(
+          `HTTP error! status: ${response.status}, message: ${
+            result.message || "Unknown error"
+          }`
+        );
+      }
+
+      if (!result.success) {
+        throw new Error(`API error: ${result.message || "Submission failed"}`);
+      }
+
+      logger.info("Mentor application submitted successfully", result);
+      return { success: true, data: result.data };
+    } catch (error) {
+      logger.error("Failed to submit mentor application", { error, data });
+      return { success: false, error, message: error.message };
+    }
+  };
+
+  // Clear error message
+  common.clearError = function (errorSpan) {
+    errorSpan.textContent = "";
+  };
+
+  // Show error message
+  common.showError = function (errorSpan, message) {
+    errorSpan.textContent = message;
+  };
+
+  // Scroll to first error
+  common.scrollToFirstError = function (container) {
+    const firstError = container.querySelector(".error:not(:empty)");
+    if (firstError) {
+      firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
+  // Check input direction
+  common.checkInputDirection = function (input) {
+    const value = input.value;
+    const isRTL = /[\u0600-\u06FF]/.test(value);
+    input.style.direction = isRTL ? "rtl" : "ltr";
   };
 
   // Initialize mentor application popup
@@ -114,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
       ".mentor-application-popup-container"
     );
     if (!popupContainer) {
-      console.warn("Mentor application popup container not found");
+      logger.warn("Mentor application popup container not found");
       return;
     }
 
@@ -136,7 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (joinAsMentorLink) {
       joinAsMentorLink.addEventListener("click", (e) => {
         e.preventDefault();
-        common.restrictAccess(() => {
+        common.restrictAccess?.(() => {
           common.showMentorApplicationPopup();
         });
       });
@@ -148,178 +282,141 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    const instructions = document.getElementById("instructions");
-    const joinAs = document.getElementById("joinAs");
-    const pendingScreen = document.getElementById("pendingScreen");
-    const successScreen = document.getElementById("successScreen");
-    const fieldScreen = document.getElementById("fieldScreen");
-    const joinBtn = document.getElementById("joinBtn");
-    const submitBtn = document.getElementById("submitBtn");
-    const joinBtn_Pendding = document.getElementById("joinBtn_Pendding");
-    const joinBtn_Sucsess = document.getElementById("joinBtn_Sucsess");
-    const joinBtn_Feild = document.getElementById("joinBtn_Feild");
+    const elements = {
+      instructions: document.getElementById("instructions"),
+      joinAs: document.getElementById("joinAs"),
+      pendingScreen: document.getElementById("pendingScreen"),
+      successScreen: document.getElementById("successScreen"),
+      fieldScreen: document.getElementById("fieldScreen"),
+      joinBtn: document.getElementById("joinBtn"),
+      submitBtn: document.getElementById("submitBtn"),
+      joinBtn_Pendding: document.getElementById("joinBtn_Pendding"),
+      joinBtn_Sucsess: document.getElementById("joinBtn_Sucsess"),
+      joinBtn_Feild: document.getElementById("joinBtn_Feild"),
+    };
 
-    if (
-      instructions &&
-      joinAs &&
-      pendingScreen &&
-      successScreen &&
-      fieldScreen &&
-      joinBtn &&
-      submitBtn &&
-      joinBtn_Pendding &&
-      joinBtn_Sucsess &&
-      joinBtn_Feild
-    ) {
-      joinBtn.addEventListener("click", () => {
+    if (Object.values(elements).every((el) => el)) {
+      elements.joinBtn.addEventListener("click", () => {
         common.setCurrentScreen("joinAs");
       });
 
-      submitBtn.addEventListener("click", async (e) => {
+      elements.submitBtn.addEventListener("click", async (e) => {
         e.preventDefault();
-        const specialization = document.getElementById("specialization").value;
-        const targetAudience = document.getElementById("target_audience").value;
-        const experience = document.getElementById("experience").value;
-        const linkedinUrl = document.getElementById("linkedin_url").value;
-        const aboutMe = document.getElementById("about_me").value;
 
-        const specializationError = document.getElementById(
-          "specializationError"
-        );
-        const targetAudienceError = document.getElementById(
-          "targetAudienceError"
-        );
-        const experienceError = document.getElementById("experienceError");
-        const linkedinError = document.getElementById("linkedinError");
-        const aboutMeError = document.getElementById("aboutMeError");
+        const formData = {
+          specialization: document.getElementById("specialization").value,
+          targetAudience: document.getElementById("target_audience").value,
+          experience: document.getElementById("experience").value,
+          linkedinUrl: document.getElementById("linkedin_url").value,
+          aboutMe: document.getElementById("about_me").value,
+        };
 
+        const errorElements = {
+          specializationError: document.getElementById("specializationError"),
+          targetAudienceError: document.getElementById("targetAudienceError"),
+          experienceError: document.getElementById("experienceError"),
+          linkedinError: document.getElementById("linkedinError"),
+          aboutMeError: document.getElementById("aboutMeError"),
+        };
+
+        // Clear all errors
+        Object.values(errorElements).forEach(common.clearError);
+
+        // Validate all fields
         let isValid = true;
+        const validations = [
+          {
+            field: "specialization",
+            value: formData.specialization,
+            errorElement: errorElements.specializationError,
+            message: "يرجى اختيار التخصص",
+          },
+          {
+            field: "targetAudience",
+            value: formData.targetAudience,
+            errorElement: errorElements.targetAudienceError,
+            message: "يرجى اختيار الفئة المستهدفة",
+          },
+          {
+            field: "experience",
+            value: formData.experience,
+            errorElement: errorElements.experienceError,
+            message: "يرجى اختيار عدد سنوات الخبرة",
+          },
+          {
+            field: "linkedinUrl",
+            value: formData.linkedinUrl,
+            errorElement: errorElements.linkedinError,
+            message:
+              "يرجى إدخال رابط LinkedIn صالح (مثال: https://www.linkedin.com/in/username)",
+            validate: common.isValidLinkedInUrl,
+          },
+          {
+            field: "aboutMe",
+            value: formData.aboutMe,
+            errorElement: errorElements.aboutMeError,
+            message: "يرجى إدخال نبذة عنك (20-500 حرفًا)",
+            validate: (val) => val.length >= 20 && val.length <= 500,
+          },
+        ];
 
-        common.clearError(specializationError);
-        common.clearError(targetAudienceError);
-        common.clearError(experienceError);
-        common.clearError(linkedinError);
-        common.clearError(aboutMeError);
-
-        if (!specialization) {
-          common.showError(specializationError, "يرجى اختيار التخصص");
-          isValid = false;
-        }
-        if (!targetAudience) {
-          common.showError(targetAudienceError, "يرجى اختيار الفئة المستهدفة");
-          isValid = false;
-        }
-        if (!experience) {
-          common.showError(experienceError, "يرجى اختيار عدد سنوات الخبرة");
-          isValid = false;
-        }
-        if (!linkedinUrl || !common.isValidLinkedInUrl(linkedinUrl)) {
-          common.showError(linkedinError, "يرجى إدخال رابط LinkedIn صالح");
-          isValid = false;
-        }
-        if (!aboutMe || aboutMe.length < 20) {
-          common.showError(
-            aboutMeError,
-            "يرجى إدخال نبذة عنك (20 حرفًا على الأقل)"
-          );
-          isValid = false;
-        }
+        validations.forEach(
+          ({ field, value, errorElement, message, validate }) => {
+            const valid = validate ? validate(value) : !!value;
+            if (!valid) {
+              common.showError(errorElement, message);
+              isValid = false;
+              logger.warn(`Validation failed for ${field}`, { value });
+            }
+          }
+        );
 
         if (isValid) {
           common.setCurrentScreen("pendingScreen");
-          const response = await common.simulateMentorApplicationSubmission({
-            specialization,
-            targetAudience,
-            experience,
-            linkedinUrl,
-            aboutMe,
-          });
+          const response = await common.submitMentorApplication(formData);
+
           if (response.success) {
-            common.setCurrentScreen("successScreen");
+            common.setCurrentScreen("pendingScreen");
           } else {
             common.setCurrentScreen("fieldScreen");
+            common.showError(
+              errorElements.aboutMeError,
+              response.message || "فشل إرسال الطلب، حاول مرة أخرى"
+            );
           }
         } else {
-          common.scrollToFirstError(joinAs);
+          common.scrollToFirstError(elements.joinAs);
         }
       });
 
-      joinBtn_Pendding.addEventListener("click", () => {
-        common.setCurrentScreen("successScreen");
+      elements.joinBtn_Pendding.addEventListener("click", () => {
+        common.hideMentorApplicationPopup();
+        logger.info("Pending screen closed");
       });
 
-      joinBtn_Sucsess.addEventListener("click", () => {
+      elements.joinBtn_Sucsess.addEventListener("click", () => {
         common.hideMentorApplicationPopup();
       });
 
-      joinBtn_Feild.addEventListener("click", () => {
+      elements.joinBtn_Feild.addEventListener("click", () => {
         common.setCurrentScreen("joinAs");
       });
 
-      const inputs = joinAs.querySelectorAll("input, select, textarea");
+      const inputs = elements.joinAs.querySelectorAll(
+        "input, select, textarea"
+      );
       inputs.forEach((input) => {
         input.addEventListener("input", () => {
           common.validateField(input);
           common.checkInputDirection(input);
         });
       });
+    } else {
+      logger.error("Required elements not found", {
+        missing: Object.keys(elements).filter((k) => !elements[k]),
+      });
     }
-  };
 
-  // Validate mentor application fields
-  common.validateField = function (input) {
-    const id = input.id;
-    const value = input.value.trim();
-    const errorSpan = document.getElementById(`${id}Error`);
-
-    if (errorSpan) {
-      common.clearError(errorSpan);
-      if (id === "specialization" && !value) {
-        common.showError(errorSpan, "يرجى اختيار التخصص");
-      } else if (id === "target_audience" && !value) {
-        common.showError(errorSpan, "يرجى اختيار الفئة المستهدفة");
-      } else if (id === "experience" && !value) {
-        common.showError(errorSpan, "يرجى اختيار عدد سنوات الخبرة");
-      } else if (
-        id === "linkedin_url" &&
-        (!value || !common.isValidLinkedInUrl(value))
-      ) {
-        common.showError(errorSpan, "يرجى إدخال رابط LinkedIn صالح");
-      } else if (
-        id === "about_me" &&
-        (!value || value.length < 20 || value.length > 500)
-      ) {
-        common.showError(errorSpan, "يرجى إدخال نبذة عنك (20-500 حرفًا)");
-      }
-    }
-  };
-
-  // Validate LinkedIn URL
-  common.isValidLinkedInUrl = function (url) {
-    try {
-      const urlObj = new URL(url);
-      return (
-        urlObj.hostname === "www.linkedin.com" &&
-        urlObj.pathname.startsWith("/in/")
-      );
-    } catch {
-      return false;
-    }
-  };
-
-  // Simulate mentor application submission
-  common.simulateMentorApplicationSubmission = async function (data) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        if (
-          data.experience === "zero-one" ||
-          !common.isValidLinkedInUrl(data.linkedinUrl)
-        ) {
-          resolve({ success: false });
-        } else {
-          resolve({ success: true });
-        }
-      }, 1000);
-    });
+    logger.info("Mentor application popup initialized");
   };
 });

@@ -205,9 +205,17 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
+    // Inside common.initializeSignupPopup
+    // Inside common.initializeSignupPopup
     if (loginBtn2) {
       loginBtn2.addEventListener("click", async () => {
         const form = document.querySelector("#signupForm2");
+        if (!form) {
+          console.error("Signup form 2 not found");
+          return;
+        }
+
+        // Validate form2 before proceeding
         if (common.validateForm2(form)) {
           const specialization = form
             .querySelector("#specialization")
@@ -229,7 +237,7 @@ document.addEventListener("DOMContentLoaded", function () {
           const loadingSpinner =
             popupContainer.querySelector(".loading-spinner");
           if (loadingSpinner) loadingSpinner.style.display = "block";
-          loginBtn2.disabled = true;
+          loginBtn2.disabled = true; // Use let if reassignment is needed, but prefer state management
 
           try {
             const response = await window.auth.register(signupData);
@@ -252,8 +260,32 @@ document.addEventListener("DOMContentLoaded", function () {
           } catch (error) {
             console.error("Registration error:", error.message);
             let errorMessage = "حدث خطأ أثناء التسجيل";
-            if (error.message.includes("Duplicate entry")) {
+            let errorField = "specializationError"; // Default to form2 field
+
+            // Handle field-specific errors from API
+            if (error.fieldErrors) {
+              const field = Object.keys(error.fieldErrors)[0];
+              errorMessage = error.fieldErrors[field];
+              // Map API field to form field and step
+              if (["fullName", "email", "phone", "password"].includes(field)) {
+                // Go back to signup1 for form1 fields
+                document.getElementById("signup2").style.display = "none";
+                document.getElementById("signup1").style.display = "block";
+                const con2 = popupContainer.querySelector(".con2");
+                if (con2) con2.classList.remove("conChecked");
+                form = document.querySelector("#signupForm1"); // Update form reference
+                errorField = `${field}Error`; // e.g., "phoneError"
+              } else {
+                errorField = `${field}Error`; // e.g., "specializationError"
+              }
+            } else if (error.message.includes("Duplicate entry")) {
               errorMessage = `البريد الإلكتروني مستخدم بالفعل. <a href='javascript:;' onclick='common.hideSignupPopup();common.showLoginPopup();'>تسجيل الدخول؟</a>`;
+              document.getElementById("signup2").style.display = "none";
+              document.getElementById("signup1").style.display = "block";
+              const con2 = popupContainer.querySelector(".con2");
+              if (con2) con2.classList.remove("conChecked");
+              form = document.querySelector("#signupForm1");
+              errorField = "signupEmailError";
             } else if (error.message.includes("Network error")) {
               errorMessage = "فشل الاتصال بالخادم. تحقق من اتصالك بالإنترنت.";
               await common.showAlert("خطأ في الاتصال", errorMessage, "error");
@@ -263,20 +295,24 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
               await common.showAlert("خطأ", errorMessage, "error");
             }
-            const errorSpan = form.querySelector("#specializationError");
-            common.showError(errorSpan, errorMessage);
-            common.scrollToFirstError(form);
+
+            const errorSpan = form.querySelector(`#${errorField}`);
+            if (errorSpan) {
+              common.showError(errorSpan, errorMessage);
+              common.scrollToFirstError(form);
+            } else {
+              console.error(`Error span #${errorField} not found`);
+            }
             localStorage.removeItem("userId");
             localStorage.removeItem("signupEmail");
             localStorage.removeItem("authToken");
           } finally {
             if (loadingSpinner) loadingSpinner.style.display = "none";
-            loginBtn2.disabled = false;
+            if (loginBtn2) loginBtn2.disabled = false; // Ensure element exists before disabling
           }
         }
       });
     }
-
     if (loginBtn3) {
       loginBtn3.addEventListener("click", async () => {
         const form = document.querySelector("#signupForm3");
@@ -433,20 +469,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </li>
         ${
           userData && userData.isMentor
-            ? `
-        <li>
-          <a href="../pages/mentor-dashboard.html" class="dashboard-link">
-            <span class="icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="7" height="9"></rect>
-                <rect x="14" y="3" width="7" height="5"></rect>
-                <rect x="14" y="12" width="7" height="9"></rect>
-                <rect x="3" y="16" width="7" height="5"></rect>
-              </svg>
-            </span>
-            <span>لوحة تحكم المرشد</span>
-          </a>
-        </li>
+            ? `        
         `
             : ""
         }

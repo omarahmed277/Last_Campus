@@ -81,16 +81,10 @@
               alt="صورة الملف الشخصي"
               style="width: 75px; height: 75px; border-radius: 50%"
             />
-            <img
-              src="../mentor-images/trash.svg"
-              alt="حذف الصورة"
-              id="removeProfileImage"
-              aria-label="حذف صورة الملف الشخصي"
-            />
           </div>
           <div class="text">
             <h4>تحميل صورة</h4>
-            <p>تأكد من أن حجم الملف أقل من 2 ميجا بايت</p>
+            <p>تأكد من أن حجم الملف أقل من 5 ميجابايت</p>
           </div>
         </div>
         <form
@@ -764,12 +758,12 @@
               <span id="achievementDescriptionError" class="error"></span>
             </div>
             <div class="form_group">
-              <label class="label" for="achievedAt">تاريخ الإنجاز</label>
+              <label class="label" for="achievementDate">تاريخ الإنجاز</label>
               <input
                 class="input date-start"
                 type="text"
-                name="achievedAt"
-                id="achievedAt"
+                name="achievementDate"
+                id="achievementDate"
                 placeholder="اختر التاريخ"
                 required
               />
@@ -777,9 +771,21 @@
                 src="../mentor-images/calendar.svg"
                 alt="تقويم"
                 class="select-icon calendar"
-                data-target="achievedAt"
+                data-target="achievementDate"
               />
-              <span id="achievedAtError" class="error"></span>
+              <span id="achievementDateError" class="error"></span>
+            </div>
+            <div class="form_group">
+              <label class="label" for="achievementLink">رابط الإنجاز</label>
+              <input
+                class="input"
+                type="url"
+                name="achievementLink"
+                id="achievementLink"
+                placeholder="https://example.com/achievement"
+                oninput="common.checkInputDirection(this)"
+              />
+              <span id="achievementLinkError" class="error"></span>
             </div>
             <div class="buttons_con">
               <input type="submit" class="updateBtn" value="حفظ" />
@@ -865,7 +871,7 @@
             />
             <input
               type="file"
-              id="uploadImage"
+              id="uploadImageProfile"
               accept="image/*"
               style="display: none"
               aria-label="تحميل صورة الملف الشخصي"
@@ -1266,7 +1272,10 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
     <script src="../JS/common.js"></script>
     <script src="../JS/APIs.js"></script>
-    <script src="../JS/MentorPage.js"></script>
+    <script type="module" src="../JS/ProfileJS/MentorPage.js"></script>
+    <script src="../JS/ProfileJS/profileService.js"></script>
+    <script src="../JS/ProfileJS/achievementService.js"></script>
+    <script type="module" src="../JS/ProfileJS/experienceService.js"></script>
     <script>
       (function () {
         function c() {

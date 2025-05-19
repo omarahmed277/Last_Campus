@@ -21,7 +21,6 @@
         width: 100%;
       }
 
-      /* Main Content */
       .main-content {
         display: flex;
         flex: 1;
@@ -29,7 +28,6 @@
         direction: ltr;
       }
 
-      /* Chat Area */
       .chat-area {
         flex: 1;
         display: flex;
@@ -81,9 +79,8 @@
         color: var(--white);
         font-family: var(--default-font-family);
         font-size: 16px;
-        font-style: normal;
         font-weight: 500;
-        line-height: 24px; /* 150% */
+        line-height: 24px;
       }
 
       .start-chat-btn img {
@@ -95,7 +92,6 @@
         background-color: #e03870;
       }
 
-      /* Chat Area (when there are chats) */
       .chat-area.active-chat {
         justify-content: flex-start;
         align-items: stretch;
@@ -135,7 +131,7 @@
       }
 
       .online-status {
-        color: #4caf50; /* Keeping the green online status as in the original design */
+        color: #4caf50;
         font-size: 12px;
         display: flex;
         align-items: center;
@@ -206,7 +202,7 @@
         position: absolute;
         bottom: -10px;
         left: -10px;
-        background-color: #ff9800; /* Keeping the reaction color as in the original design */
+        background-color: #ff9800;
         color: var(--white);
         border-radius: 50%;
         width: 24px;
@@ -261,7 +257,6 @@
         color: var(--primary-color);
       }
 
-      /* Sidebar */
       .sidebar {
         width: 280px;
         background-color: var(--white);
@@ -304,10 +299,6 @@
       .new-message-btn img {
         width: 20px;
         height: 20px;
-      }
-
-      .dropdown-icon {
-        color: var(--Colors-Neutral-500);
       }
 
       .contacts-list {
@@ -391,7 +382,6 @@
         font-weight: 600;
       }
 
-      /* Extra styling for reactions and emoji */
       .emoji-reaction {
         width: 40px;
         height: 40px;
@@ -404,13 +394,6 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
 
-      /* Dropdown caret icon */
-      .caret-icon {
-        font-size: 12px;
-        color: var(--Colors-Neutral-500);
-      }
-
-      /* Loading spinner */
       .spinner {
         width: 40px;
         height: 40px;
@@ -427,7 +410,6 @@
         }
       }
 
-      /* Error message */
       .error-message {
         color: var(--primary-color);
         text-align: center;
@@ -435,7 +417,6 @@
         font-size: 14px;
       }
 
-      /* Responsive adjustments */
       @media screen and (max-width: 768px) {
         .sidebar {
           display: none;
@@ -449,7 +430,6 @@
   </head>
   <body>
     <div class="container">
-      <!-- Header -->
       <header>
         <nav>
           <a class="logo" href="../index.html">
@@ -460,15 +440,11 @@
             <a href="./Sessions.html" id="sessionsLink">الجلسات</a>
             <a href="#" id="joinAsMentorLink">إنضم كموجه</a>
           </div>
-          <div class="left_Sec auth-section">
-            <!-- Dynamically populated by JavaScript -->
-          </div>
+          <div class="left_Sec auth-section"></div>
         </nav>
       </header>
 
-      <!-- Main Content -->
       <div class="main-content">
-        <!-- Chat Area -->
         <div class="chat-area">
           <div class="new-chat-icon">
             <img
@@ -489,7 +465,6 @@
           </button>
         </div>
 
-        <!-- Sidebar - Messages -->
         <div class="sidebar">
           <div class="sidebar-header">
             <span id="newChatBtn"
@@ -497,13 +472,11 @@
             /></span>
             <span class="sidebar-title">
               <span><img src="../mentor-images/arrow-down.svg" alt="" /></span>
-              <span> الرسائل الواردة </span>
+              <span>الرسائل الواردة</span>
             </span>
             <span id="totalMessagesCount" class="message-count">0</span>
           </div>
-          <div id="contactsList" class="contacts-list">
-            <!-- Empty messages list -->
-          </div>
+          <div id="contactsList" class="contacts-list"></div>
         </div>
       </div>
     </div>
@@ -513,7 +486,6 @@
       let currentUser = null;
       let currentChatId = null;
       let chats = [];
-      let contacts = [];
       let messages = {};
       let unreadCounts = {};
 
@@ -542,7 +514,6 @@
 
       const currentChatAvatarEl = document.createElement("img");
       currentChatAvatarEl.id = "currentChatAvatar";
-      currentChatAvatarEl.src = "/api/placeholder/40/40";
       currentChatAvatarEl.alt = "Contact Profile";
 
       const currentChatStatusEl = document.createElement("span");
@@ -554,21 +525,53 @@
 
       // API configuration
       const API_BASE_URL = "https://tawgeeh-v1-production.up.railway.app";
-      const AUTH_TOKEN = localStorage.getItem("authToken"); // Assuming token is stored after login
+      const AUTH_TOKEN = localStorage.getItem("authToken");
+
+      // Utility functions
+      function sanitizeInput(input) {
+        const div = document.createElement("div");
+        div.textContent = input;
+        return div.innerHTML;
+      }
+
+      function validateUserId(userId) {
+        return Number.isInteger(userId) && userId > 0;
+      }
+
+      function validateChatId(chatId) {
+        return typeof chatId === "string" && chatId.length > 0;
+      }
+
+      function validateMessageContent(content) {
+        return typeof content === "string" && content.trim().length > 0 && content.length <= 1000;
+      }
+
+      function handleUnauthorizedError() {
+        localStorage.removeItem("authToken");
+        showError("جلسة تسجيل الدخول منتهية. يرجى تسجيل الدخول مرة أخرى.");
+        // Redirect to login page (replace with your actual login URL)
+        setTimeout(() => {
+          window.location.href = "/login.html";
+        }, 2000);
+      }
 
       // Initialize the chat application
       document.addEventListener("DOMContentLoaded", async () => {
         try {
-          // Load current user data
-          await loadCurrentUser();
+          if (!AUTH_TOKEN) {
+            handleUnauthorizedError();
+            return;
+          }
 
-          // Load chats list
+          await loadCurrentUser();
+          if (!currentUser) {
+            throw new Error("فشل تحميل بيانات المستخدم.");
+          }
+
           await loadChats();
 
-          // Set up event listeners
           setupEventListeners();
 
-          // If there are chats, load the first one
           if (chats.length > 0) {
             await loadChat(chats[0].id);
           } else {
@@ -582,12 +585,27 @@
 
       // Load current user data
       async function loadCurrentUser() {
-        // In a real app, fetch this from your authentication system
-        currentUser = {
-          id: 1, // Replace with actual user ID from auth
-          name: "المستخدم الحالي",
-          avatar: "/api/placeholder/48/48",
-        };
+        try {
+          // Replace with actual API call to fetch user data
+          const response = await fetch(`${API_BASE_URL}/user/me`, {
+            headers: {
+              Authorization: `Bearer ${AUTH_TOKEN}`,
+              "Content-Type": "application/json",
+            },
+          });
+          if (!response.ok) {
+            if (response.status === 401) {
+              handleUnauthorizedError();
+              return;
+            }
+            throw new Error(`HTTP error ${response.status}`);
+          }
+          const data = await response.json();
+          currentUser = { id: data.id, name: data.name, avatar: data.image_url };
+        } catch (error) {
+          console.error("Error loading user:", error);
+          currentUser = { id: 3, name: "John Doe", avatar: null }; // Fallback
+        }
       }
 
       // Load user's chats
@@ -606,18 +624,28 @@
           );
 
           if (!response.ok) {
-            throw new Error("Failed to load chats");
+            if (response.status === 401) {
+              handleUnauthorizedError();
+              return;
+            }
+            throw new Error(`HTTP error ${response.status}`);
           }
 
           const data = await response.json();
 
-          if (data.success && data.data) {
-            chats = data.data;
-            renderChatsList();
-            totalMessagesCountEl.textContent = chats.length;
-          } else {
-            throw new Error(data.message || "Failed to load chats");
+          if (!data.success || !Array.isArray(data.data)) {
+            throw new Error(data.message || "فشل تحميل المحادثات");
           }
+
+          chats = data.data;
+          chats.forEach((chat) => {
+            unreadCounts[chat.id] = chat.messages.filter(
+              (msg) => !msg.read && msg.senderId !== currentUser.id
+            ).length;
+          });
+
+          renderChatsList();
+          totalMessagesCountEl.textContent = chats.length;
         } catch (error) {
           console.error("Error loading chats:", error);
           showErrorInList("حدث خطأ أثناء تحميل المحادثات.", contactsListEl);
@@ -627,13 +655,15 @@
       // Load a specific chat's messages
       async function loadChat(chatId) {
         try {
+          if (!validateChatId(chatId)) {
+            throw new Error("معرف المحادثة غير صالح");
+          }
+
           currentChatId = chatId;
           showLoading(chatMessagesEl);
 
-          // Mark messages as read
           await markMessagesAsRead(chatId);
 
-          // Fetch messages
           const response = await fetch(
             `${API_BASE_URL}/chat/${chatId}/messages`,
             {
@@ -645,67 +675,62 @@
           );
 
           if (!response.ok) {
-            throw new Error("Failed to load messages");
+            if (response.status === 401) {
+              handleUnauthorizedError();
+              return;
+            }
+            throw new Error(`HTTP error ${response.status}`);
           }
 
           const data = await response.json();
 
-          if (data.success && data.data) {
-            messages[chatId] = data.data;
-
-            // Update chat area to active state
-            chatAreaEl.innerHTML = "";
-            chatAreaEl.classList.add("active-chat");
-
-            // Create chat header
-            const chatHeader = document.createElement("div");
-            chatHeader.className = "chat-header";
-            const contactInfo = document.createElement("div");
-            contactInfo.className = "contact-info";
-            const contactDetails = document.createElement("div");
-            contactDetails.className = "contact-details";
-            const onlineStatus = document.createElement("div");
-            onlineStatus.className = "online-status";
-            const statusDot = document.createElement("div");
-            statusDot.className = "status-dot";
-
-            onlineStatus.appendChild(statusDot);
-            onlineStatus.appendChild(currentChatStatusEl);
-            contactDetails.appendChild(currentChatNameEl);
-            contactDetails.appendChild(onlineStatus);
-            contactInfo.appendChild(currentChatAvatarEl);
-            contactInfo.appendChild(contactDetails);
-            chatHeader.appendChild(contactInfo);
-            chatAreaEl.appendChild(chatHeader);
-
-            // Add messages area
-            chatAreaEl.appendChild(chatMessagesEl);
-
-            // Add input area
-            const chatInputContainer = document.createElement("div");
-            chatInputContainer.className = "chat-input-container";
-            const chatInput = document.createElement("div");
-            chatInput.className = "chat-input";
-            const attachmentIcon = document.createElement("div");
-            attachmentIcon.className = "attachment-icon";
-            attachmentIcon.innerHTML = '<i class="fas fa-paperclip"></i>';
-
-            chatInput.appendChild(attachmentIcon);
-            chatInput.appendChild(messageInputEl);
-            chatInput.appendChild(sendMessageBtn);
-            chatInputContainer.appendChild(chatInput);
-            chatAreaEl.appendChild(chatInputContainer);
-
-            renderMessages();
-
-            // Update the active chat in the sidebar
-            updateActiveChatInList(chatId);
-
-            // Update the chat header with the other participant's info
-            updateChatHeader(chatId);
-          } else {
-            throw new Error(data.message || "Failed to load messages");
+          if (!Array.isArray(data)) {
+            throw new Error("تنسيق بيانات الرسائل غير صالح");
           }
+
+          messages[chatId] = data;
+          chatAreaEl.innerHTML = "";
+          chatAreaEl.classList.add("active-chat");
+
+          const chatHeader = document.createElement("div");
+          chatHeader.className = "chat-header";
+          const contactInfo = document.createElement("div");
+          contactInfo.className = "contact-info";
+          const contactDetails = document.createElement("div");
+          contactDetails.className = "contact-details";
+          const onlineStatus = document.createElement("div");
+          onlineStatus.className = "online-status";
+          const statusDot = document.createElement("div");
+          statusDot.className = "status-dot";
+
+          onlineStatus.appendChild(statusDot);
+          onlineStatus.appendChild(currentChatStatusEl);
+          contactDetails.appendChild(currentChatNameEl);
+          contactDetails.appendChild(onlineStatus);
+          contactInfo.appendChild(currentChatAvatarEl);
+          contactInfo.appendChild(contactDetails);
+          chatHeader.appendChild(contactInfo);
+          chatAreaEl.appendChild(chatHeader);
+
+          chatAreaEl.appendChild(chatMessagesEl);
+
+          const chatInputContainer = document.createElement("div");
+          chatInputContainer.className = "chat-input-container";
+          const chatInput = document.createElement("div");
+          chatInput.className = "chat-input";
+          const attachmentIcon = document.createElement("div");
+          attachmentIcon.className = "attachment-icon";
+          attachmentIcon.innerHTML = '<i class="fas fa-paperclip"></i>';
+
+          chatInput.appendChild(attachmentIcon);
+          chatInput.appendChild(messageInputEl);
+          chatInput.appendChild(sendMessageBtn);
+          chatInputContainer.appendChild(chatInput);
+          chatAreaEl.appendChild(chatInputContainer);
+
+          renderMessages();
+          updateActiveChatInList(chatId);
+          updateChatHeader(chatId);
         } catch (error) {
           console.error("Error loading chat:", error);
           showErrorInChat("حدث خطأ أثناء تحميل الرسائل.", chatMessagesEl);
@@ -714,24 +739,27 @@
 
       // Send a new message
       async function sendMessage() {
-        const messageText = messageInputEl.value.trim();
+        const messageText = sanitizeInput(messageInputEl.value.trim());
 
-        if (!messageText) {
+        if (!validateMessageContent(messageText)) {
+          showErrorInChat("الرسالة فارغة أو طويلة جدًا (الحد الأقصى 1000 حرف).", chatMessagesEl);
           return;
         }
 
-        if (!currentChatId) {
-          alert("الرجاء تحديد محادثة أولاً");
+        if (!validateChatId(currentChatId)) {
+          showErrorInChat("يرجى تحديد محادثة أولاً.", chatMessagesEl);
           return;
         }
 
         try {
-          // Optimistically add the message to the UI
           const tempMessage = {
             id: "temp-" + Date.now(),
             content: messageText,
             senderId: currentUser.id,
+            sender: { id: currentUser.id, name: currentUser.name },
             createdAt: new Date().toISOString(),
+            type: "TEXT",
+            read: false,
             isTemp: true,
           };
 
@@ -742,11 +770,8 @@
           messages[currentChatId].push(tempMessage);
           renderMessages();
           messageInputEl.value = "";
-
-          // Scroll to bottom
           scrollToBottom();
 
-          // Send to server
           const response = await fetch(`${API_BASE_URL}/chat/send`, {
             method: "POST",
             headers: {
@@ -761,27 +786,28 @@
           });
 
           if (!response.ok) {
-            throw new Error("Failed to send message");
+            if (response.status === 401) {
+              handleUnauthorizedError();
+              return;
+            }
+            throw new Error(`HTTP error ${response.status}`);
           }
 
           const data = await response.json();
 
-          if (data.success && data.data) {
-            // Replace the temp message with the real one from server
-            const messageIndex = messages[currentChatId].findIndex(
-              (m) => m.id === tempMessage.id
-            );
-            if (messageIndex !== -1) {
-              messages[currentChatId][messageIndex] = data.data;
-              renderMessages();
-            }
-          } else {
-            throw new Error(data.message || "Failed to send message");
+          if (!data.id) {
+            throw new Error(data.message || "فشل إرسال الرسالة");
+          }
+
+          const messageIndex = messages[currentChatId].findIndex(
+            (m) => m.id === tempMessage.id
+          );
+          if (messageIndex !== -1) {
+            messages[currentChatId][messageIndex] = data;
+            renderMessages();
           }
         } catch (error) {
           console.error("Error sending message:", error);
-
-          // Show error on the temp message
           const messageIndex = messages[currentChatId].findIndex(
             (m) => m.id === tempMessage.id
           );
@@ -789,12 +815,17 @@
             messages[currentChatId][messageIndex].error = true;
             renderMessages();
           }
+          showErrorInChat("فشل إرسال الرسالة. يرجى المحاولة مرة أخرى.", chatMessagesEl);
         }
       }
 
       // Mark messages as read
       async function markMessagesAsRead(chatId) {
         try {
+          if (!validateChatId(chatId) || !validateUserId(currentUser.id)) {
+            return;
+          }
+
           const response = await fetch(`${API_BASE_URL}/chat/mark-read`, {
             method: "POST",
             headers: {
@@ -808,18 +839,25 @@
           });
 
           if (!response.ok) {
-            throw new Error("Failed to mark messages as read");
+            if (response.status === 401) {
+              handleUnauthorizedError();
+              return;
+            }
+            throw new Error(`HTTP error ${response.status}`);
           }
 
           const data = await response.json();
-          if (data.success) {
-            // Update unread counts locally
-            if (unreadCounts[chatId]) {
-              unreadCounts[chatId] = 0;
-              updateUnreadCountsInUI();
+          if (data.count !== undefined) {
+            unreadCounts[chatId] = 0;
+            updateUnreadCountsInUI();
+            if (messages[chatId]) {
+              messages[chatId] = messages[chatId].map((msg) => ({
+                ...msg,
+                read: true,
+              }));
             }
           } else {
-            throw new Error(data.message || "Failed to mark messages as read");
+            throw new Error(data.message || "فشل تحديث حالة القراءة");
           }
         } catch (error) {
           console.error("Error marking messages as read:", error);
@@ -829,6 +867,14 @@
       // Create a new chat
       async function createNewChat(userId) {
         try {
+          if (!validateUserId(userId) || !validateUserId(currentUser.id)) {
+            throw new Error("معرف المستخدم غير صالح");
+          }
+
+          if (userId === currentUser.id) {
+            throw new Error("لا يمكن إنشاء محادثة مع نفس المستخدم");
+          }
+
           const response = await fetch(`${API_BASE_URL}/chat/create`, {
             method: "POST",
             headers: {
@@ -842,23 +888,26 @@
           });
 
           if (!response.ok) {
-            throw new Error("Failed to create chat");
+            if (response.status === 401) {
+              handleUnauthorizedError();
+              return;
+            }
+            throw new Error(`HTTP error ${response.status}`);
           }
 
           const data = await response.json();
 
-          if (data.success && data.data) {
-            // Add the new chat to our list and load it
-            chats.unshift(data.data);
-            renderChatsList();
-            await loadChat(data.data.id);
-            totalMessagesCountEl.textContent = chats.length;
-          } else {
-            throw new Error(data.message || "Failed to create chat");
+          if (!data.id) {
+            throw new Error(data.message || "فشل إنشاء المحادثة");
           }
+
+          chats.unshift({ ...data, messages: [] });
+          renderChatsList();
+          await loadChat(data.id);
+          totalMessagesCountEl.textContent = chats.length;
         } catch (error) {
           console.error("Error creating chat:", error);
-          alert("حدث خطأ أثناء إنشاء المحادثة. يرجى المحاولة مرة أخرى.");
+          showError("حدث خطأ أثناء إنشاء المحادثة. يرجى المحاولة مرة أخرى.");
         }
       }
 
@@ -880,16 +929,16 @@
           chatEl.className = `contact-item ${
             chat.id === currentChatId ? "active" : ""
           }`;
-          chatEl.dataset.chatId = chat.id; // Add data attribute for tracking
+          chatEl.dataset.chatId = chat.id;
           chatEl.innerHTML = `
             <div class="contact-item-details">
               <img src="${
                 otherParticipant.avatar || "/api/placeholder/48/48"
               }" alt="Contact" />
               <div class="contact-text">
-                <div class="contact-item-name">${otherParticipant.name}</div>
+                <div class="contact-item-name">${sanitizeInput(otherParticipant.name)}</div>
                 <div class="last-message">${
-                  lastMessage ? lastMessage.content : "لا توجد رسائل"
+                  lastMessage ? sanitizeInput(lastMessage.content) : "لا توجد رسائل"
                 }</div>
               </div>
             </div>
@@ -912,7 +961,7 @@
 
       // Render messages for the current chat
       function renderMessages() {
-        if (!currentChatId || !messages[currentChatId]) {
+        if (!currentChatId || !messages[currentChatId] || messages[currentChatId].length === 0) {
           chatMessagesEl.innerHTML =
             '<div class="error-message">لا توجد رسائل في هذه المحادثة</div>';
           return;
@@ -931,18 +980,18 @@
           if (message.error) {
             messageEl.innerHTML = `
               <div class="message ${messageClass}" style="border: 1px solid var(--primary-color)">
-                <div>فشل إرسال الرسالة: ${message.content}</div>
+                <div>فشل إرسال الرسالة: ${sanitizeInput(message.content)}</div>
                 <div class="time">${time}</div>
               </div>
             `;
           } else {
             messageEl.innerHTML = `
               <div class="message ${messageClass}">
-                <div>${message.content}</div>
+                <div>${sanitizeInput(message.content)}</div>
                 <div class="time">${time}</div>
                 ${
                   message.reaction
-                    ? `<div class="reaction">${message.reaction}</div>`
+                    ? `<div class="reaction">${sanitizeInput(message.reaction)}</div>`
                     : ""
                 }
               </div>
@@ -972,39 +1021,54 @@
         if (!chat) return;
 
         const otherParticipant = getOtherParticipant(chat);
-        currentChatNameEl.textContent = otherParticipant.name;
+        currentChatNameEl.textContent = sanitizeInput(otherParticipant.name);
         currentChatAvatarEl.src =
           otherParticipant.avatar || "/api/placeholder/40/40";
-        currentChatStatusEl.textContent = "متصل الآن"; // In a real app, you'd check actual status
+        currentChatStatusEl.textContent = "متصل الآن"; // Replace with actual status check
       }
 
       // Get the other participant in a chat
       function getOtherParticipant(chat) {
+        const otherParticipant = chat.participants.find(
+          (p) => p.userId !== currentUser.id
+        );
+        if (!otherParticipant || !otherParticipant.user) {
+          return { id: 0, name: "مستخدم غير معروف", avatar: "/api/placeholder/48/48" };
+        }
         return {
-          id: chat.user1Id === currentUser.id ? chat.user2Id : chat.user1Id,
-          name: chat.user1Id === currentUser.id ? "سارة عبدالله" : "أحمد محمد",
-          avatar: "/api/placeholder/48/48",
+          id: otherParticipant.userId,
+          name: otherParticipant.user.name,
+          avatar: otherParticipant.user.image_url || "/api/placeholder/48/48",
         };
       }
 
       // Get the last message in a chat
       function getLastMessage(chatId) {
-        if (!messages[chatId] || messages[chatId].length === 0) {
-          return null;
+        if (messages[chatId] && messages[chatId].length > 0) {
+          return messages[chatId][messages[chatId].length - 1];
         }
-        return messages[chatId][messages[chatId].length - 1];
+        const chat = chats.find((c) => c.id === chatId);
+        if (chat && chat.messages && chat.messages.length > 0) {
+          return chat.messages[chat.messages.length - 1];
+        }
+        return null;
       }
 
       // Format time for display
       function formatTime(isoString) {
-        const date = new Date(isoString);
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
-        const ampm = hours >= 12 ? "م" : "ص";
-        const formattedHours = hours % 12 || 12;
-        return `${formattedHours}:${
-          minutes < 10 ? "0" + minutes : minutes
-        } ${ampm}`;
+        try {
+          const date = new Date(isoString);
+          if (isNaN(date.getTime())) throw new Error("Invalid date");
+          const hours = date.getHours();
+          const minutes = date.getMinutes();
+          const ampm = hours >= 12 ? "م" : "ص";
+          const formattedHours = hours % 12 || 12;
+          return `${formattedHours}:${
+            minutes < 10 ? "0" + minutes : minutes
+          } ${ampm}`;
+        } catch {
+          return "";
+        }
       }
 
       // Scroll chat to bottom
@@ -1019,15 +1083,15 @@
 
       // Show error message
       function showError(message) {
-        chatMessagesEl.innerHTML = `<div class="error-message">${message}</div>`;
+        chatMessagesEl.innerHTML = `<div class="error-message">${sanitizeInput(message)}</div>`;
       }
 
       function showErrorInList(message, element) {
-        element.innerHTML = `<div class="error-message">${message}</div>`;
+        element.innerHTML = `<div class="error-message">${sanitizeInput(message)}</div>`;
       }
 
       function showErrorInChat(message, element) {
-        element.innerHTML = `<div class="error-message">${message}</div>`;
+        element.innerHTML = `<div class="error-message">${sanitizeInput(message)}</div>`;
       }
 
       // Show no chats message
@@ -1046,10 +1110,9 @@
             <img src="../mentor-images/messages-white.svg" alt="Messages Icon" />
           </button>
         `;
-        // Reattach event listener for the new button
         document
           .getElementById("startChatBtn")
-          .addEventListener("click", () => createNewChat(2));
+          .addEventListener("click", () => createNewChat(2)); // Replace with dynamic user selection
       }
 
       // Update unread counts in UI
@@ -1076,24 +1139,17 @@
 
       // Set up event listeners
       function setupEventListeners() {
-        // Send message on button click
         sendMessageBtn.addEventListener("click", sendMessage);
-
-        // Send message on Enter key
         messageInputEl.addEventListener("keypress", (e) => {
           if (e.key === "Enter") {
             sendMessage();
           }
         });
-
-        // New chat button
         newChatBtn.addEventListener("click", () => {
-          createNewChat(2); // Replace with dynamic user selection in a real app
+          createNewChat(2); // Replace with dynamic user selection
         });
-
-        // Start chat button
         startChatBtn.addEventListener("click", () => {
-          createNewChat(2); // Replace with dynamic user selection in a real app
+          createNewChat(2); // Replace with dynamic user selection
         });
       }
     </script>

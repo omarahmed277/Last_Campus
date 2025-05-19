@@ -73,18 +73,18 @@ document.addEventListener("DOMContentLoaded", function () {
       const errorMessage = errorData.message || "حدث خطأ غير متوقع";
       const validationErrors = errorData.error || [];
       console.log("API error response:", JSON.stringify(errorData, null, 2)); // Log full error response
-      
+
       // Handle specific validation errors
       if (response.status === 400 && validationErrors.length > 0) {
         const fieldErrors = {};
-        
+
         // Process each validation error
-        validationErrors.forEach(error => {
+        validationErrors.forEach((error) => {
           if (error.field && error.errors && error.errors.length > 0) {
             fieldErrors[error.field] = error.errors[0];
           }
         });
-        
+
         // If we have field-specific errors, throw a structured error
         if (Object.keys(fieldErrors).length > 0) {
           const error = new Error(`فشل التحقق: ${errorMessage}`);
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
           throw error;
         }
       }
-      
+
       // General error handling by status code
       switch (response.status) {
         case 400:
@@ -172,36 +172,79 @@ document.addEventListener("DOMContentLoaded", function () {
           throw new Error("استجابة الخادم غير صالحة: الرمز مفقود");
         }
 
-        // Validate token
+        // Validate token and get user ID
         const decodedToken = decodeJWT(data.access_token);
         if (!decodedToken || (!decodedToken.sub && !decodedToken.id)) {
           localStorage.removeItem("authToken");
           throw new Error("رمز غير صالح: معرف المستخدم مفقود");
         }
+        const userId = decodedToken.sub || decodedToken.id;
 
         localStorage.setItem("authToken", data.access_token);
-        let userData = await window.common.fetchUserData(data.access_token);
 
-        userData = {
-          id: userData.id || decodedToken.sub || decodedToken.id || null,
+        // Fetch user data from /users/{id}
+        let userData;
+        try {
+          const userResponse = await fetchWithRetry(
+            `${API_BASE_URL}/users/${userId}`,
+            {
+              method: "GET",
+              headers: getHeaders(true),
+            }
+          );
+          await handleApiError(userResponse);
+          const userResponseData = await userResponse.json();
+          console.log("User data response:", userResponseData);
+
+          if (!userResponseData.success || !userResponseData.data) {
+            throw new Error("فشل جلب بيانات المستخدم");
+          }
+
+          userData = userResponseData.data;
+        } catch (error) {
+          console.warn(
+            "Failed to fetch user data from /users/{id}, falling back to common.fetchUserData:",
+            error.message
+          );
+          // Fallback to existing fetchUserData
+          userData = await window.common.fetchUserData(data.access_token);
+        }
+
+        // Structure user data for storage
+        const storedUserData = {
+          id: userData.id || userId,
           name: userData.name || email.split("@")[0],
           email: userData.email || email,
           image_url: userData.image_url || "./default-avatar.png",
           isMentor: userData.isMentor || false,
-          phoneVerified: userData.phoneVerified !== false,
-          emailVerified: userData.emailVerified !== false,
+          role: userData.role || "USER",
+          phone: userData.phone || "",
+          gender: userData.gender || "",
+          country: userData.country || "",
           specialization: userData.specialization || "",
+          experienceLevel: userData.experienceLevel || "",
           bio: userData.bio || "",
+          emailVerified: userData.emailVerified !== false,
+          phoneVerified: userData.phoneVerified !== false,
+          signup_method: userData.signup_method || "MANUAL",
+          linkedin: userData.linkedin || "",
+          behance: userData.behance || "",
+          github: userData.github || "",
+          instagram: userData.instagram || "",
+          totalSessions: userData.totalSessions || 0,
+          totalMinutes: userData.totalMinutes || 0,
+          createdAt: userData.createdAt || "",
+          updatedAt: userData.updatedAt || "",
         };
 
-        if (!userData.id) {
+        if (!storedUserData.id) {
           console.warn(
             "User ID missing in user data, proceeding with limited functionality"
           );
         }
 
-        localStorage.setItem("userData", JSON.stringify(userData));
-        return { access_token: data.access_token, user: userData };
+        localStorage.setItem("userData", JSON.stringify(storedUserData));
+        return { access_token: data.access_token, user: storedUserData };
       } catch (error) {
         console.error("Login error:", error.message);
         throw error;
@@ -210,10 +253,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     register: async function (userData) {
       try {
-        // Log incoming userData for debugging
         console.log("Incoming userData:", JSON.stringify(userData, null, 2));
 
-        // Validate required fields
         if (
           !userData.fullName?.trim() ||
           !userData.email?.trim() ||
@@ -228,34 +269,25 @@ document.addEventListener("DOMContentLoaded", function () {
           throw new Error("الحقول المطلوبة مفقودة أو غير صالحة");
         }
 
-        // Validate email format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(userData.email.trim())) {
           throw new Error("البريد الإلكتروني غير صالح");
         }
 
-        // Format and validate Egyptian phone number
         let phone = userData.phone.trim();
-        
-        // Remove any non-digit characters for validation
-        const digitsOnly = phone.replace(/\D/g, '');
-        
-        // Check if the phone number is a valid Egyptian mobile number
-        // Valid prefixes are: 010, 011, 012, 015
+        const digitsOnly = phone.replace(/\D/g, "");
         const egyptianMobileRegex = /^(010|011|012|015)\d{8}$/;
-        
+
         if (!egyptianMobileRegex.test(digitsOnly)) {
           const error = new Error(
             "رقم الهاتف غير صالح: يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015 ويتكون من 11 رقمًا"
           );
           error.fieldErrors = {
-            phone: "يرجى إدخال رقم هاتف مصري صالح يبدأ بـ 010 أو 011 أو 012 أو 015"
+            phone:
+              "يرجى إدخال رقم هاتف مصري صالح يبدأ بـ 010 أو 011 أو 012 أو 015",
           };
           throw error;
         }
-        
-        // Format with country code for API
-        phone = `+20${digitsOnly}`;
 
         const requestBody = {
           name: userData.fullName.trim(),
@@ -288,7 +320,6 @@ document.addEventListener("DOMContentLoaded", function () {
           throw new Error("استجابة الخادم غير صالحة: الرمز مفقود");
         }
 
-        // Validate token
         const decodedToken = decodeJWT(data.access_token);
         if (!decodedToken || (!decodedToken.sub && !decodedToken.id)) {
           localStorage.removeItem("authToken");
@@ -299,7 +330,6 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("userId", userId);
         localStorage.setItem("authToken", data.access_token);
 
-        // Fetch user data
         let user = await window.common.fetchUserData(data.access_token);
         user = {
           id: user.id || userId,
@@ -475,7 +505,6 @@ document.addEventListener("DOMContentLoaded", function () {
           throw new Error("لم يتم العثور على رمز OAuth");
         }
 
-        // Validate token
         const decodedToken = decodeJWT(token);
         if (!decodedToken || (!decodedToken.sub && !decodedToken.id)) {
           throw new Error("رمز OAuth غير صالح: معرف المستخدم مفقود");

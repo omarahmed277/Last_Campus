@@ -30,20 +30,36 @@ document.addEventListener("DOMContentLoaded", function () {
   ];
   let selectedTab = "upcoming";
 
+  // Get user role from localStorage
+  function getUserRole() {
+    try {
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      return userData && userData.role ? userData.role : "MENTEE"; // Default to MENTEE if role is missing
+    } catch (error) {
+      console.error("Error parsing userData from localStorage:", error);
+      return "MENTEE"; // Default to MENTEE on error
+    }
+  }
+
   // Fetch sessions from API
   async function fetchSessions() {
     try {
       console.log("Fetching sessions from API...");
-      const response = await fetch("https://tawgeeh-v1-production.up.railway.app/sessions/user", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetch(
+        "https://tawgeeh-v1-production.up.railway.app/sessions/user",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       if (!response.ok) {
-        throw new Error(`فشل جلب الجلسات: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `فشل جلب الجلسات: ${response.status} ${response.statusText}`
+        );
       }
 
       const data = await response.json();
@@ -52,43 +68,52 @@ document.addEventListener("DOMContentLoaded", function () {
         throw new Error("البيانات المستلمة غير صالحة أو فارغة");
       }
 
-      currentSessions = data.data.map(session => {
-        // Parse scheduledAt to derive date and time
+      currentSessions = data.data.map((session) => {
         const scheduledDate = new Date(session.scheduledAt);
-        const date = scheduledDate.toISOString().split("T")[0]; // e.g., "2025-05-31"
-        const startTime = scheduledDate.toTimeString().slice(0, 5); // e.g., "12:00"
-        const endTime = new Date(scheduledDate.getTime() + session.duration * 60000)
+        const date = scheduledDate.toISOString().split("T")[0];
+        const startTime = scheduledDate.toTimeString().slice(0, 5);
+        const endTime = new Date(
+          scheduledDate.getTime() + session.duration * 60000
+        )
           .toTimeString()
-          .slice(0, 5); // Add duration in minutes
-        const time = `${startTime}-${endTime}`; // e.g., "12:00-12:30"
+          .slice(0, 5);
+        const time = `${startTime}-${endTime}`;
 
-        // Map status to lowercase and match expected values
         const statusMap = {
           PENDING: "pending",
           UPCOMING: "upcoming",
           COMPLETED: "history",
-          CANCELLED: "history"
+          CANCELLED: "history",
         };
         const status = statusMap[session.status.toUpperCase()] || "pending";
-        const completionStatus = session.status === "COMPLETED" ? "done" : session.status === "CANCELLED" ? "cancelled" : "";
+        const completionStatus =
+          session.status === "COMPLETED"
+            ? "done"
+            : session.status === "CANCELLED"
+            ? "cancelled"
+            : "";
 
         return {
           id: session.id,
           title: session.service?.name || "جلسة توجيهية",
           mentorId: session.mentorId || 0,
           mentorName: session.mentor?.name || "موجه غير محدد",
-          mentorTitle: session.mentor?.title || "غير متوفر", // API may not provide this
-          mentorAvatar: session.mentor?.avatar || "../assets/default-avatar.png", // API may not provide this
+          mentorTitle: session.mentor?.title || "غير متوفر",
+          mentorAvatar:
+            session.mentor?.avatar || "../assets/default-avatar.png",
           date,
           time,
           status,
           meetingLink: session.googleMeetUrl || "",
           type: session.service?.name || "جلسة توجيهية",
           notes: session.notes || session.menteeQ || "لا توجد ملاحظات",
-          completionStatus
+          completionStatus,
         };
       });
-      console.log(`Successfully retrieved ${currentSessions.length} sessions`, currentSessions);
+      console.log(
+        `Successfully retrieved ${currentSessions.length} sessions`,
+        currentSessions
+      );
       renderSessions();
     } catch (error) {
       console.error("Error fetching sessions:", error);
@@ -133,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
     window.common.initializeSignupPopup();
 
     initializeTabMenu();
-    await fetchSessions(); // Fetch sessions on page load
+    await fetchSessions();
     window.common.renderNotifications(currentNotifications, () =>
       window.common.updateNotificationCount(currentNotifications)
     );
@@ -153,11 +178,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Render sessions based on selected tab
+  // Render sessions based on selected tab
   function renderSessions() {
     const sessionsContainer = document.querySelector(".sessions-container");
     if (!sessionsContainer) return;
 
-    // Show loading state
     sessionsContainer.innerHTML =
       '<div class="loading">جارٍ تحميل الجلسات...</div>';
 
@@ -168,9 +193,13 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
       if (sessionsToShow.length === 0) {
-        sessionsContainer.innerHTML = `<p style="text-align: right; color: #666;">لا توجد جلسات في هذا القسم.</p>`;
+        const message = "لا توجد جلسات في هذا القسم.";
+
+        sessionsContainer.innerHTML = `<p style="text-align: right; color: #666;">${message}</p>`;
         return;
       }
+
+      const userRole = getUserRole(); // Get user role
 
       sessionsToShow.forEach((session) => {
         const sessionCard = document.createElement("div");
@@ -180,77 +209,87 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         sessionCard.setAttribute("data-session-id", session.id);
         sessionCard.innerHTML = `
-          <div class="session-header">
-            <div class="session-title" id="session-title-${session.id}">
-              ${session.title}
-              <a class="MentorName" href="#Mentor_Profile_${
-                session.mentorId
-              }" aria-label="عرض ملف ${session.mentorName}">${
+        <div class="session-header">
+          <div class="session-title" id="session-title-${session.id}">
+            ${session.title}
+            <a class="MentorName" href="#Mentor_Profile_${
+              session.mentorId
+            }" aria-label="عرض ملف ${session.mentorName}">${
           session.mentorName
         }</a>
-              <span class="status-badge ${session.status}">${getStatusLabel(
+            <span class="status-badge ${session.status}">${getStatusLabel(
           session
         )}</span>
-            </div>
-            <div class="back-button">
-              <span class="details-btn" role="button" tabindex="0" aria-label="عرض تفاصيل الجلسة">
-                التفاصيل
-                <img src="../images/arrow-left.svg" width="24px" height="20px" alt="سهم التفاصيل" />
-              </span>
+          </div>
+          <div class="back-button">
+            <span class="details-btn" role="button" tabindex="0" aria-label="عرض تفاصيل الجلسة">
+              التفاصيل
+              <img src="../images/arrow-left.svg" width="24px" height="20px" alt="سهم التفاصيل" />
+            </span>
+          </div>
+        </div>
+        <div class="session-details">
+          <div class="mentor-info">
+            <img src="${session.mentorAvatar}" alt="${
+          session.mentorName
+        }" class="mentor-avatar">
+            <div class="mentor-details">
+              <div class="mentor-name">${session.mentorName}</div>
+              <div class="mentor-title">${session.mentorTitle}</div>
             </div>
           </div>
-          <div class="session-details">
-            <div class="mentor-info">
-              <img src="${
-                session.mentorAvatar
-              }" alt="${session.mentorName}" class="mentor-avatar">
-              <div class="mentor-details">
-                <div class="mentor-name">${session.mentorName}</div>
-                <div class="mentor-title">${session.mentorTitle}</div>
-              </div>
-            </div>
-            <div class="session-type">
-              <div class="type-label">اسم الجلسة</div>
-              <div class="type-value">${session.type}</div>
-            </div>
-            <div class="session-notes">
-              <div class="notes-label">ملاحظات المتدرب:</div>
-              <div class="notes-text">${session.notes}</div>
-            </div>
+          <div class="session-type">
+            <div class="type-label">اسم الجلسة</div>
+            <div class="type-value">${session.type}</div>
           </div>
-          <div class="session-time">
-            <div class="date-icon">
-              <img src="../images/calendar.svg" alt="أيقونة التقويم" />
-              <span>${formatDate(session.date)}</span>
-            </div>
-            <div class="time-icon">
-              <img src="../images/timer.svg" alt="أيقونة الساعة" />
-              <span>${session.time}</span>
-            </div>
+          <div class="session-notes">
+            <div class="notes-label">ملاحظات المتدرب:</div>
+            <div class="notes-text">${session.notes}</div>
           </div>
-          <div class="session-actions">
-            ${
-              session.status === "upcoming"
-                ? `<button class="btn btn-primary" data-action="start" aria-label="بدء جلسة ${session.title}">بدء الجلسة</button>`
-                : ""
-            }
-            <button class="btn" data-action="message" aria-label="إرسال رسالة إلى ${
-              session.mentorName
-            }">إرسال رسالة</button>
-            ${
-              session.status !== "history"
-                ? `
-                  <button class="btn" data-action="reschedule" aria-label="تغيير موعد جلسة ${session.title}">تغيير الموعد</button>
-                  <button class="btnCancel" data-action="cancel" aria-label="إلغاء جلسة ${session.title}">إلغاء الجلسة</button>`
-                : ""
-            }
+        </div>
+        <div class="session-time">
+          <div class="date-icon">
+            <img src="../images/calendar.svg" alt="أيقونة التقويم" />
+            <span>${formatDate(session.date)}</span>
           </div>
-        `;
+          <div class="time-icon">
+            <img src="../images/timer.svg" alt="أيقونة الساعة" />
+            <span>${session.time}</span>
+          </div>
+        </div>
+        <div class="session-actions">
+        ${
+          session.status !== "history"
+            ? `
+              ${
+                userRole === "MENTOR" && session.status === "pending"
+                  ? `<button class="btn btn-primary" data-action="accept" aria-label="قبول جلسة ${session.title}">قبول الجلسة</button>`
+                  : ""
+              }
+                <button class="btn" data-action="reschedule" aria-label="تغيير موعد جلسة ${
+                  session.title
+                }">تغيير الموعد</button>
+                <button class="btnCancel" data-action="cancel" aria-label="إلغاء جلسة ${
+                  session.title
+                }">إلغاء الجلسة</button>
+                `
+            : ""
+        }
+          ${
+            session.status === "upcoming"
+              ? `<button class="btn btn-primary" data-action="start" aria-label="بدء جلسة ${session.title}">بدء الجلسة</button>`
+              : ""
+          }
+          <button class="btn" data-action="message" aria-label="إرسال رسالة إلى ${
+            session.mentorName
+          }">إرسال رسالة</button>
+        </div>
+      `;
 
         initializeSessionCard(sessionCard, session);
         sessionsContainer.appendChild(sessionCard);
       });
-    }, 500); // Simulate loading
+    }, 500);
   }
 
   // Get status label for badge
@@ -339,14 +378,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (result.isConfirmed) {
-          // Send cancel request to API
-          const response = await fetch(`https://tawgeeh-v1-production.up.railway.app/sessions/${session.id}/cancel`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
+          const response = await fetch(
+            `https://tawgeeh-v1-production.up.railway.app/sessions/${session.id}/cancel`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
 
           if (!response.ok) {
             throw new Error("فشل إلغاء الجلسة");
@@ -368,6 +409,60 @@ document.addEventListener("DOMContentLoaded", function () {
             icon: "success",
             title: "تم الإلغاء",
             text: "تم إلغاء الجلسة بنجاح.",
+            confirmButtonText: "حسناً",
+          });
+        }
+      }
+
+      if (action === "accept") {
+        const result = await Swal.fire({
+          icon: "question",
+          title: "تأكيد القبول",
+          text: `هل أنت متأكد من قبول الجلسة "${session.title}"؟`,
+          showCancelButton: true,
+          confirmButtonText: "قبول",
+          cancelButtonText: "تراجع",
+        });
+
+        if (result.isConfirmed) {
+          const response = await fetch(
+            `https://tawgeeh-v1-production.up.railway.app/sessions/${session.id}/accept`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("فشل قبول الجلسة");
+          }
+
+          // Update session status to upcoming
+          const sessionIndex = currentSessions.findIndex(
+            (s) => s.id === session.id
+          );
+          if (sessionIndex !== -1) {
+            currentSessions[sessionIndex].status = "upcoming";
+          }
+
+          currentNotifications.push({
+            title: "تنبيه!",
+            text: `تم قبول جلسة "${session.title}" مع ${session.mentorName}.`,
+            avatar: "../mentor-images/default.jpg",
+            actions: [{ label: "إغلاق", primary: false }],
+            variant: "icon-variant",
+          });
+          updateSessions();
+          window.common.renderNotifications(currentNotifications, () =>
+            window.common.updateNotificationCount(currentNotifications)
+          );
+          await Swal.fire({
+            icon: "success",
+            title: "تم القبول",
+            text: "تم قبول الجلسة بنجاح.",
             confirmButtonText: "حسناً",
           });
         }

@@ -1,200 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const mentorsData = [
-    {
-      name: "عمر أحمد فتحي",
-      title: "Full Stack Developer",
-      experience: "+5 سنوات خبرة",
-      category: "البرمجة",
-      description:
-        "خبير في تطوير تطبيقات الويب باستخدام JavaScript وNode.js. أحب البحث عن حلول مبتكرة وأمتلك خبرة قوية في تصميم وتطوير تطبيقات متكاملة.",
-      avatar: "./assets/omar.jpg",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "سارة علي حسن",
-      title: "HR Specialist",
-      experience: "+3 سنوات خبرة",
-      category: "الموارد البشرية",
-      description:
-        "متخصصة في إدارة الموارد البشرية والتطوير التنظيمي. أمتلك خبرة في توظيف المواهب وتطوير استراتيجيات تعزز بيئة العمل.",
-      avatar: "./mentor-images/mentor2.jpg",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "خالد عبدالله محمد",
-      title: "Data Scientist",
-      experience: "+4 سنوات خبرة",
-      category: "علوم البيانات",
-      description:
-        "خبير في تحليل البيانات وتطبيقات الذكاء الاصطناعي. أعمل على بناء نماذج تحليلية تساعد الشركات على اتخاذ قرارات استراتيجية.",
-      avatar: "./mentor-images/mentor1.jpg",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "منى إبراهيم سالم",
-      title: "UI/UX Designer",
-      experience: "+6 سنوات خبرة",
-      category: "التصميم",
-      description:
-        "متخصصة في تصميم واجهات المستخدم وتجربة المستخدم. أحب إنشاء تصاميم جذابة وسهلة الاستخدام تعزز تجربة المستخدم.",
-      avatar: "./mentor-images/mentor3.jpg",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "محمد ياسر عبدالرحمن",
-      title: "DevOps Engineer",
-      experience: "+8 سنوات خبرة",
-      category: "البرمجة",
-      description:
-        "خبير في إدارة البنية التحتية والتكامل المستمر. أعمل على تحسين العمليات التقنية لضمان الكفاءة والاستقرار.",
-      avatar: "./mentor-images/mohammed.jpg",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "ليلى خالد محمود",
-      title: "Marketing Manager",
-      experience: "+5 سنوات خبرة",
-      category: "التسويق",
-      description:
-        "متخصصة في استراتيجيات التسويق الرقمي والعلامات التجارية. أساعد الشركات على بناء حضور قوي عبر الإنترنت.",
-      avatar:
-        "https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-04-20/laila.png",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "يوسف سمير أحمد",
-      title: "Mobile App Developer",
-      experience: "+3 سنوات خبرة",
-      category: "البرمجة",
-      description:
-        "مطور تطبيقات الهاتف باستخدام React Native. أركز على تطوير تطبيقات سريعة وسهلة الاستخدام.",
-      avatar: "./mentor-images/youssef.jpg",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "ريماس عبدالعزيز",
-      title: "Cybersecurity Analyst",
-      experience: "+6 سنوات خبرة",
-      category: "الأمن السيبراني",
-      description:
-        "خبيرة في حماية الأنظمة واختبار الاختراق. أعمل على ضمان أمان البنية التحتية التقنية للشركات.",
-      avatar: "https://via.placeholder.com/150",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "زياد حسام الدين",
-      title: "Cloud Architect",
-      experience: "+9 سنوات خبرة",
-      category: "البرمجة",
-      description:
-        "متخصص في تصميم حلول الحوسبة السحابية باستخدام AWS. أساعد الشركات على تحسين بنيتها التحتية السحابية.",
-      avatar: "./mentor-images/ziad.jpg",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "نورا سعيد عبدالله",
-      title: "Product Manager",
-      experience: "+4 سنوات خبرة",
-      category: "إدارة المنتجات",
-      description:
-        "خبيرة في إدارة المنتجات التقنية وتطويرها. أعمل على ربط احتياجات العملاء مع الحلول التقنية.",
-      avatar:
-        "https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-04-20/noura.png",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "إياد محمد فؤاد",
-      title: "Machine Learning Engineer",
-      experience: "+5 سنوات خبرة",
-      category: "علوم البيانات",
-      description:
-        "متخصص في بناء نماذج التعلم الآلي. أعمل على تطوير حلول ذكية لتحليل البيانات.",
-      avatar: "./mentor-images/eyad.jpg",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "فاطمة عبدالرحمن",
-      title: "Content Strategist",
-      experience: "+3 سنوات خبرة",
-      category: "التسويق",
-      description:
-        "خبيرة في إنشاء محتوى استراتيجي للعلامات التجارية. أساعد الشركات على تحسين تواجدها الرقمي.",
-      avatar: "https://via.placeholder.com/150",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "عبدالرحمن خالد",
-      title: "Backend Developer",
-      experience: "+6 سنوات خبرة",
-      category: "البرمجة",
-      description:
-        "مطور خلفي خبير في Python وDjango. أركز على بناء أنظمة خلفية قوية وآمنة.",
-      avatar: "./mentor-images/abdulrahman.jpg",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "هدى أحمد صبري",
-      title: "Graphic Designer",
-      experience: "+4 سنوات خبرة",
-      category: "التصميم",
-      description:
-        "مصممة جرافيك مبدعة في تصميم الهوية البصرية. أعمل على إنشاء تصاميم تعبر عن رؤية العلامة التجارية.",
-      avatar:
-        "https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-04-20/huda.png",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "سمير محمود علي",
-      title: "Business Analyst",
-      experience: "+5 سنوات خبرة",
-      category: "إدارة الأعمال",
-      description:
-        "خبير في تحليل الأعمال وتحسين العمليات. أساعد الشركات على تحقيق أهدافها الاستراتيجية.",
-      avatar: "./mentor-images/sameer.jpg",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "مها خالد العنزي",
-      title: "AI Researcher",
-      experience: "+7 سنوات خبرة",
-      category: "علوم البيانات",
-      description:
-        "باحثة في مجال الذكاء الاصطناعي والتعلم العميق. أعمل على تطوير تقنيات ذكية مبتكرة.",
-      avatar: "https://via.placeholder.com/150",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "طارق يوسف محمد",
-      title: "Frontend Developer",
-      experience: "+4 سنوات خبرة",
-      category: "البرمجة",
-      description:
-        "مطور واجهات أمامية باستخدام Vue.js. أركز على إنشاء واجهات مستخدم تفاعلية وجذابة.",
-      avatar: "./mentor-images/tariq.jpg",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "أسماء عبدالمجيد",
-      title: "Scrum Master",
-      experience: "+5 سنوات خبرة",
-      category: "إدارة المشاريع",
-      description:
-        "خبيرة في إدارة المشاريع باستخدام منهجية Scrum. أساعد الفرق على تحقيق الكفاءة والإنتاجية.",
-      avatar:
-        "https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-04-20/asmaa.png",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-    {
-      name: "بدر ناصر الدين",
-      title: "Blockchain Developer",
-      experience: "+6 سنوات خبرة",
-      category: "البرمجة",
-      description:
-        "مطور بلوكتشين خبير في العقود الذكية. أعمل على تطوير تطبيقات لامركزية آمنة.",
-      avatar: "./mentor-images/badr.jpg",
-      social: ["social-icon-1", "social-icon-2", "social-icon-3"],
-    },
-  ];
+  const API_BASE_URL = "https://tawgeeh-v1-production.up.railway.app";
 
   const notificationsData = [
     {
@@ -239,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
     },
   ];
 
-  let currentMentors = [...mentorsData];
+  let currentMentors = [];
   let currentNotifications = [...notificationsData];
   let selectedCategory = "الكل";
   let searchQuery = "";
@@ -247,7 +52,82 @@ document.addEventListener("DOMContentLoaded", function () {
 
   initializePage();
 
-  function initializePage() {
+  async function fetchMentors() {
+    try {
+      const accessToken = localStorage.getItem("authToken");
+      const headers = {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      };
+      if (accessToken) {
+        headers.Authorization = `Bearer ${accessToken}`;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/users`, {
+        method: "GET",
+        headers,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      if (!responseData.success || !Array.isArray(responseData.data)) {
+        throw new Error("Invalid API response");
+      }
+
+      // Log fetched users
+      console.log("Fetched users:", responseData.data);
+
+      // Filter users with role "MENTOR" and map to mentorData structure
+      return responseData.data
+        .filter((user) => user.role === "MENTOR")
+        .map((user) => ({
+          id: user.id, // Include user ID
+          name: user.name || "غير محدد",
+          title: user.specialization || "موجه",
+          experience: mapExperienceLevel(user.experienceLevel),
+          category: mapCategory(user.specialization),
+          description: user.bio || "لا توجد نبذة متاحة",
+          avatar: user.image_url || "https://via.placeholder.com/150",
+          social: ["social-icon-1", "social-icon-2", "social-icon-3"],
+        }));
+    } catch (error) {
+      console.error("Fetch mentors failed:", error.message);
+      common.showAlert("خطأ", "فشل تحميل بيانات الموجهين. حاول مرة أخرى.", "error");
+      return [];
+    }
+  }
+
+  function mapExperienceLevel(level) {
+    switch (level) {
+      case "JUNIOR":
+        return "+1 سنة خبرة";
+      case "INTERMEDIATE":
+        return "+3 سنوات خبرة";
+      case "SENIOR":
+        return "+5 سنوات خبرة";
+      case "EXPERT":
+        return "+7 سنوات خبرة";
+      default:
+        return "غير محدد";
+    }
+  }
+
+  function mapCategory(specialization) {
+    const categoryMap = {
+      "Software Engineering": "البرمجة",
+      "BackEnd": "البرمجة",
+      "CS": "البرمجة",
+      "Data Science": "علوم البيانات",
+      "Cyber Security": "الأمن السيبراني",
+      "AI & Machine Learning": "علوم البيانات",
+    };
+    return categoryMap[specialization] || "غير محدد";
+  }
+
+  async function initializePage() {
     const authSection = document.querySelector(".auth-section");
     common.initializeAuth(
       authSection,
@@ -264,6 +144,9 @@ document.addEventListener("DOMContentLoaded", function () {
     common.renderNotifications(currentNotifications, () =>
       common.updateNotificationCount(currentNotifications)
     );
+
+    // Fetch mentors and render them
+    currentMentors = await fetchMentors();
     renderMentors();
     common.initializeSignupPopup();
   }
@@ -380,7 +263,12 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log(`Booking session with ${mentor.name}`);
     });
     profileBtn.addEventListener("click", () => {
-      console.log(`Viewing profile for ${mentor.name}`);
+      if (mentor.id) {
+        window.location.href = `../pages/mentor-veiw.html?id=${mentor.id}`;
+      } else {
+        console.warn(`Mentor ID not found for ${mentor.name}`);
+        common.showAlert("خطأ", "تعذر تحميل الملف الشخصي. حاول مرة أخرى.", "error");
+      }
     });
   }
 
@@ -392,7 +280,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     mentorsContainer.innerHTML = "";
 
-    const mentorsToShow = currentMentors.length ? currentMentors : mentorsData;
+    const mentorsToShow = currentMentors.length ? currentMentors : [];
+
+    if (mentorsToShow.length === 0) {
+      mentorsContainer.innerHTML = `<p style="text-align: center; color: #333;">لا يوجد موجهين متاحين حاليًا.</p>`;
+      return;
+    }
 
     for (let i = 0; i < mentorsToShow.length; i += 4) {
       const row = document.createElement("div");
@@ -462,7 +355,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function updateMentors() {
-    currentMentors = mentorsData.filter((mentor) => {
+    currentMentors = currentMentors.filter((mentor) => {
       const matchesCategory =
         selectedCategory === "الكل" || mentor.category === selectedCategory;
       const matchesSearch =
