@@ -723,7 +723,8 @@
         <button class="mentor-popup-close">×</button>
       </div>
       <div class="mentor-popup-overlay" style="display: none"></div>
-      <!-- Mentor Application Popup -->
+
+      <!-- todo:Mentor Application Popup -->
       <div
         class="mentor-application-popup-container"
         style="display: none"
@@ -771,7 +772,7 @@
           <div class="overlay" id="joinAs">
             <div class="mainContaner_2">
               <h1>انضم كموجه مهني</h1>
-              <form class="content_joinAs" action="" method="post">
+              <form class="content_joinAs">
                 <div class="form_content">
                   <div class="form_group">
                     <label class="label" for="specialization">التخصص :</label>
@@ -899,12 +900,14 @@
                     ></span>
                   </div>
                 </div>
-                <input
+                <button
                   type="submit"
-                  value="انضم"
                   class="joinBtn"
                   id="submitBtn"
-                />
+                  onclick="submitJoinAsForm()"
+                >
+                انضم
+                </button>
               </form>
             </div>
           </div>
@@ -1123,6 +1126,48 @@
           }
         }
       })();
+    </script>
+    <script src="./JS/modules/mentor.js"></script>
+    <script>
+      // Request to be a mentor
+      function submitJoinAsForm() {
+        // Get the form element
+        const form = document.querySelector('.content_joinAs');
+        if (!form) {
+          console.error('Form with class "content_joinAs" not found.');
+          return;
+        }
+
+        // Get selected values
+        const specialization = form.querySelector('#specialization').value;
+        const targetAudience = form.querySelector('#target_audience').value;
+        const experience = form.querySelector('#experience').value;
+        const linkedinUrl = form.querySelector('#linkedin_url').value;
+        const aboutMe = form.querySelector('#about_me').value;
+
+        // Prepare data for fetch
+        const formData = {
+          specialization,
+          TargetMentees: targetAudience,
+          experienceLevel: experience,
+          linkedin: linkedinUrl,
+          bio: aboutMe
+        };
+
+        // Send data using fetch
+        joinAsMentor(formData).catch(err => console.error(err));
+      }
+
+      // Attach event listener to form submission
+      // document.addEventListener('DOMContentLoaded', () => {
+      //   const form = document.querySelector('.content_joinAs');
+      //   if (form) {
+      //     form.addEventListener('submit', (e) => {
+      //       e.preventDefault(); 
+      //       submitJoinAsForm();
+      //     });
+      //   }
+      // });
     </script>
   </body>
 </html>
