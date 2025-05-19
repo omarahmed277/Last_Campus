@@ -1324,6 +1324,7 @@ textarea::placeholder {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  text-align: right;
 }
 
 .content_joinAs .form_group .label {

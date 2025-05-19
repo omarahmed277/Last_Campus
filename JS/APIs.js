@@ -71,16 +71,31 @@ document.addEventListener("DOMContentLoaded", function () {
         errorData = {};
       }
       const errorMessage = errorData.message || "حدث خطأ غير متوقع";
-      const validationErrors = errorData.errors || [];
+      const validationErrors = errorData.error || [];
+      console.log("API error response:", JSON.stringify(errorData, null, 2)); // Log full error response
+      
+      // Handle specific validation errors
+      if (response.status === 400 && validationErrors.length > 0) {
+        const fieldErrors = {};
+        
+        // Process each validation error
+        validationErrors.forEach(error => {
+          if (error.field && error.errors && error.errors.length > 0) {
+            fieldErrors[error.field] = error.errors[0];
+          }
+        });
+        
+        // If we have field-specific errors, throw a structured error
+        if (Object.keys(fieldErrors).length > 0) {
+          const error = new Error(`فشل التحقق: ${errorMessage}`);
+          error.fieldErrors = fieldErrors;
+          throw error;
+        }
+      }
+      
+      // General error handling by status code
       switch (response.status) {
         case 400:
-          if (validationErrors.length > 0) {
-            throw new Error(
-              `فشل التحقق: ${validationErrors
-                .map((err) => err.msg || err.message)
-                .join("، ")}`
-            );
-          }
           throw new Error(`طلب غير صالح: ${errorMessage}`);
         case 401:
           localStorage.removeItem("authToken");
@@ -117,6 +132,22 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       alert(`${title}: ${text}`);
       return Promise.resolve();
+    }
+  }
+
+  // Map experience level to API format
+  function mapExperience(experience) {
+    switch (experience) {
+      case "zero-one":
+        return "JUNIOR";
+      case "one-three":
+        return "INTERMEDIATE";
+      case "three-five":
+        return "SENIOR";
+      case "PlusFive":
+        return "EXPERT";
+      default:
+        return "INTERMEDIATE";
     }
   }
 
@@ -179,11 +210,52 @@ document.addEventListener("DOMContentLoaded", function () {
 
     register: async function (userData) {
       try {
-        // Format phone number with country code
-        let phone = userData.phone.trim();
-        if (!phone.startsWith("+")) {
-          phone = `+20${phone}`; // Assume Egypt country code
+        // Log incoming userData for debugging
+        console.log("Incoming userData:", JSON.stringify(userData, null, 2));
+
+        // Validate required fields
+        if (
+          !userData.fullName?.trim() ||
+          !userData.email?.trim() ||
+          !userData.password?.trim() ||
+          !userData.phone?.trim() ||
+          !userData.gender ||
+          !userData.country ||
+          !userData.specialization?.trim() ||
+          !userData.experience ||
+          !userData.aboutMe?.trim()
+        ) {
+          throw new Error("الحقول المطلوبة مفقودة أو غير صالحة");
         }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(userData.email.trim())) {
+          throw new Error("البريد الإلكتروني غير صالح");
+        }
+
+        // Format and validate Egyptian phone number
+        let phone = userData.phone.trim();
+        
+        // Remove any non-digit characters for validation
+        const digitsOnly = phone.replace(/\D/g, '');
+        
+        // Check if the phone number is a valid Egyptian mobile number
+        // Valid prefixes are: 010, 011, 012, 015
+        const egyptianMobileRegex = /^(010|011|012|015)\d{8}$/;
+        
+        if (!egyptianMobileRegex.test(digitsOnly)) {
+          const error = new Error(
+            "رقم الهاتف غير صالح: يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015 ويتكون من 11 رقمًا"
+          );
+          error.fieldErrors = {
+            phone: "يرجى إدخال رقم هاتف مصري صالح يبدأ بـ 010 أو 011 أو 012 أو 015"
+          };
+          throw error;
+        }
+        
+        // Format with country code for API
+        phone = `+20${digitsOnly}`;
 
         const requestBody = {
           name: userData.fullName.trim(),
@@ -191,20 +263,26 @@ document.addEventListener("DOMContentLoaded", function () {
           password: userData.password.trim(),
           phone: phone,
           gender: userData.gender,
-          country: userData.country.toUpperCase(),
+          country: userData.country,
           specialization: userData.specialization.trim(),
           experienceLevel: mapExperience(userData.experience),
           bio: userData.aboutMe.trim(),
         };
-        console.log("Sending registration request:", requestBody);
+
+        console.log(
+          "Registration request body:",
+          JSON.stringify(requestBody, null, 2)
+        );
         const response = await fetchWithRetry(`${API_BASE_URL}/auth/register`, {
           method: "POST",
           headers: getHeaders(),
           body: JSON.stringify(requestBody),
         });
+
+        console.log("Registration response status:", response.status);
         await handleApiError(response);
         const data = await response.json();
-        console.log("Registration response:", data);
+        console.log("Registration response:", JSON.stringify(data, null, 2));
 
         if (!data.access_token) {
           throw new Error("استجابة الخادم غير صالحة: الرمز مفقود");
@@ -238,7 +316,10 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("userData", JSON.stringify(user));
         return { access_token: data.access_token, userId, user };
       } catch (error) {
-        console.error("Registration error:", error.message);
+        console.error("Registration error:", {
+          message: error.message,
+          stack: error.stack,
+        });
         throw error;
       }
     },
@@ -249,7 +330,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const response = await fetchWithRetry(
           `${API_BASE_URL}/auth/verify-email`,
           {
-            method: "POST",
+            method: "PATCH",
             headers: getHeaders(),
             body: JSON.stringify({ userId, code }),
           }
@@ -371,7 +452,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const data = await response.json();
         console.log("Notifications response:", data);
 
-        // Format notifications to match common.js expectations
         return (data.notifications || []).map((notif) => ({
           id: notif.id || null,
           title: notif.title || "إشعار جديد",
@@ -417,63 +497,12 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         localStorage.setItem("userData", JSON.stringify(user));
-
-        // Clear query parameters
-        window.history.replaceState({}, document.title, window.location.pathname);
-
-        return { access_token: token, user };
+        window.location.href = window.location.pathname;
+        return { success: true, user };
       } catch (error) {
         console.error("OAuth callback error:", error.message);
-        localStorage.removeItem("authToken");
-        await showAlert("خطأ", "فشل معالجة تسجيل الدخول عبر OAuth. حاول مرة أخرى.", "error");
         throw error;
       }
     },
   };
-
-  // Helper function to map experience levels
-  function mapExperience(experience) {
-    const experienceMap = {
-      "zero-one": "JUNIOR",
-      "one-three": "INTERMEDIATE",
-      "three-five": "SENIOR",
-      PlusFive: "EXPERT",
-    };
-    return experienceMap[experience] || "JUNIOR";
-  }
-
-  // OAuth button handlers
-  const googleBtns = document.querySelectorAll(".GoogleBtn");
-  googleBtns.forEach((btn) => {
-    btn.addEventListener("click", async function () {
-      try {
-        window.location.href = `${API_BASE_URL}/auth/google`;
-      } catch (error) {
-        console.error("Google OAuth redirect error:", error);
-        await showAlert("خطأ", "فشل الاتصال بخدمة Google. حاول مرة أخرى.", "error");
-      }
-    });
-  });
-
-  const linkedinBtns = document.querySelectorAll(".linkedinBtn");
-  linkedinBtns.forEach((btn) => {
-    btn.addEventListener("click", async function () {
-      try {
-        window.location.href = `${API_BASE_URL}/auth/linkedin`;
-      } catch (error) {
-        console.error("LinkedIn OAuth redirect error:", error);
-        await showAlert("خطأ", "فشل الاتصال بخدمة LinkedIn. حاول مرة أخرى.", "error");
-      }
-    });
-  });
-
-  // Handle OAuth callback on page load
-  if (window.location.search.includes("token=")) {
-    window.auth.handleOAuthCallback().then(() => {
-      window.location.href = "../pages/mentor-veiw.html"; // Redirect to mentor page after OAuth
-    }).catch((error) => {
-      console.error("Failed to handle OAuth callback:", error);
-      window.location.href = "../index.html"; // Redirect to home on error
-    });
-  }
 });

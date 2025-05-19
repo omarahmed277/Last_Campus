@@ -1360,7 +1360,7 @@ main {
   line-height: normal;
   background: #fff;
   transition: border-color 0.3s ease;
-  justify-items: flex-end;
+  /* justify-items: flex-end; */
 }
 
 .mainContaner .input:focus,

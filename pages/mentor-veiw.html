@@ -245,7 +245,11 @@
     </div>
 
     <!-- Experience Add/Edit Form -->
-    <div class="experience-popup-container overlay" id="editProfileEx_edit2" aria-hidden="true">
+    <div
+      class="experience-popup-container overlay"
+      id="editProfileEx_edit2"
+      aria-hidden="true"
+    >
       <div class="mainContaner">
         <div class="top_con">
           <h3>تعديل الخبرة</h3>
@@ -354,14 +358,18 @@
             </div>
           </form>
         </div>
-        <div id="experienceSuccess" class="popup-screen" style="display: none;">
+        <div id="experienceSuccess" class="popup-screen" style="display: none">
           <p>تم حفظ الخبرة بنجاح!</p>
         </div>
       </div>
     </div>
 
     <!-- Certificate Add Modal -->
-    <div class="certificate-popup-container overlay" id="editProfileSp_add" aria-hidden="true">
+    <div
+      class="certificate-popup-container overlay"
+      id="editProfileSp_add"
+      aria-hidden="true"
+    >
       <div class="mainContaner scrollableContent mainContaner_Info">
         <div class="top_con">
           <h3>إضافة شهادة</h3>
@@ -491,7 +499,11 @@
     </div>
 
     <!-- Education Add Modal -->
-    <div class="education-popup-container overlay" id="editProfileEdu_add" aria-hidden="true">
+    <div
+      class="education-popup-container overlay"
+      id="editProfileEdu_add"
+      aria-hidden="true"
+    >
       <div class="mainContaner">
         <div class="top_con">
           <h3>إضافة تعليم</h3>
@@ -503,7 +515,12 @@
           />
         </div>
         <div id="educationFormScreen" class="popup-screen">
-          <form class="form_contaner" action="" method="post" id="educationForm">
+          <form
+            class="form_contaner"
+            action=""
+            method="post"
+            id="educationForm"
+          >
             <div class="form_group">
               <label class="label" for="degree">الدرجة العلمية</label>
               <input
@@ -616,7 +633,11 @@
     </div>
 
     <!-- Rating Add Modal -->
-    <div class="rating-popup-container overlay" id="editProfileRating_add" aria-hidden="true">
+    <div
+      class="rating-popup-container overlay"
+      id="editProfileRating_add"
+      aria-hidden="true"
+    >
       <div class="mainContaner">
         <div class="top_con">
           <h3>إضافة تقييم</h3>
@@ -696,7 +717,11 @@
     </div>
 
     <!-- Achievement Add Modal -->
-    <div class="achievement-popup-container overlay" id="editProfileAchievement_add" aria-hidden="true">
+    <div
+      class="achievement-popup-container overlay"
+      id="editProfileAchievement_add"
+      aria-hidden="true"
+    >
       <div class="mainContaner">
         <div class="top_con">
           <h3>إضافة إنجاز</h3>
@@ -708,7 +733,12 @@
           />
         </div>
         <div id="achievementFormScreen" class="popup-screen">
-          <form class="form_contaner" action="" method="post" id="achievementForm">
+          <form
+            class="form_contaner"
+            action=""
+            method="post"
+            id="achievementForm"
+          >
             <div class="form_group">
               <label class="label" for="achievementTitle">عنوان الإنجاز</label>
               <input
@@ -786,7 +816,7 @@
           <a class="titel" href="#">
             <img
               id="image2"
-              src="../mentor-images/freepik__adjust__7471.svg"
+              src="../mentor-images/NoProfilePhoto.svg"
               alt="صورة المرشد"
             />
             <p class="mentor_name">المرشد الأول</p>
@@ -830,7 +860,7 @@
           <div class="personal-image">
             <img
               id="image1"
-              src="../mentor-images/freepik__adjust__7471.svg"
+              src="../mentor-images/NoProfilePhoto.svg"
               alt="صورة المرشد"
             />
             <input
@@ -1237,5 +1267,40 @@
     <script src="../JS/common.js"></script>
     <script src="../JS/APIs.js"></script>
     <script src="../JS/MentorPage.js"></script>
-  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93a6f7c129f153d3',t:'MTc0NjM1MDkwNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <script>
+      (function () {
+        function c() {
+          var b = a.contentDocument || a.contentWindow.document;
+          if (b) {
+            var d = b.createElement("script");
+            d.innerHTML =
+              "window.__CF$cv$params={r:'93a6f7c129f153d3',t:'MTc0NjM1MDkwNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+            b.getElementsByTagName("head")[0].appendChild(d);
+          }
+        }
+        if (document.body) {
+          var a = document.createElement("iframe");
+          a.height = 1;
+          a.width = 1;
+          a.style.position = "absolute";
+          a.style.top = 0;
+          a.style.left = 0;
+          a.style.border = "none";
+          a.style.visibility = "hidden";
+          document.body.appendChild(a);
+          if ("loading" !== document.readyState) c();
+          else if (window.addEventListener)
+            document.addEventListener("DOMContentLoaded", c);
+          else {
+            var e = document.onreadystatechange || function () {};
+            document.onreadystatechange = function (b) {
+              e(b);
+              "loading" !== document.readyState &&
+                ((document.onreadystatechange = e), c());
+            };
+          }
+        }
+      })();
+    </script>
+  </body>
 </html>

@@ -6,64 +6,8 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  // Initial session and notification data
-  let currentSessions = [
-    {
-      id: 1,
-      title: "جلسة توجيه مع نهال سراج",
-      mentorId: 101,
-      mentorName: "نهال سراج",
-      mentorTitle: "Product Designer",
-      mentorAvatar: "../mentor-images/mentor3.jpg",
-      date: "2025-01-10",
-      time: "15:00-15:30",
-      status: "upcoming",
-      meetingLink: "https://meet.google.com/abc-def-ghi",
-      type: "Career Coaching",
-      notes:
-        "ملاحظات حول الجلسة: مناقشة استراتيجيات تصميم المنتجات والتوجيه الوظيفي.",
-    },
-    {
-      id: 2,
-      title: "استشارة في الموارد البشرية",
-      mentorId: 102,
-      mentorName: "سارة علي حسن",
-      date: "2023-12-10",
-      time: "10:00-11:00",
-      status: "pending",
-    },
-    {
-      id: 3,
-      title: "تحليل البيانات المتقدم",
-      mentorId: 103,
-      mentorName: "خالد عبدالله محمد",
-      date: "2023-11-28",
-      time: "16:00-17:00",
-      status: "history",
-      completionStatus: "done",
-    },
-    {
-      id: 4,
-      title: "تصميم واجهات المستخدم",
-      mentorId: 104,
-      mentorName: "منى إبراهيم سالم",
-      date: "2023-12-20",
-      time: "13:00-14:00",
-      status: "upcoming",
-      meetingLink: "https://meet.google.com/jkl-mno-pqr",
-    },
-    {
-      id: 5,
-      title: "إدارة البنية التحتية السحابية",
-      mentorId: 105,
-      mentorName: "زياد حسام الدين",
-      date: "2023-11-30",
-      time: "09:00-10:00",
-      status: "history",
-      completionStatus: "cancelled",
-    },
-  ];
-
+  // State variables
+  let currentSessions = [];
   let currentNotifications = [
     {
       title: "تنبيه!",
@@ -84,8 +28,82 @@ document.addEventListener("DOMContentLoaded", function () {
       variant: "icon-variant",
     },
   ];
-
   let selectedTab = "upcoming";
+
+  // Fetch sessions from API
+  async function fetchSessions() {
+    try {
+      console.log("Fetching sessions from API...");
+      const response = await fetch("https://tawgeeh-v1-production.up.railway.app/sessions/user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`فشل جلب الجلسات: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log("Raw API response:", data);
+      if (!data.data || !Array.isArray(data.data)) {
+        throw new Error("البيانات المستلمة غير صالحة أو فارغة");
+      }
+
+      currentSessions = data.data.map(session => {
+        // Parse scheduledAt to derive date and time
+        const scheduledDate = new Date(session.scheduledAt);
+        const date = scheduledDate.toISOString().split("T")[0]; // e.g., "2025-05-31"
+        const startTime = scheduledDate.toTimeString().slice(0, 5); // e.g., "12:00"
+        const endTime = new Date(scheduledDate.getTime() + session.duration * 60000)
+          .toTimeString()
+          .slice(0, 5); // Add duration in minutes
+        const time = `${startTime}-${endTime}`; // e.g., "12:00-12:30"
+
+        // Map status to lowercase and match expected values
+        const statusMap = {
+          PENDING: "pending",
+          UPCOMING: "upcoming",
+          COMPLETED: "history",
+          CANCELLED: "history"
+        };
+        const status = statusMap[session.status.toUpperCase()] || "pending";
+        const completionStatus = session.status === "COMPLETED" ? "done" : session.status === "CANCELLED" ? "cancelled" : "";
+
+        return {
+          id: session.id,
+          title: session.service?.name || "جلسة توجيهية",
+          mentorId: session.mentorId || 0,
+          mentorName: session.mentor?.name || "موجه غير محدد",
+          mentorTitle: session.mentor?.title || "غير متوفر", // API may not provide this
+          mentorAvatar: session.mentor?.avatar || "../assets/default-avatar.png", // API may not provide this
+          date,
+          time,
+          status,
+          meetingLink: session.googleMeetUrl || "",
+          type: session.service?.name || "جلسة توجيهية",
+          notes: session.notes || session.menteeQ || "لا توجد ملاحظات",
+          completionStatus
+        };
+      });
+      console.log(`Successfully retrieved ${currentSessions.length} sessions`, currentSessions);
+      renderSessions();
+    } catch (error) {
+      console.error("Error fetching sessions:", error);
+      const sessionsContainer = document.querySelector(".sessions-container");
+      if (sessionsContainer) {
+        sessionsContainer.innerHTML = `<p style="text-align: right; color: #ff0000;">خطأ في جلب الجلسات: ${error.message}</p>`;
+      }
+      Swal.fire({
+        icon: "error",
+        title: "خطأ",
+        text: "حدث خطأ أثناء جلب الجلسات. يرجى المحاولة لاحقاً.",
+        confirmButtonText: "حسناً",
+      });
+    }
+  }
 
   // Format date to Arabic
   function formatDate(dateStr) {
@@ -115,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
     window.common.initializeSignupPopup();
 
     initializeTabMenu();
-    renderSessions();
+    await fetchSessions(); // Fetch sessions on page load
     window.common.renderNotifications(currentNotifications, () =>
       window.common.updateNotificationCount(currentNotifications)
     );
@@ -184,22 +202,20 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="session-details">
             <div class="mentor-info">
               <img src="${
-                session.mentorAvatar || "../assets/default-avatar.png"
+                session.mentorAvatar
               }" alt="${session.mentorName}" class="mentor-avatar">
               <div class="mentor-details">
                 <div class="mentor-name">${session.mentorName}</div>
-                <div class="mentor-title">${session.mentorTitle || ""}</div>
+                <div class="mentor-title">${session.mentorTitle}</div>
               </div>
             </div>
             <div class="session-type">
               <div class="type-label">اسم الجلسة</div>
-              <div class="type-value">${session.type || "جلسة توجيهية"}</div>
+              <div class="type-value">${session.type}</div>
             </div>
             <div class="session-notes">
               <div class="notes-label">ملاحظات المتدرب:</div>
-              <div class="notes-text">${
-                session.notes || "لا توجد ملاحظات"
-              }</div>
+              <div class="notes-text">${session.notes}</div>
             </div>
           </div>
           <div class="session-time">
@@ -323,6 +339,19 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (result.isConfirmed) {
+          // Send cancel request to API
+          const response = await fetch(`https://tawgeeh-v1-production.up.railway.app/sessions/${session.id}/cancel`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("فشل إلغاء الجلسة");
+          }
+
           currentSessions = currentSessions.filter((s) => s.id !== session.id);
           currentNotifications.push({
             title: "تنبيه!",

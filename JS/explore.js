@@ -219,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       title: "تنبيه!",
       text: "موعد جلسة مع خالد عبدالله محمد يقترب.",
-      avatar: "./mentor-images/khaled.jpg",
+      avatar: "../mentor-images/khaled.jpg",
     },
     {
       title: "تنبيه!",
