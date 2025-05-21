@@ -46,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let currentMentors = [];
   let currentNotifications = [...notificationsData];
+  // currentNotifications = window.auth.fetchNotifications();
   let selectedCategory = "الكل";
   let searchQuery = "";
   let isAscending = true;
@@ -95,7 +96,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }));
     } catch (error) {
       console.error("Fetch mentors failed:", error.message);
-      common.showAlert("خطأ", "فشل تحميل بيانات الموجهين. حاول مرة أخرى.", "error");
+      common.showAlert(
+        "خطأ",
+        "فشل تحميل بيانات الموجهين. حاول مرة أخرى.",
+        "error"
+      );
       return [];
     }
   }
@@ -118,8 +123,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function mapCategory(specialization) {
     const categoryMap = {
       "Software Engineering": "البرمجة",
-      "BackEnd": "البرمجة",
-      "CS": "البرمجة",
+      BackEnd: "البرمجة",
+      CS: "البرمجة",
       "Data Science": "علوم البيانات",
       "Cyber Security": "الأمن السيبراني",
       "AI & Machine Learning": "علوم البيانات",
@@ -267,7 +272,11 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = `../pages/mentor-veiw.html?id=${mentor.id}`;
       } else {
         console.warn(`Mentor ID not found for ${mentor.name}`);
-        common.showAlert("خطأ", "تعذر تحميل الملف الشخصي. حاول مرة أخرى.", "error");
+        common.showAlert(
+          "خطأ",
+          "تعذر تحميل الملف الشخصي. حاول مرة أخرى.",
+          "error"
+        );
       }
     });
   }

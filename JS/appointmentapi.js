@@ -3,9 +3,8 @@
  * Handles all API calls to the mentor availability endpoints
  */
 
-const API_BASE_URL = "https://tawgeeh-v1-production.up.railway.app"; // Replace with actual API base URL
+const API_BASE_URL = "https://tawgeeh-v1-production.up.railway.app";
 
-// API service object
 const apiService = {
   // Get auth token from localStorage
   getAuthToken: function () {
@@ -154,7 +153,7 @@ function showNotification(message, duration = 5000) {
 
   notification.innerHTML = `
     <div class="message">${message}</div>
-    <span class="close-btn">&times;</span>
+    <span class="close-btn">×</span>
   `;
 
   notificationsContainer.appendChild(notification);

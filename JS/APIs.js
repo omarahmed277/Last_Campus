@@ -459,40 +459,61 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     },
 
-    fetchNotifications: async function () {
+    fetchNotifications: function () {
       try {
         const token = localStorage.getItem("authToken");
         if (!token) {
           throw new Error("غير مصرح: يجب تسجيل الدخول");
         }
+
         const decodedToken = decodeJWT(token);
         if (!decodedToken || (!decodedToken.sub && !decodedToken.id)) {
           throw new Error("رمز غير صالح: معرف المستخدم مفقود");
         }
+
         const userId = decodedToken.sub || decodedToken.id;
 
-        const response = await fetchWithRetry(
-          `${API_BASE_URL}/notifications?userId=${userId}`,
-          {
-            method: "GET",
-            headers: getHeaders(true),
-          }
+        // This will be updated live
+        const notificationsData = JSON.parse(
+          localStorage.getItem("notifications") || "[]"
         );
-        await handleApiError(response);
-        const data = await response.json();
-        console.log("Notifications response:", data);
 
-        return (data.notifications || []).map((notif) => ({
-          id: notif.id || null,
-          title: notif.title || "إشعار جديد",
-          text: notif.text || "",
-          avatar: notif.avatar || "",
-          actions: notif.actions || [],
-          variant: notif.variant || "",
-          compact: notif.compact || false,
-        }));
+        // Render immediately
+        common.renderNotifications(notificationsData, () =>
+          common.updateNotificationCount(notificationsData)
+        );
+
+        const source = new EventSource(
+          `${API_BASE_URL}/notifications/stream?userId=${userId}`
+        );
+
+        source.onopen = () => {
+          console.log("SSE connection opened");
+        };
+
+        source.addEventListener("notification", (event) => {
+          const data = JSON.parse(event.data);
+          notificationsData.push(data);
+          localStorage.setItem(
+            "notifications",
+            JSON.stringify(notificationsData)
+          );
+
+          // Re-render after update
+          common.renderNotifications(notificationsData, () =>
+            common.updateNotificationCount(notificationsData)
+          );
+        });
+
+        source.onerror = (error) => {
+          console.error("SSE error:", error);
+          console.log("EventSource state:", source.readyState);
+        };
+
+        // Return both the array (by reference) and a stop method
+        return notificationsData;
       } catch (error) {
-        console.error("Fetch notifications error:", error.message);
+        console.error("Notification listener error:", error.message);
         throw error;
       }
     },

@@ -1,291 +1,473 @@
-// Appointment Management System
-document.addEventListener("DOMContentLoaded", () => {
-  // Settings elements
-  const availabilityRows = document.querySelectorAll(".availability-row");
-  const recurrenceSelect = document.querySelector("select");
-  const maxAdvanceInput = document.querySelector('.input-number[value="3"]');
-  const minLeadTimeInput = document.querySelector('.input-number[value="4"]');
-  const durationIntervalInput = document.querySelector(
-    '.input-number[value="30"]'
-  );
-  const maxDailyBookingsInput = document.querySelector(
-    '.input-number[value="4"]'
-  );
-  const calendarBody = document.querySelector(".calendar-body");
+document.addEventListener("DOMContentLoaded", async () => {
+  const calendarHeader = document.getElementById("calendar-header");
+  const calendarBody = document.getElementById("calendar-body");
+  const currentWeekSpan = document.getElementById("current-week");
+  const prevWeekBtn = document.getElementById("prev-week");
+  const nextWeekBtn = document.getElementById("next-week");
+  const saveBtn = document.getElementById("save-btn");
+  const titleInput = document.getElementById("title-input");
+  const recurrenceSelect = document.getElementById("recurrence");
+  const maxDaysBeforeInput = document.getElementById("max-days-before");
+  const minHoursBeforeInput = document.getElementById("min-hours-before");
+  const availableNowRadio = document.getElementById("available-now");
+  const dateRangeRadio = document.getElementById("date-range");
+  const changeDatesBtn = document.getElementById("change-dates-btn");
 
-  // Store availability settings
-  let availability = {
-    Sunday: { available: false, hours: [] },
-    Monday: { available: false, hours: [] },
-    Tuesday: { available: false, hours: [] },
-    Wednesday: { available: false, hours: [] },
-    Thursday: { available: false, hours: [] },
-    Friday: { available: false, hours: [] },
-    Saturday: { available: false, hours: [] },
+  // Set current date to today (May 20, 2025, 12:55 PM EEST)
+  let currentDate = new Date("2025-05-20T12:55:00+03:00");
+  let availabilityData = {
+    title: titleInput.value || "Work time",
+    availableFrom: "2025-05-20",
+    expireAt: "2026-05-20",
+    maxDaysBefore: parseInt(maxDaysBeforeInput.value) || 30,
+    minHoursBefore: parseInt(minHoursBeforeInput.value) || 24,
+    maxBookingsPerDay: 5,
+    breakMinutes: 15,
+    isRecurring: recurrenceSelect.value !== "none",
+    days: [
+      {
+        dayOfWeek: "MONDAY",
+        intervals: [{ startTime: "13:00", endTime: "14:00" }],
+      },
+    ],
   };
 
-  // Map day names from Arabic to English for internal use
-  const dayNameMap = {
-    الأحد: "Sunday",
-    الإثنين: "Monday",
-    الثلاثاء: "Tuesday",
-    الأربعاء: "Wednesday",
-    الخميس: "Thursday",
-    الجمعة: "Friday",
-    السبت: "Saturday",
+  const dayMap = {
+    SATURDAY: "السبت",
+    SUNDAY: "الأحد",
+    MONDAY: "الإثنين",
+    TUESDAY: "الثلاثاء",
+    WEDNESDAY: "الأربعاء",
+    THURSDAY: "الخميس",
+    FRIDAY: "الجمعة",
   };
 
-  // Initialize availability settings
-  availabilityRows.forEach((row) => {
-    const dayLabel = row.querySelector(".day-name-label").textContent;
-    const status = row.querySelector(".availability-status");
-    const englishDay = dayNameMap[dayLabel];
+  // Function to convert API format to local format
+  function convertToLocalFormat(apiData) {
+    const localAvailability = {};
+    apiData.days.forEach((day) => {
+      const localDayName = dayMap[day.dayOfWeek];
+      localAvailability[localDayName] = day.intervals.map((interval) => ({
+        start: interval.startTime,
+        end: interval.endTime,
+      }));
+    });
+    return localAvailability;
+  }
 
-    row.addEventListener("click", () => {
-      const isAvailable = status.textContent === "غير متاح";
-      status.textContent = isAvailable ? "متاح" : "غير متاح";
-      availability[englishDay].available = isAvailable;
-
-      if (isAvailable) {
-        // Prompt for available hours (e.g., 09:00-17:00)
-        const hours = prompt(
-          "Enter available hours (e.g., 09:00-17:00)",
-          "09:00-17:00"
+  // Function to convert local format to API format
+  function convertToApiFormat(localAvailability) {
+    const days = Object.entries(localAvailability).map(
+      ([dayName, intervals]) => {
+        const apiDayName = Object.keys(dayMap).find(
+          (key) => dayMap[key] === dayName
         );
-        if (hours && hours.match(/^\d{2}:\d{2}-\d{2}:\d{2}$/)) {
-          availability[englishDay].hours = hours.split("-");
-        } else {
-          availability[englishDay].available = false;
-          status.textContent = "غير متاح";
-          alert("Invalid hours format. Use HH:MM-HH:MM");
+        return {
+          dayOfWeek: apiDayName,
+          intervals: intervals.map((interval) => ({
+            startTime: interval.start,
+            endTime: interval.end,
+          })),
+        };
+      }
+    );
+    return {
+      title: titleInput.value || "Work time",
+      availableFrom: availableNowRadio.checked
+        ? new Date().toISOString().split("T")[0]
+        : availabilityData.availableFrom,
+      expireAt: availableNowRadio.checked
+        ? new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+            .toISOString()
+            .split("T")[0]
+        : availabilityData.expireAt,
+      maxDaysBefore: parseInt(maxDaysBeforeInput.value) || 30,
+      minHoursBefore: parseInt(minHoursBeforeInput.value) || 24,
+      maxBookingsPerDay: 5,
+      breakMinutes: 15,
+      isRecurring: recurrenceSelect.value !== "none",
+      days,
+    };
+  }
+
+  // Function to collect availability from UI
+  function collectAvailabilityFromUI() {
+    const localAvailability = {};
+    document.querySelectorAll(".availability-row").forEach((row) => {
+      const dayName = row.dataset.day;
+      const timeSlots = row.querySelectorAll(".time-slot");
+      const slots = [];
+      timeSlots.forEach((slot) => {
+        const start = slot.querySelector(".slot-start").value;
+        const end = slot.querySelector(".slot-end").value;
+        if (start && end) {
+          slots.push({ start, end });
         }
-      } else {
-        availability[englishDay].hours = [];
+      });
+      if (slots.length > 0) {
+        localAvailability[dayName] = slots;
       }
     });
+    return localAvailability;
+  }
+
+  // Function to render the calendar
+  function renderCalendar(localAvailability) {
+    calendarHeader.innerHTML = "";
+    calendarBody.innerHTML = "";
+
+    // Adjust the date to the start of the week (Saturday)
+    let startOfWeek = new Date(currentDate);
+    startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() - 1);
+
+    // Header: Time label and days
+    const timeLabel = document.createElement("div");
+    timeLabel.className = "time-label";
+    timeLabel.textContent = "GMT-5";
+    calendarHeader.appendChild(timeLabel);
+
+    const days = [
+      "الأحد",
+      "الإثنين",
+      "الثلاثاء",
+      "الأربعاء",
+      "الخميس",
+      "الجمعة",
+      "السبت",
+    ];
+    for (let i = 0; i < 7; i++) {
+      const dayDate = new Date(startOfWeek);
+      dayDate.setDate(startOfWeek.getDate() + i);
+      const dayLabel = document.createElement("div");
+      dayLabel.className = "day-label";
+      dayLabel.innerHTML = `
+        <div class="day-name">${days[i]}</div>
+        <div class="day-date">${dayDate.getDate()}</div>
+      `;
+      calendarHeader.appendChild(dayLabel);
+    }
+
+    // Body: Time slots
+    for (let hour = 0; hour < 24; hour++) {
+      const timeCell = document.createElement("div");
+      timeCell.className = "time-cell";
+      timeCell.textContent = `${hour.toString().padStart(2, "0")}:00`;
+      calendarBody.appendChild(timeCell);
+
+      for (let day = 0; day < 7; day++) {
+        const calendarCell = document.createElement("div");
+        calendarCell.className = "calendar-cell";
+        const dayName = days[day];
+        if (localAvailability[dayName]) {
+          localAvailability[dayName].forEach((slot) => {
+            const startHour = parseInt(slot.start.split(":")[0]);
+            const startMin = parseInt(slot.start.split(":")[1]);
+            const endHour = parseInt(slot.end.split(":")[0]);
+            const endMin = parseInt(slot.end.split(":")[1]);
+            const startTime = startHour + startMin / 60;
+            const endTime = endHour + endMin / 60;
+
+            if (startTime <= hour && hour < endTime) {
+              const timeSlotBlock = document.createElement("div");
+              timeSlotBlock.className = "time-slot-block";
+              timeSlotBlock.textContent = `${slot.start} - ${slot.end}`;
+              calendarCell.appendChild(timeSlotBlock);
+            }
+          });
+        }
+        calendarBody.appendChild(calendarCell);
+      }
+    }
+  }
+
+  // Function to update the current week display
+  function updateCurrentWeek() {
+    const startOfWeek = new Date(currentDate);
+    startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() - 1);
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    currentWeekSpan.textContent = `من ${startOfWeek.toLocaleDateString(
+      "ar-EG"
+    )} إلى ${endOfWeek.toLocaleDateString("ar-EG")}`;
+  }
+
+  // Function to check if two time slots overlap
+  function isOverlapping(slot1, slot2) {
+    const start1 = new Date(`1970-01-01T${slot1.start}:00`);
+    const end1 = new Date(`1970-01-01T${slot1.end}:00`);
+    const start2 = new Date(`1970-01-01T${slot2.start}:00`);
+    const end2 = new Date(`1970-01-01T${slot2.end}:00`);
+    return start1 < end2 && start2 < end1;
+  }
+
+  // Function to validate a time slot
+  function isValidSlot(slot) {
+    const start = new Date(`1970-01-01T${slot.start}:00`);
+    const end = new Date(`1970-01-01T${slot.end}:00`);
+    return end > start;
+  }
+
+  // Function to sort time slots
+  function sortSlots(slots) {
+    return slots.sort((a, b) => {
+      const timeA = new Date(`1970-01-01T${a.start}:00`);
+      const timeB = new Date(`1970-01-01T${b.start}:00`);
+      return timeA - timeB;
+    });
+  }
+
+  // Function to generate a unique time slot
+  function getUniqueTimeSlot(dayName, localAvailability) {
+    const existingSlots = localAvailability[dayName] || [];
+    const possibleStarts = [
+      "08:00",
+      "09:00",
+      "10:00",
+      "11:00",
+      "12:00",
+      "13:00",
+      "14:00",
+      "15:00",
+      "16:00",
+      "17:00",
+    ];
+
+    for (let start of possibleStarts) {
+      const startHour = parseInt(start.split(":")[0]);
+      const durations = [1, 1.5, 2];
+      for (let duration of durations) {
+        const endHour = Math.floor(startHour + duration);
+        const endMin = (duration % 1) * 60;
+        const end = `${endHour.toString().padStart(2, "0")}:${endMin
+          .toString()
+          .padStart(2, "0")}`;
+        const newSlot = { start, end };
+        if (endHour <= 18 && isValidSlot(newSlot)) {
+          const hasConflict = existingSlots.some((slot) =>
+            isOverlapping(slot, newSlot)
+          );
+          if (!hasConflict) {
+            return newSlot;
+          }
+        }
+      }
+    }
+
+    if (existingSlots.length > 0) {
+      const lastSlot = existingSlots[existingSlots.length - 1];
+      const lastEndHour = parseInt(lastSlot.end.split(":")[0]);
+      const lastEndMin = parseInt(lastSlot.end.split(":")[1]);
+      const lastEndTime = lastEndHour + lastEndMin / 60;
+      if (lastEndTime < 18) {
+        const startHour = Math.floor(lastEndTime);
+        const startMin = (lastEndTime % 1) * 60;
+        const start = `${startHour.toString().padStart(2, "0")}:${startMin
+          .toString()
+          .padStart(2, "0")}`;
+        const endHour = Math.floor(lastEndTime + 1);
+        const end = `${endHour.toString().padStart(2, "0")}:00`;
+        const newSlot = { start, end };
+        if (
+          isValidSlot(newSlot) &&
+          !existingSlots.some((slot) => isOverlapping(slot, newSlot))
+        ) {
+          return newSlot;
+        }
+      }
+    }
+
+    return { start: "08:00", end: "09:00" };
+  }
+
+  // Function to update availability status
+  function updateAvailabilityStatus(dayRow, dayName, localAvailability) {
+    const status = dayRow.querySelector(".availability-status");
+    status.textContent =
+      localAvailability[dayName] && localAvailability[dayName].length
+        ? "متاح"
+        : "غير متاح";
+  }
+
+  // Save button handler
+  saveBtn.addEventListener("click", async () => {
+    const localAvailability = collectAvailabilityFromUI();
+    const apiData = convertToApiFormat(localAvailability);
+    try {
+      await apiService.createMentorAvailability(apiData);
+      showNotification("تم حفظ التغييرات بنجاح");
+      availabilityData = apiData; // Update local data
+    } catch (error) {
+      showNotification(`خطأ أثناء الحفظ: ${error.message}`);
+    }
   });
 
-  // Appointment preparation
-  function prepareAppointment(day, time, duration) {
-    const appointment = {
-      day,
-      time,
-      duration,
-      date: getDateForDay(day),
-      active: true,
-    };
-    return validateAppointment(appointment) ? appointment : null;
-  }
+  // Mock date picker for "Change Dates" button
+  changeDatesBtn.addEventListener("click", () => {
+    // Simulate date picker (replace with actual date picker logic)
+    const newStart = prompt("أدخل تاريخ البدء (YYYY-MM-DD):", "2025-05-20");
+    const newEnd = prompt("أدخل تاريخ الانتهاء (YYYY-MM-DD):", "2026-05-20");
+    if (newStart && newEnd) {
+      availabilityData.availableFrom = newStart;
+      availabilityData.expireAt = newEnd;
+      dateRangeRadio.checked = true;
+    }
+  });
 
-  // Get date for a given day (based on calendar header)
-  function getDateForDay(day) {
-    const dayLabels = document.querySelectorAll(".day-label");
-    for (let label of dayLabels) {
-      if (label.querySelector(".day-name").textContent === day) {
-        return label.querySelector(".day-date").textContent;
+  // Event listeners for week navigation
+  prevWeekBtn.addEventListener("click", () => {
+    currentDate.setDate(currentDate.getDate() - 7);
+    renderCalendar(convertToLocalFormat(availabilityData));
+    updateCurrentWeek();
+  });
+
+  nextWeekBtn.addEventListener("click", () => {
+    currentDate.setDate(currentDate.getDate() + 7);
+    renderCalendar(convertToLocalFormat(availabilityData));
+    updateCurrentWeek();
+  });
+
+  // Event listeners for adding and managing availability
+  document.querySelectorAll(".availability-row").forEach((row) => {
+    const dayName = row.dataset.day;
+    const timeSlotsDiv = row.querySelector(".time-slots");
+
+    // Handle adding new time slot
+    row.querySelector(".add-btn").addEventListener("click", () => {
+      const localAvailability = convertToLocalFormat(availabilityData);
+      const newSlot = getUniqueTimeSlot(dayName, localAvailability);
+      if (!localAvailability[dayName]) {
+        localAvailability[dayName] = [];
       }
-    }
-    return null;
-  }
+      localAvailability[dayName].push(newSlot);
+      localAvailability[dayName] = sortSlots(localAvailability[dayName]);
+      availabilityData = convertToApiFormat(localAvailability);
 
-  // Appointment validation
-  function validateAppointment(appointment) {
-    const { day, time, duration, date } = appointment;
-    const englishDay = dayNameMap[day];
-
-    // 1. Check if day is available
-    if (!availability[englishDay].available) {
-      console.error(`Day ${day} is not available`);
-      return false;
-    }
-
-    // 2. Check if time is within available hours
-    const [startHour, endHour] = availability[englishDay].hours;
-    if (startHour && endHour) {
-      if (time < startHour || time >= endHour) {
-        console.error(
-          `Time ${time} is outside available hours (${startHour}-${endHour})`
-        );
-        return false;
-      }
-    }
-
-    // 3. Check maximum advance booking
-    const maxAdvanceDays = parseInt(maxAdvanceInput.value);
-    const appointmentDate = new Date(parseArabicDate(date));
-    const currentDate = new Date();
-    const maxAdvanceDate = new Date(currentDate);
-    maxAdvanceDate.setDate(currentDate.getDate() + maxAdvanceDays);
-    if (appointmentDate > maxAdvanceDate) {
-      console.error(
-        `Appointment date ${date} exceeds maximum advance booking period`
-      );
-      return false;
-    }
-
-    // 4. Check minimum lead time
-    const minLeadHours = parseInt(minLeadTimeInput.value);
-    const appointmentTime = new Date(appointmentDate);
-    const [hours, minutes] = time.split(":").map(Number);
-    appointmentTime.setHours(hours, minutes);
-    const minLeadTime = new Date(currentDate);
-    minLeadTime.setHours(currentDate.getHours() + minLeadHours);
-    if (appointmentTime < minLeadTime) {
-      console.error(
-        `Appointment time ${time} is too soon (minimum lead time: ${minLeadHours} hours)`
-      );
-      return false;
-    }
-
-    // 5. Check duration interval
-    const durationInterval = parseInt(durationIntervalInput.value);
-    if (duration % durationInterval !== 0) {
-      console.error(
-        `Duration ${duration} does not match interval ${durationInterval}`
-      );
-      return false;
-    }
-
-    // 6. Check maximum daily bookings
-    const maxDailyBookings = parseInt(maxDailyBookingsInput.value);
-    const dailyAppointments = getAppointmentsForDay(day, date);
-    if (dailyAppointments.length >= maxDailyBookings) {
-      console.error(
-        `Maximum daily bookings (${maxDailyBookings}) reached for ${day}`
-      );
-      return false;
-    }
-
-    // 7. Check for overlapping appointments
-    if (hasOverlap(day, date, time, duration)) {
-      console.error(
-        `Appointment at ${time} on ${day} overlaps with another appointment`
-      );
-      return false;
-    }
-
-    return true;
-  }
-
-  // Parse Arabic date (e.g., "1 مايو" to JavaScript Date)
-  function parseArabicDate(dateStr) {
-    const [day, month] = dateStr.split(" ");
-    const monthMap = {
-      يناير: 0,
-      فبراير: 1,
-      مارس: 2,
-      أبريل: 3,
-      مايو: 4,
-      يونيو: 5,
-      يوليو: 6,
-      أغسطس: 7,
-      سبتمبر: 8,
-      أكتوبر: 9,
-      نوفمبر: 10,
-      ديسمبر: 11,
-    };
-    return new Date(2025, monthMap[month], parseInt(day));
-  }
-
-  // Get existing appointments for a specific day
-  function getAppointmentsForDay(day, date) {
-    const appointments = [];
-    const dayIndex = Array.from(
-      document.querySelectorAll(".day-label")
-    ).findIndex(
-      (label) => label.querySelector(".day-name").textContent === day
-    );
-    if (dayIndex === -1) return appointments;
-
-    const cells = document.querySelectorAll(
-      `.calendar-body .calendar-cell:nth-child(${8 * (dayIndex + 1)})`
-    );
-    cells.forEach((cell) => {
-      const appointment = cell.querySelector(".appointment");
-      if (appointment) {
-        const time = appointment.querySelector(".appointment-time").textContent;
-        const duration = parseInt(
-          appointment
-            .querySelector(".appointment-duration")
-            .textContent.match(/\d+/)[0]
-        );
-        appointments.push({ time, duration });
-      }
-    });
-    return appointments;
-  }
-
-  // Check for overlapping appointments
-  function hasOverlap(day, date, time, duration) {
-    const appointments = getAppointmentsForDay(day, date);
-    const [newHours, newMinutes] = time.split(":").map(Number);
-    const newStart = newHours * 60 + newMinutes;
-    const newEnd = newStart + duration;
-
-    for (let appt of appointments) {
-      const [hours, minutes] = appt.time.split(":").map(Number);
-      const start = hours * 60 + minutes;
-      const end = start + appt.duration;
-      if (newStart < end && newEnd > start) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // Add appointment to calendar
-  function addAppointmentToCalendar(appointment) {
-    const { day, time, duration } = appointment;
-    const dayIndex = Array.from(
-      document.querySelectorAll(".day-label")
-    ).findIndex(
-      (label) => label.querySelector(".day-name").textContent === day
-    );
-    const timeIndex = Array.from(
-      document.querySelectorAll(".time-cell")
-    ).findIndex((cell) => cell.textContent === time);
-
-    if (dayIndex === -1 || timeIndex === -1) {
-      console.error("Invalid day or time");
-      return;
-    }
-
-    const cell = calendarBody.children[timeIndex * 8 + (dayIndex + 1)];
-    const appointmentDiv = document.createElement("div");
-    appointmentDiv.className = "appointment";
-    appointmentDiv.innerHTML = `
-            <div class="appointment-time">${time}</div>
-            <div class="appointment-duration">(${duration} دقيقة)</div>
+      // Rebuild time slots
+      timeSlotsDiv.innerHTML = "";
+      localAvailability[dayName].forEach((slot, slotIndex) => {
+        const timeSlotElement = document.createElement("div");
+        timeSlotElement.className = "time-slot";
+        timeSlotElement.innerHTML = `
+          <input type="time" class="slot-start" value="${slot.start}" />
+          <span>-</span>
+          <input type="time" class="slot-end" value="${slot.end}" />
+          <button class="remove-slot-btn">×</button>
         `;
-    cell.appendChild(appointmentDiv);
-  }
+        timeSlotsDiv.appendChild(timeSlotElement);
 
-  // Example: Add a new appointment (for testing)
-  calendarBody.addEventListener("click", (e) => {
-    const cell = e.target.closest(".calendar-cell");
-    if (!cell || cell.querySelector(".appointment")) return;
+        // Attach event listeners for the new slot
+        attachSlotEventListeners(timeSlotElement, dayName, slotIndex);
+      });
 
-    const timeCell = cell.previousElementSibling;
-    while (timeCell && !timeCell.classList.contains("time-cell")) {
-      timeCell = timeCell.previousElementSibling;
+      updateAvailabilityStatus(row, dayName, localAvailability);
+      renderCalendar(localAvailability);
+    });
+
+    // Function to attach event listeners to time slot inputs and remove button
+    function attachSlotEventListeners(slotElement, dayName, index) {
+      const startInput = slotElement.querySelector(".slot-start");
+      const endInput = slotElement.querySelector(".slot-end");
+      const removeBtn = slotElement.querySelector(".remove-slot-btn");
+
+      startInput.addEventListener("change", () => {
+        const localAvailability = convertToLocalFormat(availabilityData);
+        const newStart = startInput.value;
+        const currentEnd = localAvailability[dayName][index].end;
+        const updatedSlot = { start: newStart, end: currentEnd };
+
+        if (!isValidSlot(updatedSlot)) {
+          alert("وقت الانتهاء يجب أن يكون بعد وقت البدء");
+          startInput.value = localAvailability[dayName][index].start;
+          return;
+        }
+
+        const hasOverlap = localAvailability[dayName].some(
+          (slot, i) => i !== index && isOverlapping(slot, updatedSlot)
+        );
+        if (hasOverlap) {
+          alert("الفترة الزمنية تتداخل مع فترة أخرى");
+          startInput.value = localAvailability[dayName][index].start;
+          return;
+        }
+
+        localAvailability[dayName][index].start = newStart;
+        localAvailability[dayName] = sortSlots(localAvailability[dayName]);
+        availabilityData = convertToApiFormat(localAvailability);
+        rebuildTimeSlots();
+        renderCalendar(localAvailability);
+      });
+
+      endInput.addEventListener("change", () => {
+        const localAvailability = convertToLocalFormat(availabilityData);
+        const newEnd = endInput.value;
+        const currentStart = localAvailability[dayName][index].start;
+        const updatedSlot = { start: currentStart, end: newEnd };
+
+        if (!isValidSlot(updatedSlot)) {
+          alert("وقت الانتهاء يجب أن يكون بعد وقت البدء");
+          endInput.value = localAvailability[dayName][index].end;
+          return;
+        }
+
+        const hasOverlap = localAvailability[dayName].some(
+          (slot, i) => i !== index && isOverlapping(slot, updatedSlot)
+        );
+        if (hasOverlap) {
+          alert("الفترة الزمنية تتداخل مع فترة أخرى");
+          endInput.value = localAvailability[dayName][index].end;
+          return;
+        }
+
+        localAvailability[dayName][index].end = newEnd;
+        localAvailability[dayName] = sortSlots(localAvailability[dayName]);
+        availabilityData = convertToApiFormat(localAvailability);
+        rebuildTimeSlots();
+        renderCalendar(localAvailability);
+      });
+
+      removeBtn.addEventListener("click", () => {
+        const localAvailability = convertToLocalFormat(availabilityData);
+        localAvailability[dayName].splice(index, 1);
+        if (localAvailability[dayName].length === 0) {
+          delete localAvailability[dayName];
+        }
+        availabilityData = convertToApiFormat(localAvailability);
+        rebuildTimeSlots();
+        updateAvailabilityStatus(row, dayName, localAvailability);
+        renderCalendar(localAvailability);
+      });
     }
-    const time = timeCell ? timeCell.textContent : null;
 
-    const dayIndex =
-      (Array.from(cell.parentNode.children).indexOf(cell) % 8) - 1;
-    const day = document
-      .querySelectorAll(".day-label")
-      [dayIndex]?.querySelector(".day-name").textContent;
-
-    if (time && day) {
-      const duration = parseInt(durationIntervalInput.value);
-      const appointment = prepareAppointment(day, time, duration);
-      if (appointment) {
-        addAppointmentToCalendar(appointment);
-        alert("Appointment added successfully");
-      } else {
-        alert("Invalid appointment");
+    // Function to rebuild time slots for the day
+    function rebuildTimeSlots() {
+      const localAvailability = convertToLocalFormat(availabilityData);
+      timeSlotsDiv.innerHTML = "";
+      if (localAvailability[dayName]) {
+        localAvailability[dayName] = sortSlots(localAvailability[dayName]);
+        localAvailability[dayName].forEach((slot, slotIndex) => {
+          const timeSlotElement = document.createElement("div");
+          timeSlotElement.className = "time-slot";
+          timeSlotElement.innerHTML = `
+            <input type="time" class="slot-start" value="${slot.start}" />
+            <span>-</span>
+            <input type="time" class="slot-end" value="${slot.end}" />
+            <button class="remove-slot-btn">×</button>
+          `;
+          timeSlotsDiv.appendChild(timeSlotElement);
+          attachSlotEventListeners(timeSlotElement, dayName, slotIndex);
+        });
       }
     }
+
+    // Initialize existing slots
+    const localAvailability = convertToLocalFormat(availabilityData);
+    if (localAvailability[dayName]) {
+      rebuildTimeSlots();
+      updateAvailabilityStatus(row, dayName, localAvailability);
+    }
   });
+
+  // Initial render
+  renderCalendar(convertToLocalFormat(availabilityData));
+  updateCurrentWeek();
 });

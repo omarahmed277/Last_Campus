@@ -614,11 +614,12 @@
           return messages[chatId][messages[chatId].length - 1];
         }
         const chat = chats.find((c) => c.id === chatId);
+        console.log(chat.messages)
+        const lastMessage = chat.messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0]
         if (chat && chat.messages) {
           return {
-            content: chat.messages.sort((a, b) => b.createdAt - a.createdAt)[0]
-              .content,
-            createdAt: chat.timestamp,
+            content: lastMessage.content,
+            createdAt: lastMessage.createdAt,
           };
         }
         return null;

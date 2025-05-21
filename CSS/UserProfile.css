@@ -1595,9 +1595,6 @@ main {
 }
 
 .uplodimage .image img:last-child {
-  position: absolute;
-  top: 35%;
-  right: 5%;
   cursor: pointer;
   width: 24px;
   height: 24px;
@@ -1646,7 +1643,7 @@ main {
 
 .moreExBtn {
   display: flex;
-  width: 500px;
+  width: 450px;
   padding: 8px 16px;
   justify-content: center;
   align-items: center;
@@ -1682,6 +1679,7 @@ main {
 
 .education {
   display: flex;
+  flex-direction: row;
   padding: 4px 16px;
   justify-content: center;
   align-items: center;

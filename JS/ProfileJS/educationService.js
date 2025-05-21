@@ -16,7 +16,7 @@ function formatDate(dateString) {
   });
 }
 
-export function renderItem(container, item, isList) {
+export function renderItem(container, item, isList, isProfileOwner) {
   const div = document.createElement("div");
   div.className = "second_con";
   div.innerHTML = `
@@ -30,7 +30,7 @@ export function renderItem(container, item, isList) {
     <div class="${isList ? "date2_con" : "date2"}">
       <p>${formatDate(item.startDate)} - ${formatDate(item.endDate)}</p>
       ${
-        isList
+        isList && isProfileOwner
           ? `
         <img src="../mentor-images/edit-2.svg" alt="تعديل" class="edit-edu" data-id="${item.id}">
         <img src="../mentor-images/trash.svg" alt="حذف" class="delete-edu" data-id="${item.id}">
@@ -42,7 +42,7 @@ export function renderItem(container, item, isList) {
   container.appendChild(div);
 }
 
-export async function loadSectionData(cache, containerId, renderFn, listId) {
+export async function loadSectionData(cache, containerId, renderFn, listId, isProfileOwner) {
   const container = document.querySelector(containerId);
   const listContainer = document.querySelector(listId);
   if (!container || !listContainer) return;
@@ -52,6 +52,22 @@ export async function loadSectionData(cache, containerId, renderFn, listId) {
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get("id");
     if (!userId) throw new Error("User ID not found in URL");
+
+    // Validate token and ownership
+    if (token) {
+      const decoded = common.decodeJWT(token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (decoded.exp && decoded.exp < currentTime) {
+        localStorage.removeItem("authToken");
+        common.showAlert("خطأ", "انتهت صلاحية الجلسة، يرجى تسجيل الدخول مجددًا", "error");
+        common.showLoginPopup();
+        return;
+      }
+      if (isProfileOwner && userId !== (decoded.sub || decoded.id)) {
+        console.warn("Unauthorized: User ID does not match token");
+        return;
+      }
+    }
 
     if (cache.education !== null) {
       const items = cache.education;
@@ -63,8 +79,8 @@ export async function loadSectionData(cache, containerId, renderFn, listId) {
         return;
       }
       items.forEach((item) => {
-        renderFn(container, item, false);
-        renderFn(listContainer, item, true);
+        renderFn(container, item, false, isProfileOwner);
+        renderFn(listContainer, item, true, isProfileOwner);
       });
       return;
     }
@@ -90,13 +106,13 @@ export async function loadSectionData(cache, containerId, renderFn, listId) {
     }
 
     items.forEach((item) => {
-      renderFn(container, item, false);
-      renderFn(listContainer, item, true);
+      renderFn(container, item, false, isProfileOwner);
+      renderFn(listContainer, item, true, isProfileOwner);
     });
   } catch (error) {
     console.error("Failed to load education:", error.message);
-    container.innerHTML = `<p class="no-data">لا توجد نتائج لعرضها</p>`;
-    listContainer.innerHTML = `<p class="no-data">لا توجد نتائج لعرضها</p>`;
+    container.innerHTML = `<p class="no-data">فشل تحميل البيانات</p>`;
+    listContainer.innerHTML = `<p class="no-data">فشل تحميل البيانات</p>`;
   }
 }
 
@@ -139,7 +155,9 @@ function validateForm(form) {
   return isValid;
 }
 
-export function initializePopup(showPopup, hidePopup, cache) {
+export function initializePopup(showPopup, hidePopup, cache, isProfileOwner) {
+  if (!isProfileOwner) return; // Skip for non-owners
+
   const popup = document.getElementById("editProfileEdu_add");
   const editListPopup = document.getElementById("editProfileEdu_edit");
   const closeBtn = document.getElementById("closeBtn6");
@@ -168,8 +186,13 @@ export function initializePopup(showPopup, hidePopup, cache) {
   if (form) {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (!isProfileOwner) {
+        common.showAlert("غير مسموح", "لا يمكنك تعديل هذا الملف الشخصي", "error");
+        return;
+      }
       if (!validateForm(form)) return;
 
+      common.showAlert("جاري التحميل", "جاري حفظ التعليم...", "info");
       const data = {
         degree: form.querySelector("#degree").value.trim(),
         institution: form.querySelector("#institution").value.trim(),
@@ -180,6 +203,14 @@ export function initializePopup(showPopup, hidePopup, cache) {
 
       try {
         const token = localStorage.getItem("authToken");
+        const decoded = common.decodeJWT(token);
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get("id");
+        if (userId !== (decoded.sub || decoded.id)) {
+          common.showAlert("غير مسموح", "لا يمكنك تعديل هذا الملف الشخصي", "error");
+          return;
+        }
+
         const method = form.dataset.id ? "PATCH" : "POST";
         const url = form.dataset.id
           ? `${API_BASE_URL}/education/${form.dataset.id}`
@@ -202,16 +233,20 @@ export function initializePopup(showPopup, hidePopup, cache) {
           cache,
           "#educationContainer",
           renderItem,
-          "#educationList"
+          "#educationList",
+          isProfileOwner
         );
       } catch (error) {
         console.error("Education form submission error:", error.message);
+        common.showAlert("خطأ", "فشل حفظ التعليم", "error");
       }
     });
   }
 }
 
-export function initializeEventListeners(cache, showPopup) {
+export function initializeEventListeners(cache, showPopup, isProfileOwner) {
+  if (!isProfileOwner) return; // Skip for non-owners
+
   document
     .querySelector("#educationList")
     ?.addEventListener("click", async (e) => {
@@ -219,6 +254,14 @@ export function initializeEventListeners(cache, showPopup) {
         const id = e.target.dataset.id;
         try {
           const token = localStorage.getItem("authToken");
+          const decoded = common.decodeJWT(token);
+          const urlParams = new URLSearchParams(window.location.search);
+          const userId = urlParams.get("id");
+          if (userId !== (decoded.sub || decoded.id)) {
+            common.showAlert("غير مسموح", "لا يمكنك تعديل هذا الملف الشخصي", "error");
+            return;
+          }
+
           const response = await fetch(`${API_BASE_URL}/education/${id}`, {
             method: "GET",
             headers: {
@@ -231,20 +274,36 @@ export function initializeEventListeners(cache, showPopup) {
 
           const form = document.getElementById("educationForm");
           if (form) form.dataset.id = id;
-          showPopup("editProfileEdu_add", "educationFormScreen", {
-            degree: data.degree,
-            institution: data.institution,
-            field: data.field,
-            eduStartDate: data.startDate,
-            eduEndDate: data.endDate || "",
+          const fields = [
+            { id: "degree", value: data.degree || "" },
+            { id: "institution", value: data.institution || "" },
+            { id: "field", value: data.field || "" },
+            { id: "eduStartDate", value: data.startDate || "" },
+            { id: "eduEndDate", value: data.endDate || "" },
+          ];
+          fields.forEach(({ id, value }) => {
+            const element = document.getElementById(id);
+            if (element) element.value = value;
+            else console.warn(`Form field ${id} not found`);
           });
+          showPopup("editProfileEdu_add", "educationFormScreen");
         } catch (error) {
           console.error("Fetch education error:", error.message);
+          common.showAlert("خطأ", "فشل جلب بيانات التعليم", "error");
         }
       } else if (e.target.classList.contains("delete-edu")) {
         if (confirm("هل أنت متأكد من حذف هذا التعليم؟")) {
+          common.showAlert("جاري التحميل", "جاري حذف التعليم...", "info");
           try {
             const token = localStorage.getItem("authToken");
+            const decoded = common.decodeJWT(token);
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get("id");
+            if (userId !== (decoded.sub || decoded.id)) {
+              common.showAlert("غير مسموح", "لا يمكنك تعديل هذا الملف الشخصي", "error");
+              return;
+            }
+
             const response = await fetch(
               `${API_BASE_URL}/education/${e.target.dataset.id}`,
               {
@@ -263,10 +322,12 @@ export function initializeEventListeners(cache, showPopup) {
               cache,
               "#educationContainer",
               renderItem,
-              "#educationList"
+              "#educationList",
+              isProfileOwner
             );
           } catch (error) {
             console.error("Delete education error:", error.message);
+            common.showAlert("خطأ", "فشل حذف التعليم", "error");
           }
         }
       }

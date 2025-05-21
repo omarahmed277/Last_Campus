@@ -73,6 +73,26 @@ export async function loadSectionData(
     const userId = urlParams.get("id");
     if (!userId) throw new Error("User ID not found in URL");
 
+    // Validate token and ownership
+    if (token) {
+      const decoded = common.decodeJWT(token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (decoded.exp && decoded.exp < currentTime) {
+        localStorage.removeItem("authToken");
+        common.showAlert(
+          "خطأ",
+          "انتهت صلاحية الجلسة، يرجى تسجيل الدخول مجددًا",
+          "error"
+        );
+        common.showLoginPopup();
+        return;
+      }
+      if (isProfileOwner && userId !== (decoded.sub || decoded.id)) {
+        console.warn("Unauthorized: User ID does not match token");
+        return;
+      }
+    }
+
     if (cache.certifications !== null) {
       const items = cache.certifications;
       container.innerHTML = "";
@@ -152,7 +172,7 @@ export async function loadSectionData(
         hiddenContainer.id = "hiddenCertificates";
         hiddenContainer.style.display = "none";
         container.appendChild(hiddenContainer);
-        hiddenContainer.appendChild(container.lastChild);
+        container.appendChild(hiddenContainer);
       }
     });
 
@@ -180,8 +200,8 @@ export async function loadSectionData(
     }
   } catch (error) {
     console.error("Failed to load certifications:", error.message);
-    container.innerHTML = `<p class="no-data">لا توجد نتائج لعرضها</p>`;
-    listContainer.innerHTML = `<p class="no-data">لا توجد نتائج لعرضها</p>`;
+    container.innerHTML = `<p class="no-data">فشل تحميل البيانات</p>`;
+    listContainer.innerHTML = `<p class="no-data">فشل تحميل البيانات</p>`;
   }
 }
 
@@ -220,6 +240,43 @@ function validateForm(form) {
   return isValid;
 }
 
+async function uploadCertificateImage(file, token, userId) {
+  if (!file) return null;
+  if (file.size > 2 * 1024 * 1024) {
+    common.showAlert(
+      "خطأ",
+      "حجم الصورة يجب أن يكون أقل من 2 ميجابايت",
+      "error"
+    );
+    return null;
+  }
+  if (!["image/jpeg", "image/png"].includes(file.type)) {
+    common.showAlert("خطأ", "يرجى اختيار صورة بصيغة JPEG أو PNG", "error");
+    return null;
+  }
+
+  common.showAlert("جاري التحميل", "جاري رفع الصورة...", "info");
+  try {
+    const formData = new FormData();
+    formData.append("image", file);
+    const response = await fetch(
+      `${API_BASE_URL}/certifications/${userId}/upload-image`,
+      {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      }
+    );
+    await window.auth.handleApiError(response);
+    const data = await response.json();
+    return data.image_url;
+  } catch (error) {
+    console.error("Certificate image upload error:", error.message);
+    common.showAlert("خطأ", "فشل رفع الصورة", "error");
+    return null;
+  }
+}
+
 export function initializePopup(showPopup, hidePopup, cache, isProfileOwner) {
   if (!isProfileOwner) return; // Skip popup initialization for non-owners
 
@@ -249,6 +306,7 @@ export function initializePopup(showPopup, hidePopup, cache, isProfileOwner) {
 
   const form = document.getElementById("certificateForm");
   if (form) {
+    const imageInput = form.querySelector("#certificateImage");
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!isProfileOwner) {
@@ -261,6 +319,23 @@ export function initializePopup(showPopup, hidePopup, cache, isProfileOwner) {
       }
       if (!validateForm(form)) return;
 
+      const token = localStorage.getItem("authToken");
+      const decoded = common.decodeJWT(token);
+      const urlParams = new URLSearchParams(window.location.search);
+      const userId = urlParams.get("id");
+      if (userId !== (decoded.sub || decoded.id)) {
+        common.showAlert(
+          "غير مسموح",
+          "لا يمكنك تعديل هذا الملف الشخصي",
+          "error"
+        );
+        return;
+      }
+
+      common.showAlert("جاري التحميل", "جاري حفظ الشهادة...", "info");
+      const imageFile = imageInput?.files[0];
+      const imageUrl = await uploadCertificateImage(imageFile, token, userId);
+
       const data = {
         name: form.querySelector("#certificateName").value.trim(),
         issuingAuthority: form.querySelector("#issuingAuthority").value.trim(),
@@ -268,12 +343,10 @@ export function initializePopup(showPopup, hidePopup, cache, isProfileOwner) {
         expiryDate: form.querySelector("#certEndDate").value || null,
         certificateLink:
           form.querySelector("#certificateLink").value.trim() || null,
-        image_url:
-          "https://i.pinimg.com/736x/18/c6/e0/18c6e05ccc51b8e8e8385d0b38105d83.jpg",
+        image_url: imageUrl || null,
       };
 
       try {
-        const token = localStorage.getItem("authToken");
         const method = form.dataset.id ? "PATCH" : "POST";
         const url = form.dataset.id
           ? `${API_BASE_URL}/certifications/${form.dataset.id}`
@@ -317,6 +390,18 @@ export function initializeEventListeners(cache, showPopup, isProfileOwner) {
         const id = e.target.dataset.id;
         try {
           const token = localStorage.getItem("authToken");
+          const decoded = common.decodeJWT(token);
+          const urlParams = new URLSearchParams(window.location.search);
+          const userId = urlParams.get("id");
+          if (userId !== (decoded.sub || decoded.id)) {
+            common.showAlert(
+              "غير مسموح",
+              "لا يمكنك تعديل هذا الملف الشخصي",
+              "error"
+            );
+            return;
+          }
+
           const response = await fetch(`${API_BASE_URL}/certifications/${id}`, {
             method: "GET",
             headers: {
@@ -329,21 +414,46 @@ export function initializeEventListeners(cache, showPopup, isProfileOwner) {
 
           const form = document.getElementById("certificateForm");
           if (form) form.dataset.id = id;
-          showPopup("editProfileSp_add", "certificateFormScreen", {
-            certificateName: data.name,
-            issuingAuthority: data.issuingAuthority || data.issuer,
-            certStartDate: data.issueDate,
-            certEndDate: data.expiryDate || "",
-            certificateLink: data.certificateLink || data.url,
+          const fields = [
+            { id: "certificateName", value: data.name || "" },
+            {
+              id: "issuingAuthority",
+              value: data.issuingAuthority || data.issuer || "",
+            },
+            { id: "certStartDate", value: data.issueDate || "" },
+            { id: "certEndDate", value: data.expiryDate || "" },
+            {
+              id: "certificateLink",
+              value: data.certificateLink || data.url || "",
+            },
+          ];
+          fields.forEach(({ id, value }) => {
+            const element = document.getElementById(id);
+            if (element) element.value = value;
+            else console.warn(`Form field ${id} not found`);
           });
+          showPopup("editProfileSp_add", "certificateFormScreen");
         } catch (error) {
           console.error("Fetch certificate error:", error.message);
           common.showAlert("خطأ", "فشل جلب بيانات الشهادة", "error");
         }
       } else if (e.target.classList.contains("delete-cert")) {
         if (confirm("هل أنت متأكد من حذف هذه الشهادة؟")) {
+          common.showAlert("جاري التحميل", "جاري حذف الشهادة...", "info");
           try {
             const token = localStorage.getItem("authToken");
+            const decoded = common.decodeJWT(token);
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get("id");
+            if (userId !== (decoded.sub || decoded.id)) {
+              common.showAlert(
+                "غير مسموح",
+                "لا يمكنك تعديل هذا الملف الشخصي",
+                "error"
+              );
+              return;
+            }
+
             const response = await fetch(
               `${API_BASE_URL}/certifications/${e.target.dataset.id}`,
               {

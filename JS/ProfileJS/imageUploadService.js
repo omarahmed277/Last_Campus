@@ -2,7 +2,9 @@ const API_BASE_URL = "https://tawgeeh-v1-production.up.railway.app";
 
 export function initializeImageUpload() {
   const uploadImage = document.getElementById("uploadImage");
-  const uploadImageBackground = document.getElementById("uploadImageBackground");
+  const uploadImageBackground = document.getElementById(
+    "uploadImageBackground"
+  );
   const profileImagePreview = document.getElementById("profileImagePreview");
   const editBtnMain = document.getElementById("editBtnMain");
   const removeProfileImage = document.getElementById("removeProfileImage");
@@ -37,9 +39,9 @@ export function initializeImageUpload() {
         const userId = urlParams.get("id");
 
         const response = await fetch(
-          `${API_BASE_URL}/users/${userId}/upload-image`,
+          `${API_BASE_URL}/users/profileImg/${userId}`,
           {
-            method: "POST",
+            method: "PATCH",
             headers: { Authorization: `Bearer ${token}` },
             body: formData,
           }
@@ -90,9 +92,9 @@ export function initializeImageUpload() {
         const userId = urlParams.get("id");
 
         const response = await fetch(
-          `${API_BASE_URL}/users/${userId}/upload-background-image`,
+          `${API_BASE_URL}/users/coverImg/${userId}`,
           {
-            method: "POST",
+            method: "PATCH",
             headers: { Authorization: `Bearer ${token}` },
             body: formData,
           }
@@ -166,31 +168,31 @@ export function initializeImageUpload() {
     editBtnMain.addEventListener("click", () => uploadImage.click());
   }
 
-  if (removeProfileImage) {
-    removeProfileImage.addEventListener("click", async () => {
-      try {
-        const token = localStorage.getItem("authToken");
-        const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get("id");
+  // if (removeProfileImage) {
+  //   removeProfileImage.addEventListener("click", async () => {
+  //     try {
+  //       const token = localStorage.getItem("authToken");
+  //       const urlParams = new URLSearchParams(window.location.search);
+  //       const userId = urlParams.get("id");
 
-        const response = await fetch(
-          `${API_BASE_URL}/users/${userId}/remove-image`,
-          {
-            method: "DELETE",
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        await window.auth.handleApiError(response);
-        profileImagePreview.src = "../mentor-images/personal_image.png";
-        document.querySelectorAll("#image1, #image2").forEach((img) => {
-          img.src = "../mentor-images/personal_image.png";
-        });
-        common.showAlert("تم", "تم إزالة الصورة بنجاح", "success");
-        await profileService.loadUserProfile();
-      } catch (error) {
-        console.error("Image removal error:", error.message);
-        common.showAlert("خطأ", "فشل إزالة الصورة", "error");
-      }
-    });
-  }
+  //       const response = await fetch(
+  //         `${API_BASE_URL}/users/${userId}/remove-image`,
+  //         {
+  //           method: "DELETE",
+  //           headers: { Authorization: `Bearer ${token}` },
+  //         }
+  //       );
+  //       await window.auth.handleApiError(response);
+  //       profileImagePreview.src = "../mentor-images/personal_image.png";
+  //       document.querySelectorAll("#image1, #image2").forEach((img) => {
+  //         img.src = "../mentor-images/personal_image.png";
+  //       });
+  //       common.showAlert("تم", "تم إزالة الصورة بنجاح", "success");
+  //       await profileService.loadUserProfile();
+  //     } catch (error) {
+  //       console.error("Image removal error:", error.message);
+  //       common.showAlert("خطأ", "فشل إزالة الصورة", "error");
+  //     }
+  //   });
+  // }
 }

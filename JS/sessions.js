@@ -381,7 +381,7 @@ document.addEventListener("DOMContentLoaded", function () {
           const response = await fetch(
             `https://tawgeeh-v1-production.up.railway.app/sessions/${session.id}/cancel`,
             {
-              method: "POST",
+              method: "PATCH",
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`,
@@ -428,7 +428,7 @@ document.addEventListener("DOMContentLoaded", function () {
           const response = await fetch(
             `https://tawgeeh-v1-production.up.railway.app/sessions/${session.id}/accept`,
             {
-              method: "POST",
+              method: "PATCH",
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`,

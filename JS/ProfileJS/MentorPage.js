@@ -1,2172 +1,87 @@
-// document.addEventListener("DOMContentLoaded", async function () {
-//   // Cache for storing fetched data to reduce API calls
-//   const dataCache = {
-//     experiences: null,
-//     certifications: null,
-//     education: null,
-//     ratings: null,
-//     achievements: null,
-//   };
+// main.js
+import {
+  createCertification,
+  getCertifications,
+  getCertification,
+  updateCertification,
+  deleteCertification,
+  createExperience,
+  getExperiences,
+  getExperience,
+  updateExperience,
+  deleteExperience,
+  createEducation,
+  getEducation,
+  getEducationItem,
+  updateEducation,
+  deleteEducation,
+  createRating,
+  getRatings,
+  getRating,
+  updateRating,
+  deleteRating,
+  likeRating,
+  createAchievement,
+  getAchievements,
+  getAchievement,
+  updateAchievement,
+  deleteAchievement,
+  createService,
+  getServices,
+  getService,
+  updateService,
+  deleteService,
+} from "./api.js";
+
+// Cache for storing fetched data to reduce API calls
+const dataCache = {
+  experiences: null,
+  certifications: null,
+  education: null,
+  ratings: null,
+  achievements: null,
+  services: null,
+};
+
+// Utility Functions
+const utils = {
+  sanitizeHTML(str) {
+    const div = document.createElement("div");
+    div.textContent = str || "";
+    return div.innerHTML;
+  },
+
+  checkInputDirection(input) {
+    const value = input.value || "";
+    input.style.direction = /[\u0600-\u06FF]/.test(value) ? "rtl" : "ltr";
+    input.style.textAlign = /[\u0600-\u06FF]/.test(value) ? "right" : "left";
+  },
+
+  formatDate(dateString) {
+    if (!dateString) return "الحالي";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("ar-EG", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  },
+};
+
+// Authentication Module
+const authModule = {
+  async initialize() {
+    const authSection = document.querySelector(".left_Sec");
+    if (!authSection) return;
+
+    let notificationsData = [];
+    try {
+      notificationsData = window.auth.fetchNotifications();
+      console.log("Notifications loaded:", notificationsData);
+    } catch (error) {
+      console.error("Failed to fetch notifications:", error.message);
+    }
 
-//   // Utility Functions
-//   // Sanitize user input to prevent XSS
-//   function sanitizeHTML(str) {
-//     const div = document.createElement("div");
-//     div.textContent = str || "";
-//     return div.innerHTML;
-//   }
-
-//   // Adjust input direction (RTL/LTR) based on Arabic or Latin text
-//   function checkInputDirection(input) {
-//     const value = input.value || "";
-//     input.style.direction = /[\u0600-\u06FF]/.test(value) ? "rtl" : "ltr";
-//     input.style.textAlign = /[\u0600-\u06FF]/.test(value) ? "right" : "left";
-//   }
-
-//   // Format date to Arabic locale or show "current" for ongoing
-//   function formatDate(dateString) {
-//     if (!dateString) return "الحالي";
-//     const date = new Date(dateString);
-//     return date.toLocaleDateString("ar-EG", {
-//       day: "numeric",
-//       month: "long",
-//       year: "numeric",
-//     });
-//   }
-
-//   // Initialize notifications
-//   let notificationsData = [];
-//   try {
-//     notificationsData = await window.auth.fetchNotifications();
-//     console.log("Notifications loaded:", notificationsData);
-//   } catch (error) {
-//     console.error("Failed to fetch notifications:", error.message);
-//   }
-
-//   // Initialize authentication UI and functionality
-//   const authSection = document.querySelector(".left_Sec");
-//   if (authSection) {
-//     common.initializeAuth(
-//       authSection,
-//       notificationsData,
-//       common.showLoginPopup,
-//       common.showSignupPopup,
-//       common.toggleNotifications,
-//       () => common.updateNotificationCount(notificationsData)
-//     );
-//     common.renderNotifications(notificationsData, () =>
-//       common.updateNotificationCount(notificationsData)
-//     );
-//   }
-
-//   // Initialize Flatpickr for date inputs with Arabic locale
-//   function initializeFlatpickr() {
-//     const dateInputs = document.querySelectorAll(".date-start, .date-end");
-//     dateInputs.forEach((input) => {
-//       flatpickr(input, {
-//         locale: "ar",
-//         dateFormat: "Y-m-d",
-//         allowInput: true,
-//         altInput: true,
-//         altFormat: "d/m/Y",
-//         onChange: function (selectedDates, dateStr) {
-//           const pairId = input.dataset.pair;
-//           if (pairId && input.classList.contains("date-start")) {
-//             const pairInput = document.getElementById(pairId);
-//             if (pairInput) pairInput._flatpickr.set("minDate", dateStr);
-//           }
-//         },
-//       });
-//     });
-//   }
-
-//   // Fetch and display user profile data
-//   async function loadUserProfile() {
-//     const profileContainer = document.querySelector("#profile-hero");
-//     if (!profileContainer) return;
-
-//     const token = localStorage.getItem("authToken");
-//     if (!token) {
-//       common.showLoginPopup();
-//       return;
-//     }
-
-//     try {
-//       const userData = await common.fetchUserData(token);
-//       const image1 = profileContainer.querySelector("#image1");
-//       const image2 = profileContainer.querySelector("#image2");
-//       const profileImagePreview = document.getElementById(
-//         "profileImagePreview"
-//       );
-//       const mentorName = profileContainer.querySelector(".mentor_name");
-//       const mentorJob = profileContainer.querySelector("#mentor_jop");
-//       const mentorBio = document.querySelector("#mentorBio");
-//       const linkedinLink = profileContainer.querySelector("#linkedinLink");
-//       const behanceLink = profileContainer.querySelector("#behanceLink");
-//       const githubLink = profileContainer.querySelector("#githubLink");
-//       const instagramLink = profileContainer.querySelector("#instagramLink");
-//       const totalMinutes = document.getElementById("totalMinutes");
-//       const totalSessions = document.getElementById("totalSessions");
-//       const backgroundImage = document.getElementById("background_image");
-
-//       if (image1)
-//         image1.src =
-//           userData.image_url || "../mentor-images/NoProfilePhoto.svg";
-//       if (image2)
-//         image2.src =
-//           userData.image_url || "../mentor-images/NoProfilePhoto.svg";
-//       if (profileImagePreview)
-//         profileImagePreview.src =
-//           userData.image_url || "../mentor-images/NoProfilePhoto.svg";
-//       if (mentorName) mentorName.textContent = userData.name || "المرشد الأول";
-//       if (mentorJob)
-//         mentorJob.textContent = userData.specialization || "غير محدد";
-//       if (mentorBio) mentorBio.textContent = userData.bio || "لا توجد نبذة";
-//       if (linkedinLink) linkedinLink.href = userData.linkedin || "#";
-//       if (behanceLink) behanceLink.href = userData.behance || "#";
-//       if (githubLink) githubLink.href = userData.github || "#";
-//       if (instagramLink) instagramLink.href = userData.instagram || "#";
-//       if (totalMinutes)
-//         totalMinutes.textContent = `${userData.totalMinutes || 0} دقيقة`;
-//       if (totalSessions)
-//         totalSessions.textContent = userData.totalSessions || 0;
-//       if (backgroundImage)
-//         backgroundImage.src =
-//           userData.background_image_url ||
-//           "../mentor-images/dummyBackground.png";
-
-//       // Populate edit forms with user data
-//       document.getElementById("mentor_name").value = userData.name || "";
-//       document.getElementById("about_me").value = userData.bio || "";
-//       document.getElementById("gender").value = userData.gender || "";
-//       document.getElementById("country").value = userData.country || "";
-//       document.getElementById("linkedin").value = userData.linkedin || "";
-//       document.getElementById("behance").value = userData.behance || "";
-//       document.getElementById("github").value = userData.github || "";
-//       document.getElementById("instagram").value = userData.instagram || "";
-//     } catch (error) {
-//       console.error("Failed to load user profile:", error.message);
-//     }
-//   }
-
-//   // Fetch and render section data (experiences, certifications, etc.)
-//   async function loadSectionData(section, containerId, renderFn, listId) {
-//     const container = document.querySelector(containerId);
-//     const listContainer = document.querySelector(listId);
-//     if (!container || !listContainer) return;
-
-//     try {
-//       const token = localStorage.getItem("authToken");
-//       if (!token) throw new Error("No auth token found");
-
-//       const decodedToken = common.decodeJWT(token);
-//       const userId = decodedToken?.sub || decodedToken?.id;
-//       if (!userId) throw new Error("Invalid token: User ID not found");
-
-//       // Use cached data if available
-//       if (dataCache[section] !== null) {
-//         const items = dataCache[section];
-//         container.innerHTML = "";
-//         listContainer.innerHTML = "";
-//         if (items.length === 0) {
-//           container.innerHTML = `<p class="no-data">لا توجد نتائج لعرضها</p>`;
-//           listContainer.innerHTML = `<p class="no-data">لا توجد نتائج لعرضها</p>`;
-//           return;
-//         }
-//         items.forEach((item, index) => {
-//           renderFn(container, item, false);
-//           renderFn(listContainer, item, true);
-//           if (
-//             section === "certifications" &&
-//             index >= 3 &&
-//             containerId === "#certificatesContainer"
-//           ) {
-//             const hiddenContainer =
-//               document.getElementById("hiddenCertificates") ||
-//               document.createElement("div");
-//             hiddenContainer.id = "hiddenCertificates";
-//             hiddenContainer.style.display = "none";
-//             container.appendChild(hiddenContainer);
-//             hiddenContainer.appendChild(container.lastChild);
-//           }
-//         });
-//         return;
-//       }
-
-//       // Construct API endpoint based on section
-//       const endpoint =
-//         section === "education"
-//           ? `/education/${userId}`
-//           : `/${section}/${userId}`;
-//       const response = await fetch(
-//         `https://tawgeeh-v1-production.up.railway.app${endpoint}`,
-//         {
-//           method: "GET",
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//             "Content-Type": "application/json",
-//           },
-//         }
-//       );
-//       await window.auth.handleApiError(response);
-//       const data = await response.json();
-//       const items = data[section] || data || [];
-
-//       // Cache the fetched data
-//       dataCache[section] = items;
-
-//       container.innerHTML = "";
-//       listContainer.innerHTML = "";
-//       if (items.length === 0) {
-//         container.innerHTML = `<p class="no-data">لا توجد نتائج لعرضها</p>`;
-//         listContainer.innerHTML = `<p class="no-data">لا توجد نتائج لعرضها</p>`;
-//         return;
-//       }
-
-//       items.forEach((item, index) => {
-//         renderFn(container, item, false);
-//         renderFn(listContainer, item, true);
-//         if (
-//           section === "certifications" &&
-//           index >= 3 &&
-//           containerId === "#certificatesContainer"
-//         ) {
-//           const hiddenContainer =
-//             document.getElementById("hiddenCertificates") ||
-//             document.createElement("div");
-//           hiddenContainer.id = "hiddenCertificates";
-//           hiddenContainer.style.display = "none";
-//           container.appendChild(hiddenContainer);
-//           hiddenContainer.appendChild(container.lastChild);
-//         }
-//       });
-
-//       // Handle "Show More" button for certifications
-//       if (section === "certifications") {
-//         const moreBtn = document.getElementById("moreBtnCert");
-//         if (moreBtn && items.length > 3) {
-//           moreBtn.style.display = "block";
-//           const btnText = moreBtn.querySelector(".btn-text");
-//           btnText.textContent = `عرض المزيد +${items.length - 3}`;
-//           let isExpanded = false;
-//           moreBtn.onclick = () => {
-//             isExpanded = !isExpanded;
-//             const hiddenContainer =
-//               document.getElementById("hiddenCertificates");
-//             hiddenContainer.style.display = isExpanded ? "block" : "none";
-//             btnText.textContent = isExpanded
-//               ? "عرض أقل"
-//               : `عرض المزيد +${items.length - 3}`;
-//             moreBtn.querySelector(".more-icon").style.transform = isExpanded
-//               ? "rotate(180deg)"
-//               : "rotate(0deg)";
-//           };
-//         } else if (moreBtn) {
-//           moreBtn.style.display = "none";
-//         }
-//       }
-//     } catch (error) {
-//       console.error(`Failed to load ${section}:`, error.message);
-//       container.innerHTML = `<p class="no-data">لا توجد نتائج لعرضها</p>`;
-//       listContainer.innerHTML = `<p class="no-data">لا توجد نتائج لعرضها</p>`;
-//     }
-//   }
-
-//   // Render functions for different sections
-//   function renderExperience(container, item, isList) {
-//     const div = document.createElement("div");
-//     div.className = "second_con";
-//     div.innerHTML = `
-//       <div class="veiw_con">
-//         <img src="../mentor-images/briefcase.svg" alt="أيقونة عمل">
-//         <div class="text">
-//           <h4>${sanitizeHTML(item.jobTitle || item.title || "غير محدد")}</h4>
-//           <p>${sanitizeHTML(item.companyName || item.company || "غير محدد")}</p>
-//           ${
-//             isList
-//               ? ""
-//               : `<p>${sanitizeHTML(item.description || "لا يوجد وصف")}</p>`
-//           }
-//         </div>
-//       </div>
-//       <div class="${isList ? "date2_con" : "date2"}">
-//         <p>${formatDate(item.startDate)} - ${
-//       item.endDate ? formatDate(item.endDate) : "الحالي"
-//     }</p>
-//         ${
-//           isList
-//             ? `
-//               <img src="../mentor-images/edit-2.svg" alt="تعديل" class="edit-exp" data-id="${item.id}">
-//               <img src="../mentor-images/trash.svg" alt="حذف" class="delete-exp" data-id="${item.id}">
-//             `
-//             : ""
-//         }
-//       </div>
-//     `;
-//     container.appendChild(div);
-//   }
-
-//   function renderCertificate(container, item, isList) {
-//     const div = document.createElement("div");
-//     div.className = "second_con";
-//     div.innerHTML = `
-//       <div class="veiw_con">
-//         <img src="${sanitizeHTML(
-//           item.image_url || "../mentor-images/default-cert.jpg"
-//         )}" width="100px" alt="صورة الشهادة">
-//         <div class="text">
-//           <h4>${sanitizeHTML(item.name || "غير محدد")}</h4>
-//           <p>${sanitizeHTML(
-//             item.issuingAuthority || item.issuer || "غير محدد"
-//           )}</p>
-//           <p>${formatDate(item.issueDate)}</p>
-//         </div>
-//       </div>
-//       <div class="education">
-//         <div class="edu_con">
-//           ${
-//             item.certificateLink || item.url
-//               ? `<a href="${sanitizeHTML(
-//                   item.certificateLink || item.url
-//                 )}" target="_blank">عرض الشهادة</a>`
-//               : "<p>عرض الشهادة</p>"
-//           }
-//           <img src="../mentor-images/export.svg" alt="عرض">
-//         </div>
-//         ${
-//           isList
-//             ? `
-//               <img src="../mentor-images/edit-2.svg" alt="تعديل" class="edit-cert" data-id="${item.id}">
-//               <img src="../mentor-images/trash.svg" alt="حذف" class="delete-cert" data-id="${item.id}">
-//             `
-//             : ""
-//         }
-//       </div>
-//     `;
-//     container.appendChild(div);
-//   }
-
-//   function renderEducation(container, item, isList) {
-//     const div = document.createElement("div");
-//     div.className = "second_con";
-//     div.innerHTML = `
-//       <div class="veiw_con">
-//         <img src="../mentor-images/education.svg" alt="أيقونة تعليم">
-//         <div class="text">
-//           <h4>${sanitizeHTML(item.degree || "غير محدد")}</h4>
-//           <p>${sanitizeHTML(item.institution || "غير محدد")}</p>
-//         </div>
-//       </div>
-//       <div class="${isList ? "date2_con" : "date2"}">
-//         <p>${formatDate(item.startDate)} - ${formatDate(item.endDate)}</p>
-//         ${
-//           isList
-//             ? `
-//               <img src="../mentor-images/edit-2.svg" alt="تعديل" class="edit-edu" data-id="${item.id}">
-//               <img src="../mentor-images/trash.svg" alt="حذف" class="delete-edu" data-id="${item.id}">
-//             `
-//             : ""
-//         }
-//       </div>
-//     `;
-//     container.appendChild(div);
-//   }
-
-//   function renderRating(container, item, isList) {
-//     const div = document.createElement("div");
-//     div.className = "session1 sessionsFormat";
-//     const starsHtml = generateStars(item.rating);
-//     const formattedDate = new Date(
-//       item.createdAt || item.date
-//     ).toLocaleDateString("ar-EG", {
-//       day: "numeric",
-//       month: "short",
-//       year: "numeric",
-//     });
-//     div.innerHTML = `
-//       <div class="session_con">
-//         <img class="menteePhoto" src="${sanitizeHTML(
-//           item.menteeImage || "../mentor-images/default-user.jpg"
-//         )}" alt="مجهول" />
-//         <div class="time timeR">
-//           <h4>${sanitizeHTML(
-//             item.reviewerName || item.menteeName || "مجهول"
-//           )}</h4>
-//           <p>${sanitizeHTML(item.comment || "لا يوجد تعليق")}</p>
-//           <div class="stars_con">
-//             <p>${item.rating.toFixed(1)}</p>
-//             <div class="stars">${starsHtml}</div>
-//           </div>
-//         </div>
-//         <div class="rette-con">
-//           <div class="ratte">
-//             <span><p>${(Math.random() * 10).toFixed(
-//               1
-//             )}</p><img src="../mentor-images/hand-thumb-up.svg" alt="Likes" /></span>
-//             <span><p>رد</p><img src="../mentor-images/chat-bubble-oval-left-ellipsis.svg" alt="Reply" /></span>
-//           </div>
-//           <div class="date dateR"><p>${formattedDate}</p></div>
-//         </div>
-//       </div>
-//       ${
-//         isList
-//           ? `
-//             <div class="edit-actions">
-//               <button class="edit-btn" data-id="${item.id}">تعديل</button>
-//               <button class="delete-btn" data-id="${item.id}">حذف</button>
-//               <button class="like-btn" data-id="${item.id}">${
-//               item.liked ? "إلغاء الإعجاب" : "إعجاب"
-//             }</button>
-//             </div>
-//           `
-//           : ""
-//       }
-//     `;
-//     container.appendChild(div);
-//   }
-
-//   function generateStars(rating) {
-//     const filledStars = Math.floor(rating);
-//     const halfStar = rating % 1 >= 0.5 ? 1 : 0;
-//     const emptyStars = 5 - filledStars - halfStar;
-//     return `
-//       ${'<img src="../mentor-images/ic_baseline-star.svg" alt="Filled Star" />'.repeat(
-//         filledStars
-//       )}
-//       ${
-//         halfStar
-//           ? '<img src="../mentor-images/IcBaselineStarHalf.svg" alt="Half Star" />'
-//           : ""
-//       }
-//       ${'<img src="../mentor-images/ic_baseline-star (1).svg" alt="Empty Star" />'.repeat(
-//         emptyStars
-//       )}
-//     `;
-//   }
-
-//   function renderAchievement(container, item, isList) {
-//     const div = document.createElement("div");
-//     div.className = "session1 sessionsFormat";
-//     const progress = item.unlocked ? 100 : item.progress || 0;
-//     div.innerHTML = `
-//       <div class="session_con">
-//         <img class="AchievementPhoto" src="${sanitizeHTML(
-//           item.icon || "../mentor-images/default-achievement.svg"
-//         )}" alt="إنجاز" />
-//         <div class="time">
-//           <h4>${sanitizeHTML(item.title || "بدون عنوان")}</h4>
-//           <p>${sanitizeHTML(item.description || "بدون وصف")}</p>
-//         </div>
-//       </div>
-//       ${
-//         item.unlocked
-//           ? `<div class="date"><p>${formatDate(
-//               item.achievedAt || item.date
-//             )}</p></div>`
-//           : `<div class="progress"><progress value="${progress}" max="100"></progress><span>${progress}%</span></div>`
-//       }
-//       ${
-//         isList
-//           ? `
-//             <div class="edit-actions">
-//               <button class="edit-btn" data-id="${item.id}">تعديل</button>
-//               <button class="delete-btn" data-id="${item.id}">حذف</button>
-//             </div>
-//           `
-//           : ""
-//       }
-//     `;
-//     container.appendChild(div);
-//   }
-
-// // Show popup with form pre-filled for editing
-//   function showPopup(popupId, screenId, data = {}) {
-//     const popupContainer = document.getElementById(popupId);
-//     const popupOverlay = popupContainer?.parentElement;
-//     if (!popupContainer || !popupOverlay) {
-//       console.error(`Popup container or overlay not found for ID: ${popupId}`);
-//       return;
-//     }
-
-//     // Close other open popups to prevent overlap
-//     document.querySelectorAll(".overlay.show").forEach((modal) => {
-//       if (modal !== popupOverlay) hidePopup(modal.querySelector(".popup-container")?.id);
-//     });
-
-//     // Apply smooth transition for popup display
-//     popupOverlay.classList.add("show");
-//     popupOverlay.style.display = "block";
-//     popupContainer.classList.add("show");
-//     popupContainer.style.display = "block";
-
-//     // Show the specified screen within the popup
-//     const screens = popupContainer.querySelectorAll(".popup-screen");
-//     if (screens.length === 0) {
-//       console.warn(`No popup screens found in container: ${popupId}`);
-//     }
-//     screens.forEach((screen) => {
-//       screen.style.display = screen.id === screenId ? "block" : "none";
-//     });
-
-//     // Populate and reset form for editing
-//     const form = popupContainer.querySelector("form");
-//     if (form) {
-//       form.reset();
-//       delete form.dataset.id;
-//       Object.entries(data).forEach(([key, value]) => {
-//         const input = form.querySelector(`#${key}`);
-//         if (input) {
-//           if (input.type === "checkbox") {
-//             input.checked = !!value;
-//           } else {
-//             input.value = value || "";
-//           }
-//         }
-//       });
-//       if (data.id) form.dataset.id = data.id;
-//       if (data.currentlyWorking !== undefined) {
-//         const currentlyWorking = form.querySelector("#currentlyWorking");
-//         if (currentlyWorking) currentlyWorking.checked = data.currentlyWorking;
-//       }
-//       form.querySelectorAll(".error").forEach((span) => (span.textContent = ""));
-//       form.querySelectorAll("input, textarea, select").forEach((input) => {
-//         checkInputDirection(input);
-//         // Add input direction listener (not once, to allow multiple edits)
-//         input.addEventListener("input", () => checkInputDirection(input));
-//       });
-//     }
-
-//     // Hide authentication-related popups (with fallback)
-//     const authPopups = [
-//       "hideSignupPopup",
-//       "hideLoginPopup",
-//       "hideMentorApplicationPopup",
-//       "hidePasswordResetPopup",
-//     ];
-//     authPopups.forEach((fn) => {
-//       if (typeof common[fn] === "function") {
-//         common[fn]();
-//       } else {
-//         console.warn(`Common function ${fn} is not defined`);
-//       }
-//     });
-
-//     initializeFlatpickr();
-//   }
-
-//   // Hide popup with smooth transition
-//   function hidePopup(popupId) {
-//     const popupContainer = document.getElementById(popupId);
-//     const popupOverlay = popupContainer?.parentElement;
-//     if (!popupContainer || !popupOverlay) {
-//       console.error(`Popup container or overlay not found for ID: ${popupId}`);
-//       return;
-//     }
-
-//     // Skip if already hidden
-//     if (!popupOverlay.classList.contains("show")) return;
-
-//     // Apply smooth transition for hiding
-//     popupContainer.classList.remove("show");
-//     popupOverlay.classList.remove("show");
-
-//     // Delay display none to allow transition (match CSS transition duration)
-//     setTimeout(() => {
-//       popupContainer.style.display = "none";
-//       popupOverlay.style.display = "none";
-//     }, 300);
-
-//     // Reset form and clean up
-//     const form = popupContainer.querySelector("form");
-//     if (form) {
-//       form.reset();
-//       delete form.dataset.id;
-//       form.querySelectorAll(".error").forEach((span) => (span.textContent = ""));
-//       form.querySelectorAll("input, textarea, select").forEach((input) => {
-//         // Remove all input event listeners to prevent memory leaks
-//         const clone = input.cloneNode(true);
-//         input.parentNode.replaceChild(clone, input);
-//       });
-//     }
-//   }
-
-//   // Close a modal (distinct from popup, no overlay assumed)
-//   function closeModal(modalId) {
-//     const modal = document.getElementById(modalId);
-//     if (!modal) {
-//       console.error(`Modal with ID ${modalId} not found`);
-//       return;
-//     }
-
-//     // Hide immediately (no transition for modals)
-//     modal.style.display = "none";
-
-//     // Reset form and clear errors
-//     const form = modal.querySelector("form");
-//     if (form) {
-//       form.reset();
-//       delete form.dataset.id; // Use dataset.id for consistency
-//       form.querySelectorAll(".error").forEach((span) => (span.textContent = ""));
-//       form.querySelectorAll("input, textarea, select").forEach((input) => {
-//         // Remove all input event listeners
-//         const clone = input.cloneNode(true);
-//         input.parentNode.replaceChild(clone, input);
-//       });
-//     }
-//   }
-//   // Validate form inputs based on type
-//   function validateForm(form, type) {
-//     let isValid = true;
-//     form.querySelectorAll(".error").forEach((span) => (span.textContent = ""));
-
-//     if (type === "professional") {
-//       const mentorName = form.querySelector("#mentor_name")?.value.trim();
-//       const gender = form.querySelector("#gender")?.value;
-//       const country = form.querySelector("#country")?.value;
-//       const aboutMe = form.querySelector("#about_me")?.value.trim();
-
-//       if (!mentorName) {
-//         form.querySelector("#mentor_nameError").textContent =
-//           "يرجى إدخال الاسم الكامل";
-//         isValid = false;
-//       }
-//       if (!gender) {
-//         form.querySelector("#genderError").textContent = "يرجى اختيار الجنس";
-//         isValid = false;
-//       }
-//       if (!country) {
-//         form.querySelector("#countryError").textContent = "يرجى اختيار البلد";
-//         isValid = false;
-//       }
-//       if (aboutMe.length < 20) {
-//         form.querySelector("#about_meError").textContent =
-//           "النبذة يجب أن تكون 20 حرفًا على الأقل";
-//         isValid = false;
-//       }
-//     } else if (type === "social") {
-//       const linkedin = form.querySelector("#linkedin")?.value.trim();
-//       const behance = form.querySelector("#behance")?.value.trim();
-//       const github = form.querySelector("#github")?.value.trim();
-//       const instagram = form.querySelector("#instagram")?.value.trim();
-
-//       if (linkedin && !linkedin.match(/https?:\/\/(www\.)?linkedin\.com\/.+/)) {
-//         form.querySelector("#linkedinError").textContent =
-//           "يرجى إدخال رابط LinkedIn صالح";
-//         isValid = false;
-//       }
-//       if (
-//         behance &&
-//         !behance.match(/https?:\/\/(www\.)?(behance\.net|dribbble\.com)\/.+/)
-//       ) {
-//         form.querySelector("#behanceError").textContent =
-//           "يرجى إدخال رابط Behance/Dribbble صالح";
-//         isValid = false;
-//       }
-//       if (github && !github.match(/https?:\/\/(www\.)?github\.com\/.+/)) {
-//         form.querySelector("#githubError").textContent =
-//           "يرجى إدخال رابط GitHub صالح";
-//         isValid = false;
-//       }
-//       if (
-//         instagram &&
-//         !instagram.match(/https?:\/\/(www\.)?instagram\.com\/.+/)
-//       ) {
-//         form.querySelector("#instagramError").textContent =
-//           "يرجى إدخال رابط Instagram صالح";
-//         isValid = false;
-//       }
-//     } else if (type === "experience") {
-//       const title = form.querySelector("#title")?.value.trim();
-//       const company = form.querySelector("#companyName")?.value.trim();
-//       const startDate = form.querySelector("#expStartDate")?.value;
-//       const description = form.querySelector("#expDescription")?.value.trim();
-
-//       if (!title) {
-//         form.querySelector("#titleError").textContent =
-//           "يرجى إدخال المسمى الوظيفي";
-//         isValid = false;
-//       }
-//       if (!company) {
-//         form.querySelector("#companyNameError").textContent =
-//           "يرجى إدخال اسم الشركة";
-//         isValid = false;
-//       }
-//       if (!startDate) {
-//         form.querySelector("#expStartDateError").textContent =
-//           "يرجى إدخال تاريخ البدء";
-//         isValid = false;
-//       }
-//       if (!description) {
-//         form.querySelector("#expDescriptionError").textContent =
-//           "يرجى إدخال الوصف";
-//         isValid = false;
-//       }
-//     } else if (type === "certificate") {
-//       const name = form.querySelector("#certificateName")?.value.trim();
-//       const issuer = form.querySelector("#issuingAuthority")?.value.trim();
-//       const issueDate = form.querySelector("#certStartDate")?.value;
-
-//       if (!name) {
-//         form.querySelector("#certificateNameError").textContent =
-//           "يرجى إدخال اسم الشهادة";
-//         isValid = false;
-//       }
-//       if (!issuer) {
-//         form.querySelector("#issuingAuthorityError").textContent =
-//           "يرجى إدخال الجهة المصدرة";
-//         isValid = false;
-//       }
-//       if (!issueDate) {
-//         form.querySelector("#certStartDateError").textContent =
-//           "يرجى إدخال تاريخ الإصدار";
-//         isValid = false;
-//       }
-//     } else if (type === "education") {
-//       const degree = form.querySelector("#degree")?.value.trim();
-//       const institution = form.querySelector("#institution")?.value.trim();
-//       const field = form.querySelector("#field")?.value.trim();
-//       const startDate = form.querySelector("#eduStartDate")?.value;
-
-//       if (!degree) {
-//         form.querySelector("#degreeError").textContent =
-//           "يرجى إدخال الدرجة العلمية";
-//         isValid = false;
-//       }
-//       if (!institution) {
-//         form.querySelector("#institutionError").textContent =
-//           "يرجى إدخال المؤسسة";
-//         isValid = false;
-//       }
-//       if (!field) {
-//         form.querySelector("#fieldError").textContent = "يرجى إدخال التخصص";
-//         isValid = false;
-//       }
-//       if (!startDate) {
-//         form.querySelector("#eduStartDateError").textContent =
-//           "يرجى إدخال تاريخ البدء";
-//         isValid = false;
-//       }
-//     } else if (type === "rating") {
-//       const reviewerName = form.querySelector("#reviewerName")?.value.trim();
-//       const comment = form.querySelector("#comment")?.value.trim();
-//       const rating = form.querySelector("#ratingScore")?.value;
-
-//       if (!reviewerName) {
-//         form.querySelector("#reviewerNameError").textContent =
-//           "يرجى إدخال اسم المراجع";
-//         isValid = false;
-//       }
-//       if (!comment) {
-//         form.querySelector("#commentError").textContent = "يرجى إدخال التعليق";
-//         isValid = false;
-//       }
-//       if (!rating || rating < 1 || rating > 5) {
-//         form.querySelector("#ratingScoreError").textContent =
-//           "يرجى إدخال تقييم بين 1 و5";
-//         isValid = false;
-//       }
-//     } else if (type === "achievement") {
-//       const title = form.querySelector("#achievementTitle")?.value.trim();
-//       const description = form
-//         .querySelector("#achievementDescription")
-//         ?.value.trim();
-//       const achievedAt = form.querySelector("#achievedAt")?.value;
-
-//       if (!title) {
-//         form.querySelector("#achievementTitleError").textContent =
-//           "يرجى إدخال عنوان الإنجاز";
-//         isValid = false;
-//       }
-//       if (!description) {
-//         form.querySelector("#achievementDescriptionError").textContent =
-//           "يرجى إدخال الوصف";
-//         isValid = false;
-//       }
-//       if (!achievedAt) {
-//         form.querySelector("#achievedAtError").textContent =
-//           "يرجى إدخال تاريخ الإنجاز";
-//         isValid = false;
-//       }
-//     }
-
-//     if (!isValid) {
-//       const firstError = form.querySelector(".error:not(:empty)");
-//       if (firstError) {
-//         firstError.scrollIntoView({ behavior: "smooth", block: "center" });
-//         firstError.parentElement.querySelector("input,textarea")?.focus();
-//       }
-//     }
-
-//     return isValid;
-//   }
-
-//   // Initialize Profile Popup and Form Handlers
-//   function initializeProfilePopup() {
-//     // Setup popup elements
-//     const popup = document.getElementById("editProfileInfo");
-//     const closeBtn = document.getElementById("closeBtn1");
-//     const overlay = popup?.parentElement;
-
-//     // Handle close button click
-//     if (closeBtn)
-//       closeBtn.addEventListener("click", () => hidePopup("editProfileInfo"));
-//     // Handle overlay click to close
-//     if (overlay) {
-//       overlay.addEventListener("click", (e) => {
-//         if (e.target === overlay) hidePopup("editProfileInfo");
-//       });
-//     }
-
-//     // Define tabs and their associated sections
-//     const tabs = {
-//       BasicInfoTab: ["professionalForm", "socialForm"],
-//       ExperienceTab: ["experienceList"],
-//       CertificatesTab: ["certificateList"],
-//       EducationTab: ["educationList"],
-//       RatingsTab: ["ratingList"],
-//       AchievementsTab: ["achievementList"],
-//     };
-
-//     // Setup tab switching
-//     Object.entries(tabs).forEach(([tabId, sections]) => {
-//       const tab = document.getElementById(tabId);
-//       if (tab) {
-//         tab.addEventListener("click", async () => {
-//           // Hide all tabs and sections
-//           Object.keys(tabs).forEach((t) => {
-//             document.getElementById(t).classList.remove("checked");
-//             tabs[t].forEach((id) => {
-//               const el = document.getElementById(id);
-//               if (el) el.style.display = "none";
-//             });
-//           });
-//           // Show selected tab and sections
-//           tab.classList.add("checked");
-//           sections.forEach((id) => {
-//             const el = document.getElementById(id);
-//             if (el) el.style.display = "block";
-//           });
-
-//           // Manage add buttons visibility
-//           const addButtons = {
-//             ExperienceTab: "moreExBtn_EX",
-//             CertificatesTab: "moreExBtn_SP",
-//             EducationTab: "moreExBtn_Edu",
-//             RatingsTab: "moreExBtn_Rating",
-//             AchievementsTab: "moreExBtn_Achievement",
-//           };
-//           Object.values(addButtons).forEach((btnId) => {
-//             const btn = document.getElementById(btnId);
-//             if (btn) btn.style.display = "none";
-//           });
-//           if (addButtons[tabId]) {
-//             document.getElementById(addButtons[tabId]).style.display = "block";
-//           }
-
-//           // Load data for list tabs
-//           const sectionMap = {
-//             ExperienceTab: "experiences",
-//             CertificatesTab: "certifications",
-//             EducationTab: "education",
-//             RatingsTab: "ratings",
-//             AchievementsTab: "achievements",
-//           };
-//           if (sectionMap[tabId]) {
-//             await loadSectionData(
-//               sectionMap[tabId],
-//               `#${sectionMap[tabId]}Container`,
-//               sectionMap[tabId] === "ratings"
-//                 ? renderRating
-//                 : sectionMap[tabId] === "achievements"
-//                 ? renderAchievement
-//                 : sectionMap[tabId] === "experiences"
-//                 ? renderExperience
-//                 : sectionMap[tabId] === "certifications"
-//                 ? renderCertificate
-//                 : renderEducation,
-//               `#${sectionMap[tabId]}List`
-//             );
-//           }
-//         });
-//       }
-//     });
-
-//     // Handle Professional Form Submission
-//     const professionalForm = document.getElementById("professionalForm");
-//     if (professionalForm) {
-//       professionalForm.addEventListener("submit", async (e) => {
-//         e.preventDefault();
-
-//         // Validate form inputs
-//         if (!validateForm(professionalForm, "professional")) return;
-
-//         // Prepare data for API
-//         const data = {
-//           name: professionalForm.querySelector("#mentor_name").value.trim(),
-//           gender: professionalForm.querySelector("#gender").value,
-//           country: professionalForm.querySelector("#country").value,
-//           bio: professionalForm.querySelector("#about_me").value.trim(),
-//         };
-
-//         try {
-//           const token = localStorage.getItem("authToken");
-//           const decodedToken = common.decodeJWT(token);
-//           const userId = decodedToken?.sub || decodedToken?.id;
-
-//           // Update user profile via API
-//           const response = await fetch(
-//             `https://tawgeeh-v1-production.up.railway.app/users/${userId}`,
-//             {
-//               method: "PATCH",
-//               headers: {
-//                 Authorization: `Bearer ${token}`,
-//                 "Content-Type": "application/json",
-//               },
-//               body: JSON.stringify(data),
-//             }
-//           );
-//           await window.auth.handleApiError(response);
-
-//           // Show success message and refresh profile
-//           common.showAlert(
-//             "تم",
-//             "تم تحديث المعلومات الأساسية بنجاح",
-//             "success"
-//           );
-//           hidePopup("editProfileInfo");
-//           await loadUserProfile();
-//         } catch (error) {
-//           console.error("Professional form submission error:", error.message);
-//         }
-//       });
-//     }
-
-//     // Handle Social Form Submission
-//     const socialForm = document.getElementById("socialForm");
-//     if (socialForm) {
-//       socialForm.addEventListener("submit", async (e) => {
-//         e.preventDefault();
-
-//         // Validate social media links
-//         if (!validateForm(socialForm, "social")) return;
-
-//         // Prepare data for API
-//         const data = {
-//           linkedin: socialForm.querySelector("#linkedin").value.trim() || null,
-//           behance: socialForm.querySelector("#behance").value.trim() || null,
-//           github: socialForm.querySelector("#github").value.trim() || null,
-//           instagram:
-//             socialForm.querySelector("#instagram").value.trim() || null,
-//         };
-
-//         try {
-//           const token = localStorage.getItem("authToken");
-//           const decodedToken = common.decodeJWT(token);
-//           const userId = decodedToken?.sub || decodedToken?.id;
-
-//           // Update social links via API
-//           const response = await fetch(
-//             `https://tawgeeh-v1-production.up.railway.app/users/${userId}`,
-//             {
-//               method: "PATCH",
-//               headers: {
-//                 Authorization: `Bearer ${token}`,
-//                 "Content-Type": "application/json",
-//               },
-//               body: JSON.stringify(data),
-//             }
-//           );
-//           await window.auth.handleApiError(response);
-
-//           // Show success message and refresh profile
-//           common.showAlert(
-//             "تم",
-//             "تم تحديث الروابط الاجتماعية بنجاح",
-//             "success"
-//           );
-//           hidePopup("editProfileInfo");
-//           await loadUserProfile();
-//         } catch (error) {
-//           console.error("Social form submission error:", error.message);
-//         }
-//       });
-//     }
-//   }
-
-//   // Initialize Experience Popup and Form Handler
-//   function initializeExperiencePopup() {
-//     // Setup popup elements
-//     const popup = document.getElementById("editProfileEx_edit2");
-//     const editListPopup = document.getElementById("editProfileEx_edit");
-//     const closeBtn = document.getElementById("closeBtn4");
-//     const closeListBtn = document.getElementById("closeBtn3");
-//     const overlay = popup?.parentElement;
-//     const listOverlay = editListPopup?.parentElement;
-
-//     // Handle close buttons and overlay clicks
-//     if (closeBtn)
-//       closeBtn.addEventListener("click", () =>
-//         hidePopup("editProfileEx_edit2")
-//       );
-//     if (overlay) {
-//       overlay.addEventListener("click", (e) => {
-//         if (e.target === overlay) hidePopup("editProfileEx_edit2");
-//       });
-//     }
-//     if (closeListBtn)
-//       closeListBtn.addEventListener("click", () =>
-//         hidePopup("editProfileEx_edit")
-//       );
-//     if (listOverlay) {
-//       listOverlay.addEventListener("click", (e) => {
-//         if (e.target === listOverlay) hidePopup("editProfileEx_edit");
-//       });
-//     }
-
-//     // Handle Experience Form Submission
-//     const form = document.getElementById("experienceForm");
-//     if (form) {
-//       // Toggle end date based on "currently working" checkbox
-//       const currentlyWorking = form.querySelector("#currentlyWorking");
-//       const endDateInput = form.querySelector("#expEndDate");
-//       if (currentlyWorking) {
-//         currentlyWorking.addEventListener("change", (e) => {
-//           endDateInput.disabled = e.target.checked;
-//           if (e.target.checked) endDateInput.value = "";
-//         });
-//       }
-
-//       form.addEventListener("submit", async (e) => {
-//         e.preventDefault();
-
-//         // Validate form inputs
-//         if (!validateForm(form, "experience")) return;
-
-//         // Prepare data for API
-//         const data = {
-//           jobTitle: form.querySelector("#title").value.trim(),
-//           companyName: form.querySelector("#companyName").value.trim(),
-//           startDate: form.querySelector("#expStartDate").value,
-//           endDate: currentlyWorking.checked
-//             ? null
-//             : form.querySelector("#expEndDate").value || null,
-//           description: form.querySelector("#expDescription").value.trim(),
-//         };
-
-//         try {
-//           const token = localStorage.getItem("authToken");
-//           // Determine if creating new or updating existing experience
-//           const method = form.dataset.id ? "PATCH" : "POST";
-//           const url = form.dataset.id
-//             ? `https://tawgeeh-v1-production.up.railway.app/experiences/${form.dataset.id}`
-//             : `https://tawgeeh-v1-production.up.railway.app/experiences`;
-
-//           // Submit experience data to API
-//           const response = await fetch(url, {
-//             method,
-//             headers: {
-//               Authorization: `Bearer ${token}`,
-//               "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify(data),
-//           });
-//           await window.auth.handleApiError(response);
-
-//           // Show success message and refresh experiences
-//           common.showAlert("تم", "تم حفظ الخبرة بنجاح", "success");
-//           dataCache.experiences = null; // Clear cache
-//           hidePopup("editProfileEx_edit2");
-//           await loadSectionData(
-//             "experiences",
-//             "#experiencesContainer",
-//             renderExperience,
-//             "#experienceList"
-//           );
-//         } catch (error) {
-//           console.error("Experience form submission error:", error.message);
-//         }
-//       });
-//     }
-//   }
-
-//   // Initialize Certificate Popup and Form Handler
-//   function initializeCertificatePopup() {
-//     // Setup popup elements
-//     const popup = document.getElementById("editProfileSp_add");
-//     const editListPopup = document.getElementById("editProfileSp_edit");
-//     const closeBtn = document.getElementById("closeBtn5");
-//     const closeListBtn = document.getElementById("closeBtn9");
-//     const overlay = popup?.parentElement;
-//     const listOverlay = editListPopup?.parentElement;
-
-//     // Handle close buttons and overlay clicks
-//     if (closeBtn)
-//       closeBtn.addEventListener("click", () => hidePopup("editProfileSp_add"));
-//     if (overlay) {
-//       overlay.addEventListener("click", (e) => {
-//         if (e.target === overlay) hidePopup("editProfileSp_add");
-//       });
-//     }
-//     if (closeListBtn)
-//       closeListBtn.addEventListener("click", () =>
-//         hidePopup("editProfileSp_edit")
-//       );
-//     if (listOverlay) {
-//       listOverlay.addEventListener("click", (e) => {
-//         if (e.target === listOverlay) hidePopup("editProfileSp_edit");
-//       });
-//     }
-
-//     // Handle Certificate Form Submission
-//     const form = document.getElementById("certificateForm");
-//     if (form) {
-//       form.addEventListener("submit", async (e) => {
-//         e.preventDefault();
-
-//         // Validate form inputs
-//         if (!validateForm(form, "certificate")) return;
-
-//         // Prepare data for API
-//         const data = {
-//           name: form.querySelector("#certificateName").value.trim(),
-//           issuingAuthority: form
-//             .querySelector("#issuingAuthority")
-//             .value.trim(),
-//           issueDate: form.querySelector("#certStartDate").value,
-//           expiryDate: form.querySelector("#certEndDate").value || null,
-//           certificateLink:
-//             form.querySelector("#certificateLink").value.trim() || null,
-//           image_url:
-//             "https://i.pinimg.com/736x/18/c6/e0/18c6e05ccc51b8e8e8385d0b38105d83.jpg",
-//         };
-
-//         try {
-//           const token = localStorage.getItem("authToken");
-//           // Determine if creating new or updating existing certificate
-//           const method = form.dataset.id ? "PATCH" : "POST";
-//           const url = form.dataset.id
-//             ? `https://tawgeeh-v1-production.up.railway.app/certifications/${form.dataset.id}`
-//             : `https://tawgeeh-v1-production.up.railway.app/certifications`;
-
-//           // Submit certificate data to API
-//           const response = await fetch(url, {
-//             method,
-//             headers: {
-//               Authorization: `Bearer ${token}`,
-//               "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify(data),
-//           });
-//           await window.auth.handleApiError(response);
-
-//           // Show success message and refresh certificates
-//           common.showAlert("تم", "تم حفظ الشهادة بنجاح", "success");
-//           dataCache.certifications = null; // Clear cache
-//           hidePopup("editProfileSp_add");
-//           await loadSectionData(
-//             "certifications",
-//             "#certificatesContainer",
-//             renderCertificate,
-//             "#certificateList"
-//           );
-//         } catch (error) {
-//           console.error("Certificate form submission error:", error.message);
-//         }
-//       });
-//     }
-//   }
-
-//   // Initialize Education Popup and Form Handler
-//   function initializeEducationPopup() {
-//     // Setup popup elements
-//     const popup = document.getElementById("editProfileEdu_add");
-//     const editListPopup = document.getElementById("editProfileEdu_edit");
-//     const closeBtn = document.getElementById("closeBtn6");
-//     const closeListBtn = document.getElementById("closeBtn7");
-//     const overlay = popup?.parentElement;
-//     const listOverlay = editListPopup?.parentElement;
-
-//     // Handle close buttons and overlay clicks
-//     if (closeBtn)
-//       closeBtn.addEventListener("click", () => hidePopup("editProfileEdu_add"));
-//     if (overlay) {
-//       overlay.addEventListener("click", (e) => {
-//         if (e.target === overlay) hidePopup("editProfileEdu_add");
-//       });
-//     }
-//     if (closeListBtn)
-//       closeListBtn.addEventListener("click", () =>
-//         hidePopup("editProfileEdu_edit")
-//       );
-//     if (listOverlay) {
-//       listOverlay.addEventListener("click", (e) => {
-//         if (e.target === listOverlay) hidePopup("editProfileEdu_edit");
-//       });
-//     }
-
-//     // Handle Education Form Submission
-//     const form = document.getElementById("educationForm");
-//     if (form) {
-//       form.addEventListener("submit", async (e) => {
-//         e.preventDefault();
-
-//         // Validate form inputs
-//         if (!validateForm(form, "education")) return;
-
-//         // Prepare data for API
-//         const data = {
-//           degree: form.querySelector("#degree").value.trim(),
-//           institution: form.querySelector("#institution").value.trim(),
-//           field: form.querySelector("#field").value.trim(),
-//           startDate: form.querySelector("#eduStartDate").value,
-//           endDate: form.querySelector("#eduEndDate").value || null,
-//         };
-
-//         try {
-//           const token = localStorage.getItem("authToken");
-//           // Determine if creating new or updating existing education
-//           const method = form.dataset.id ? "PATCH" : "POST";
-//           const url = form.dataset.id
-//             ? `https://tawgeeh-v1-production.up.railway.app/education/${form.dataset.id}`
-//             : `https://tawgeeh-v1-production.up.railway.app/education`;
-
-//           // Submit education data to API
-//           const response = await fetch(url, {
-//             method,
-//             headers: {
-//               Authorization: `Bearer ${token}`,
-//               "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify(data),
-//           });
-//           await window.auth.handleApiError(response);
-
-//           // Show success message and refresh education
-//           common.showAlert("تم", "تم حفظ التعليم بنجاح", "success");
-//           dataCache.education = null; // Clear cache
-//           hidePopup("editProfileEdu_add");
-//           await loadSectionData(
-//             "education",
-//             "#educationContainer",
-//             renderEducation,
-//             "#educationList"
-//           );
-//         } catch (error) {
-//           console.error("Education form submission error:", error.message);
-//         }
-//       });
-//     }
-//   }
-
-//   // Initialize Rating Popup and Form Handler
-//   function initializeRatingPopup() {
-//     // Setup popup elements
-//     const popup = document.getElementById("editProfileRating_add");
-//     const editListPopup = document.getElementById("editProfileRating_edit");
-//     const closeBtn = document.getElementById("closeBtn10");
-//     const closeListBtn = document.getElementById("closeBtn11");
-//     const overlay = popup?.parentElement;
-//     const listOverlay = editListPopup?.parentElement;
-
-//     // Handle close buttons and overlay clicks
-//     if (closeBtn)
-//       closeBtn.addEventListener("click", () =>
-//         hidePopup("editProfileRating_add")
-//       );
-//     if (overlay) {
-//       overlay.addEventListener("click", (e) => {
-//         if (e.target === overlay) hidePopup("editProfileRating_add");
-//       });
-//     }
-//     if (closeListBtn)
-//       closeListBtn.addEventListener("click", () =>
-//         hidePopup("editProfileRating_edit")
-//       );
-//     if (listOverlay) {
-//       listOverlay.addEventListener("click", (e) => {
-//         if (e.target === listOverlay) hidePopup("editProfileRating_edit");
-//       });
-//     }
-
-//     // Handle Rating Form Submission
-//     const form = document.getElementById("ratingForm");
-//     if (form) {
-//       form.addEventListener("submit", async (e) => {
-//         e.preventDefault();
-
-//         // Validate form inputs
-//         if (!validateForm(form, "rating")) return;
-
-//         // Prepare data for API
-//         const data = {
-//           reviewerName: form.querySelector("#reviewerName").value.trim(),
-//           comment: form.querySelector("#comment").value.trim(),
-//           rating: parseInt(form.querySelector("#ratingScore").value),
-//         };
-
-//         try {
-//           const token = localStorage.getItem("authToken");
-//           const decodedToken = common.decodeJWT(token);
-//           const userId = decodedToken?.sub || decodedToken?.id;
-//           // Determine if creating new or updating existing rating
-//           const method = form.dataset.id ? "PATCH" : "POST";
-//           const url = form.dataset.id
-//             ? `https://tawgeeh-v1-production.up.railway.app/ratings/${form.dataset.id}`
-//             : `https://tawgeeh-v1-production.up.railway.app/ratings/${userId}`;
-
-//           // Submit rating data to API
-//           const response = await fetch(url, {
-//             method,
-//             headers: {
-//               Authorization: `Bearer ${token}`,
-//               "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify(data),
-//           });
-//           await window.auth.handleApiError(response);
-
-//           // Show success message and refresh ratings
-//           common.showAlert("تم", "تم حفظ التقييم بنجاح", "success");
-//           dataCache.ratings = null; // Clear cache
-//           hidePopup("editProfileRating_add");
-//           await loadSectionData(
-//             "ratings",
-//             "#ratingContent",
-//             renderRating,
-//             "#ratingList"
-//           );
-//         } catch (error) {
-//           console.error("Rating form submission error:", error.message);
-//         }
-//       });
-//     }
-//   }
-
-//   // Initialize Achievement Popup and Form Handler
-//   function initializeAchievementPopup() {
-//     // Setup popup elements
-//     const popup = document.getElementById("editProfileAchievement_add");
-//     const editListPopup = document.getElementById(
-//       "editProfileAchievement_edit"
-//     );
-//     const closeBtn = document.getElementById("closeBtn12");
-//     const closeListBtn = document.getElementById("closeBtn13");
-//     const overlay = popup?.parentElement;
-//     const listOverlay = editListPopup?.parentElement;
-
-//     // Handle close buttons and overlay clicks
-//     if (closeBtn)
-//       closeBtn.addEventListener("click", () =>
-//         hidePopup("editProfileAchievement_add")
-//       );
-//     if (overlay) {
-//       overlay.addEventListener("click", (e) => {
-//         if (e.target === overlay) hidePopup("editProfileAchievement_add");
-//       });
-//     }
-//     if (closeListBtn)
-//       closeListBtn.addEventListener("click", () =>
-//         hidePopup("editProfileAchievement_edit")
-//       );
-//     if (listOverlay) {
-//       listOverlay.addEventListener("click", (e) => {
-//         if (e.target === listOverlay) hidePopup("editProfileAchievement_edit");
-//       });
-//     }
-
-//     // Handle Achievement Form Submission
-//     const form = document.getElementById("achievementForm");
-//     if (form) {
-//       form.addEventListener("submit", async (e) => {
-//         e.preventDefault();
-
-//         // Validate form inputs
-//         if (!validateForm(form, "achievement")) return;
-
-//         // Prepare data for API
-//         const data = {
-//           title: form.querySelector("#achievementTitle").value.trim(),
-//           description: form
-//             .querySelector("#achievementDescription")
-//             .value.trim(),
-//           achievedAt: form.querySelector("#achievedAt").value,
-//         };
-
-//         try {
-//           const token = localStorage.getItem("authToken");
-//           // Determine if creating new or updating existing achievement
-//           const method = form.dataset.id ? "PATCH" : "POST";
-//           const url = form.dataset.id
-//             ? `https://tawgeeh-v1-production.up.railway.app/achievements/${form.dataset.id}`
-//             : `https://tawgeeh-v1-production.up.railway.app/achievements`;
-
-//           // Submit achievement data to API
-//           const response = await fetch(url, {
-//             method,
-//             headers: {
-//               Authorization: `Bearer ${token}`,
-//               "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify(data),
-//           });
-//           await window.auth.handleApiError(response);
-
-//           // Show success message and refresh achievements
-//           common.showAlert("تم", "تم حفظ الإنجاز بنجاح", "success");
-//           dataCache.achievements = null; // Clear cache
-//           hidePopup("editProfileAchievement_add");
-//           await loadSectionData(
-//             "achievements",
-//             "#achievementsContent",
-//             renderAchievement,
-//             "#achievementList"
-//           );
-//         } catch (error) {
-//           console.error("Achievement form submission error:", error.message);
-//         }
-//       });
-//     }
-//   }
-
-//   // Delete item from a section
-//   async function deleteItem(section, id, containerId, listId, renderFn) {
-//     try {
-//       const token = localStorage.getItem("authToken");
-//       // Send delete request to API
-//       const response = await fetch(
-//         `https://tawgeeh-v1-production.up.railway.app/${section}/${id}`,
-//         {
-//           method: "DELETE",
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//             "Content-Type": "application/json",
-//           },
-//         }
-//       );
-//       await window.auth.handleApiError(response);
-
-//       // Show success message and refresh section
-//       common.showAlert("تم", "تم الحذف بنجاح", "success");
-//       dataCache[section] = null; // Clear cache
-//       await loadSectionData(section, containerId, renderFn, listId);
-//     } catch (error) {
-//       console.error(`Delete ${section} error:`, error.message);
-//     }
-//   }
-
-//   // Like a rating
-//   async function likeRating(id) {
-//     try {
-//       const token = localStorage.getItem("authToken");
-//       // Send like request to API
-//       const response = await fetch(
-//         `https://tawgeeh-v1-production.up.railway.app/ratings/${id}/like`,
-//         {
-//           method: "PATCH",
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//             "Content-Type": "application/json",
-//           },
-//         }
-//       );
-//       await window.auth.handleApiError(response);
-
-//       // Show success message and refresh ratings
-//       common.showAlert("تم", "تم الإعجاب بالتقييم", "success");
-//       dataCache.ratings = null; // Clear cache
-//       await loadSectionData(
-//         "ratings",
-//         "#ratingContent",
-//         renderRating,
-//         "#ratingList"
-//       );
-//     } catch (error) {
-//       console.error("Like rating error:", error.message);
-//     }
-//   }
-
-//   // Initialize Image Upload Handlers
-//   function initializeImageUpload() {
-//     const uploadImage = document.getElementById("uploadImage");
-//     const uploadImageBackground = document.getElementById(
-//       "uploadImageBackground"
-//     );
-//     const profileImagePreview = document.getElementById("profileImagePreview");
-//     const editBtnMain = document.getElementById("editBtnMain");
-//     const removeProfileImage = document.getElementById("removeProfileImage");
-//     const videoInput = document.getElementById("videoInput");
-
-//     // Handle profile image upload
-//     if (uploadImage && profileImagePreview) {
-//       uploadImage.addEventListener("change", async (e) => {
-//         const file = e.target.files[0];
-//         if (file && file.size > 2 * 1024 * 1024) {
-//           common.showAlert(
-//             "خطأ",
-//             "حجم الصورة يجب أن يكون أقل من 2 ميجا بايت",
-//             "error"
-//           );
-//           return;
-//         }
-
-//         try {
-//           const formData = new FormData();
-//           formData.append("image", file);
-//           const token = localStorage.getItem("authToken");
-//           const decodedToken = common.decodeJWT(token);
-//           const userId = decodedToken?.sub || decodedToken?.id;
-
-//           // Upload profile image to API
-//           const response = await fetch(
-//             `https://tawgeeh-v1-production.up.railway.app/users/${userId}/upload-image`,
-//             {
-//               method: "POST",
-//               headers: { Authorization: `Bearer ${token}` },
-//               body: formData,
-//             }
-//           );
-//           await window.auth.handleApiError(response);
-//           const data = await response.json();
-//           profileImagePreview.src = data.image_url;
-//           await loadUserProfile();
-//         } catch (error) {
-//           console.error("Image upload error:", error.message);
-//         }
-//       });
-//     }
-
-//     // Handle background image upload
-//     if (uploadImageBackground) {
-//       uploadImageBackground.addEventListener("change", async (e) => {
-//         const file = e.target.files[0];
-//         if (!file) return;
-
-//         try {
-//           const formData = new FormData();
-//           formData.append("image", file);
-//           const token = localStorage.getItem("authToken");
-//           const decodedToken = common.decodeJWT(token);
-//           const userId = decodedToken?.sub || decodedToken?.id;
-
-//           // Upload background image to API
-//           const response = await fetch(
-//             `https://tawgeeh-v1-production.up.railway.app/users/${userId}/upload-background-image`,
-//             {
-//               method: "POST",
-//               headers: { Authorization: `Bearer ${token}` },
-//               body: formData,
-//             }
-//           );
-//           await window.auth.handleApiError(response);
-//           const data = await response.json();
-//           document.getElementById("background_image").src =
-//             data.background_image_url;
-//           await loadUserProfile();
-//         } catch (error) {
-//           console.error("Background image upload error:", error.message);
-//         }
-//       });
-//     }
-
-//     // Handle video upload
-//     if (videoInput) {
-//       videoInput.addEventListener("change", async (e) => {
-//         const file = e.target.files[0];
-//         if (
-//           file &&
-//           file.type.includes("mp4") &&
-//           file.size <= 25 * 1024 * 1024
-//         ) {
-//           try {
-//             const formData = new FormData();
-//             formData.append("video", file);
-//             const token = localStorage.getItem("authToken");
-//             const decodedToken = common.decodeJWT(token);
-//             const userId = decodedToken?.sub || decodedToken?.id;
-
-//             // Upload video to API
-//             const response = await fetch(
-//               `https://tawgeeh-v1-production.up.railway.app/users/${userId}/upload-video`,
-//               {
-//                 method: "POST",
-//                 headers: { Authorization: `Bearer ${token}` },
-//                 body: formData,
-//               }
-//             );
-//             await window.auth.handleApiError(response);
-//             const data = await response.json();
-//             const videoPlayer = document.getElementById("videoPlayer");
-//             videoPlayer.src = data.video_url;
-//             videoPlayer.style.display = "block";
-//             document.getElementById("uplodimage").style.display = "none";
-//             document.getElementById("uplodeBtn").style.display = "none";
-//             document.getElementById("size").style.display = "none";
-//             await loadUserProfile();
-//           } catch (error) {
-//             console.error("Video upload error:", error.message);
-//           }
-//         } else {
-//           common.showAlert(
-//             "خطأ",
-//             "يجب أن يكون الفيديو بصيغة MP4 وحجمه أقل من 25 ميجابايت",
-//             "error"
-//           );
-//         }
-//       });
-//     }
-
-//     // Trigger file input for profile image
-//     if (editBtnMain)
-//       editBtnMain.addEventListener("click", () => uploadImage.click());
-
-//     // Handle profile image removal
-//     if (removeProfileImage) {
-//       removeProfileImage.addEventListener("click", async () => {
-//         try {
-//           const token = localStorage.getItem("authToken");
-//           const decodedToken = common.decodeJWT(token);
-//           const userId = decodedToken?.sub || decodedToken?.id;
-
-//           // Remove profile image via API
-//           const response = await fetch(
-//             `https://tawgeeh-v1-production.up.railway.app/users/${userId}/remove-image`,
-//             {
-//               method: "DELETE",
-//               headers: { Authorization: `Bearer ${token}` },
-//             }
-//           );
-//           await window.auth.handleApiError(response);
-//           profileImagePreview.src = "../mentor-images/personal_image.png";
-//           await loadUserProfile();
-//         } catch (error) {
-//           console.error("Image removal error:", error.message);
-//         }
-//       });
-//     }
-//   }
-
-//   // Switch between profile tabs
-//   async function switchTab(tabName) {
-//     const tabs = {
-//       overview: {
-//         content: "overviewContent",
-//         tab: "overviewTab",
-//         section: null,
-//       },
-//       services: {
-//         content: "servicesContent",
-//         tab: "manageservices",
-//         section: null,
-//       },
-//       rating: {
-//         content: "ratingContent",
-//         tab: "ratingTab",
-//         section: "ratings",
-//       },
-//       achievements: {
-//         content: "achievementsContent",
-//         tab: "achievementsTab",
-//         section: "achievements",
-//       },
-//     };
-
-//     // Hide all tabs and content
-//     Object.values(tabs).forEach(({ content, tab }) => {
-//       const contentElement = document.getElementById(content);
-//       if (contentElement) contentElement.style.display = "none";
-//       const tabElement = document.getElementById(tab);
-//       if (tabElement) tabElement.classList.remove("checked");
-//     });
-
-//     // Show selected tab and content
-//     const selectedContent = document.getElementById(tabs[tabName].content);
-//     const selectedTab = document.getElementById(tabs[tabName].tab);
-//     if (selectedContent) selectedContent.style.display = "block";
-//     if (selectedTab) selectedTab.classList.add("checked");
-
-//     // Load data for section if applicable
-//     if (tabs[tabName].section) {
-//       await loadSectionData(
-//         tabs[tabName].section,
-//         `#${tabs[tabName].content}`,
-//         tabs[tabName].section === "ratings" ? renderRating : renderAchievement,
-//         `#${tabs[tabName].section}List`
-//       );
-//     }
-//   }
-
-//   // Initialize Event Listeners
-//   function initializeEventListeners() {
-//     // Open modal buttons
-//     const openModalConfigs = [
-//       {
-//         btnId: "editBtn",
-//         modalId: "editProfileInfo",
-//         screenId: "professionalForm",
-//       },
-//       {
-//         btnId: "editBtnMain",
-//         modalId: "editProfileInfo",
-//         screenId: "professionalForm",
-//       },
-//       {
-//         btnId: "edit_2BtnExp",
-//         modalId: "editProfileEx_edit",
-//         screenId: "experienceList",
-//       },
-//       {
-//         btnId: "edit_addExp",
-//         modalId: "editProfileEx_edit2",
-//         screenId: "experienceFormScreen",
-//       },
-//       {
-//         btnId: "moreExBtn_EX",
-//         modalId: "editProfileEx_edit2",
-//         screenId: "experienceFormScreen",
-//       },
-//       {
-//         btnId: "edit_2BtnCert",
-//         modalId: "editProfileSp_edit",
-//         screenId: "certificateList",
-//       },
-//       {
-//         btnId: "edit_addCert",
-//         modalId: "editProfileSp_add",
-//         screenId: "certificateFormScreen",
-//       },
-//       {
-//         btnId: "moreExBtn_SP",
-//         modalId: "editProfileSp_add",
-//         screenId: "certificateFormScreen",
-//       },
-//       {
-//         btnId: "edit_2BtnEdu",
-//         modalId: "editProfileEdu_edit",
-//         screenId: "educationList",
-//       },
-//       {
-//         btnId: "edit_addEdu",
-//         modalId: "editProfileEdu_add",
-//         screenId: "educationFormScreen",
-//       },
-//       {
-//         btnId: "moreExBtn_Edu",
-//         modalId: "editProfileEdu_add",
-//         screenId: "educationFormScreen",
-//       },
-//       {
-//         btnId: "edit_2BtnRating",
-//         modalId: "editProfileRating_edit",
-//         screenId: "ratingList",
-//       },
-//       {
-//         btnId: "edit_addRating",
-//         modalId: "editProfileRating_add",
-//         screenId: "ratingFormScreen",
-//       },
-//       {
-//         btnId: "moreExBtn_Rating",
-//         modalId: "editProfileRating_add",
-//         screenId: "ratingFormScreen",
-//       },
-//       {
-//         btnId: "edit_2BtnAchievement",
-//         modalId: "editProfileAchievement_edit",
-//         screenId: "achievementList",
-//       },
-//       {
-//         btnId: "edit_addAchievement",
-//         modalId: "editProfileAchievement_add",
-//         screenId: "achievementFormScreen",
-//       },
-//       {
-//         btnId: "moreExBtn_Achievement",
-//         modalId: "editProfileAchievement_add",
-//         screenId: "achievementFormScreen",
-//       },
-//       {
-//         btnId: "edit_bigimage",
-//         modalId: null,
-//         action: () => document.getElementById("uploadImageBackground").click(),
-//       },
-//     ];
-
-//     openModalConfigs.forEach((config) => {
-//       const button = document.getElementById(config.btnId);
-//       if (button) {
-//         button.addEventListener("click", (e) => {
-//           e.preventDefault();
-//           if (config.modalId) {
-//             const form = document.getElementById(
-//               config.screenId.replace("Screen", "")
-//             );
-//             if (form) delete form.dataset.id;
-//             showPopup(config.modalId, config.screenId);
-//           } else if (config.action) {
-//             config.action();
-//           }
-//         });
-//       }
-//     });
-
-//     // Close modal buttons
-//     const closeModalConfigs = [
-//       { btnId: "closeBtn1", modalId: "editProfileInfo" },
-//       { btnId: "closeBtn3", modalId: "editProfileEx_edit" },
-//       { btnId: "closeBtn4", modalId: "editProfileEx_edit2" },
-//       { btnId: "closeBtn5", modalId: "editProfileSp_add" },
-//       { btnId: "closeBtn6", modalId: "editProfileEdu_add" },
-//       { btnId: "closeBtn7", modalId: "editProfileEdu_edit" },
-//       { btnId: "closeBtn9", modalId: "editProfileSp_edit" },
-//       { btnId: "closeBtn10", modalId: "editProfileRating_add" },
-//       { btnId: "closeBtn11", modalId: "editProfileRating_edit" },
-//       { btnId: "closeBtn12", modalId: "editProfileAchievement_add" },
-//       { btnId: "closeBtn13", modalId: "editProfileAchievement_edit" },
-//     ];
-
-//     closeModalConfigs.forEach((config) => {
-//       const button = document.getElementById(config.btnId);
-//       if (button) {
-//         button.addEventListener("click", () => hidePopup(config.modalId));
-//       }
-//     });
-
-//     // Handle edit and delete for experiences
-//     document
-//       .querySelector("#experienceList")
-//       ?.addEventListener("click", async (e) => {
-//         if (e.target.classList.contains("edit-exp")) {
-//           const id = e.target.dataset.id;
-//           try {
-//             const token = localStorage.getItem("authToken");
-//             // Fetch experience data for editing
-//             const response = await fetch(
-//               `https://tawgeeh-v1-production.up.railway.app/experiences/${id}`,
-//               {
-//                 method: "GET",
-//                 headers: {
-//                   Authorization: `Bearer ${token}`,
-//                   "Content-Type": "application/json",
-//                 },
-//               }
-//             );
-//             await window.auth.handleApiError(response);
-//             const data = await response.json();
-
-//             // Populate form with existing data
-//             const form = document.getElementById("experienceForm");
-//             if (form) form.dataset.id = id;
-//             showPopup("editProfileEx_edit2", "experienceFormScreen", {
-//               title: data.jobTitle || data.title,
-//               companyName: data.companyName || data.company,
-//               expStartDate: data.startDate,
-//               expEndDate: data.endDate || "",
-//               expDescription: data.description,
-//               currentlyWorking: !data.endDate,
-//             });
-//           } catch (error) {
-//             console.error("Fetch experience error:", error.message);
-//           }
-//         } else if (e.target.classList.contains("delete-exp")) {
-//           if (confirm("هل أنت متأكد من حذف هذه الخبرة؟")) {
-//             await deleteItem(
-//               "experiences",
-//               e.target.dataset.id,
-//               "#experiencesContainer",
-//               "#experienceList",
-//               renderExperience
-//             );
-//           }
-//         }
-//       });
-
-//     // Handle edit and delete for certificates
-//     document
-//       .querySelector("#certificateList")
-//       ?.addEventListener("click", async (e) => {
-//         if (e.target.classList.contains("edit-cert")) {
-//           const id = e.target.dataset.id;
-//           try {
-//             const token = localStorage.getItem("authToken");
-//             // Fetch certificate data for editing
-//             const response = await fetch(
-//               `https://tawgeeh-v1-production.up.railway.app/certifications/${id}`,
-//               {
-//                 method: "GET",
-//                 headers: {
-//                   Authorization: `Bearer ${token}`,
-//                   "Content-Type": "application/json",
-//                 },
-//               }
-//             );
-//             await window.auth.handleApiError(response);
-//             const data = await response.json();
-
-//             // Populate form with existing data
-//             const form = document.getElementById("certificateForm");
-//             if (form) form.dataset.id = id;
-//             showPopup("editProfileSp_add", "certificateFormScreen", {
-//               certificateName: data.name,
-//               issuingAuthority: data.issuingAuthority || data.issuer,
-//               certStartDate: data.issueDate,
-//               certEndDate: data.expiryDate || "",
-//               certificateLink: data.certificateLink || data.url,
-//             });
-//           } catch (error) {
-//             console.error("Fetch certificate error:", error.message);
-//           }
-//         } else if (e.target.classList.contains("delete-cert")) {
-//           if (confirm("هل أنت متأكد من حذف هذه الشهادة؟")) {
-//             await deleteItem(
-//               "certifications",
-//               e.target.dataset.id,
-//               "#certificatesContainer",
-//               "#certificateList",
-//               renderCertificate
-//             );
-//           }
-//         }
-//       });
-
-//     // Handle edit and delete for education
-//     document
-//       .querySelector("#educationList")
-//       ?.addEventListener("click", async (e) => {
-//         if (e.target.classList.contains("edit-edu")) {
-//           const id = e.target.dataset.id;
-//           try {
-//             const token = localStorage.getItem("authToken");
-//             // Fetch education data for editing
-//             const response = await fetch(
-//               `https://tawgeeh-v1-production.up.railway.app/education/${id}`,
-//               {
-//                 method: "GET",
-//                 headers: {
-//                   Authorization: `Bearer ${token}`,
-//                   "Content-Type": "application/json",
-//                 },
-//               }
-//             );
-//             await window.auth.handleApiError(response);
-//             const data = await response.json();
-
-//             // Populate form with existing data
-//             const form = document.getElementById("educationForm");
-//             if (form) form.dataset.id = id;
-//             showPopup("editProfileEdu_add", "educationFormScreen", {
-//               degree: data.degree,
-//               institution: data.institution,
-//               field: data.field,
-//               eduStartDate: data.startDate,
-//               eduEndDate: data.endDate || "",
-//             });
-//           } catch (error) {
-//             console.error("Fetch education error:", error.message);
-//           }
-//         } else if (e.target.classList.contains("delete-edu")) {
-//           if (confirm("هل أنت متأكد من حذف هذا التعليم؟")) {
-//             await deleteItem(
-//               "education",
-//               e.target.dataset.id,
-//               "#educationContainer",
-//               "#educationList",
-//               renderEducation
-//             );
-//           }
-//         }
-//       });
-
-//     // Handle edit, delete, and like for ratings
-//     document
-//       .querySelector("#ratingList")
-//       ?.addEventListener("click", async (e) => {
-//         if (e.target.classList.contains("edit-btn")) {
-//           const id = e.target.dataset.id;
-//           try {
-//             const token = localStorage.getItem("authToken");
-//             // Fetch rating data for editing
-//             const response = await fetch(
-//               `https://tawgeeh-v1-production.up.railway.app/ratings/${id}`,
-//               {
-//                 method: "GET",
-//                 headers: {
-//                   Authorization: `Bearer ${token}`,
-//                   "Content-Type": "application/json",
-//                 },
-//               }
-//             );
-//             await window.auth.handleApiError(response);
-//             const data = await response.json();
-
-//             // Populate form with existing data
-//             const form = document.getElementById("ratingForm");
-//             if (form) form.dataset.id = id;
-//             showPopup("editProfileRating_add", "ratingFormScreen", {
-//               reviewerName: data.reviewerName || data.menteeName,
-//               comment: data.comment,
-//               ratingScore: data.rating,
-//             });
-//           } catch (error) {
-//             console.error("Fetch rating error:", error.message);
-//           }
-//         } else if (e.target.classList.contains("delete-btn")) {
-//           if (confirm("هل أنت متأكد من حذف هذا التقييم؟")) {
-//             await deleteItem(
-//               "ratings",
-//               e.target.dataset.id,
-//               "#ratingContent",
-//               "#ratingList",
-//               renderRating
-//             );
-//           }
-//         } else if (e.target.classList.contains("like-btn")) {
-//           await likeRating(e.target.dataset.id);
-//         }
-//       });
-
-//     // Handle edit and delete for achievements
-//     document
-//       .querySelector("#achievementList")
-//       ?.addEventListener("click", async (e) => {
-//         if (e.target.classList.contains("edit-btn")) {
-//           const id = e.target.dataset.id;
-//           try {
-//             const token = localStorage.getItem("authToken");
-//             // Fetch achievement data for editing
-//             const response = await fetch(
-//               `https://tawgeeh-v1-production.up.railway.app/achievements/${id}`,
-//               {
-//                 method: "GET",
-//                 headers: {
-//                   Authorization: `Bearer ${token}`,
-//                   "Content-Type": "application/json",
-//                 },
-//               }
-//             );
-//             await window.auth.handleApiError(response);
-//             const data = await response.json();
-
-//             // Populate form with existing data
-//             const form = document.getElementById("achievementForm");
-//             if (form) form.dataset.id = id;
-//             showPopup("editProfileAchievement_add", "achievementFormScreen", {
-//               achievementTitle: data.title,
-//               achievementDescription: data.description,
-//               achievedAt: data.achievedAt || data.date,
-//             });
-//           } catch (error) {
-//             console.error("Fetch achievement error:", error.message);
-//           }
-//         } else if (e.target.classList.contains("delete-btn")) {
-//           if (confirm("هل أنت متأكد من حذف هذا الإنجاز؟")) {
-//             await deleteItem(
-//               // Continuation of initializeEventListeners function
-
-//               // Complete the achievement deletion handler
-//               "#achievementList",
-//               renderAchievement
-//             );
-//           }
-//         }
-//       });
-
-//     // Tab switching for profile sections
-//     document.querySelectorAll(".tab").forEach((tab) => {
-//       tab.addEventListener("click", async () => {
-//         const tabName = tab.id.replace("Tab", "");
-//         await switchTab(tabName);
-//       });
-//     });
-//   }
-
-//   // Initialize all components
-//   async function initialize() {
-//     // Load initial user profile data
-//     await loadUserProfile();
-
-//     // Initialize popups and form handlers
-//     initializeProfilePopup();
-//     initializeExperiencePopup();
-//     initializeCertificatePopup();
-//     initializeEducationPopup();
-//     initializeRatingPopup();
-//     initializeAchievementPopup();
-
-//     // Initialize image upload handlers
-//     initializeImageUpload();
-
-//     // Setup event listeners for buttons and interactions
-//     initializeEventListeners();
-
-//     // Load initial section data
-//     await Promise.all([
-//       loadSectionData(
-//         "experiences",
-//         "#experiencesContainer",
-//         renderExperience,
-//         "#experienceList"
-//       ),
-//       loadSectionData(
-//         "certifications",
-//         "#certificatesContainer",
-//         renderCertificate,
-//         "#certificateList"
-//       ),
-//       loadSectionData(
-//         "education",
-//         "#educationContainer",
-//         renderEducation,
-//         "#educationList"
-//       ),
-//       loadSectionData("ratings", "#ratingContent", renderRating, "#ratingList"),
-//       loadSectionData(
-//         "achievements",
-//         "#achievementsContent",
-//         renderAchievement,
-//         "#achievementList"
-//       ),
-//     ]);
-
-//     // Set default tab
-//     await switchTab("overview");
-//   }
-
-//   // Run initialization
-//   initialize().catch((error) =>
-//     console.error("Initialization error:", error.message)
-//   );
-// });
-import * as profileService from "./profileService.js";
-import * as experienceService from "./experienceService.js";
-import * as certificateService from "./certificateService.js";
-import * as educationService from "./educationService.js";
-import * as ratingService from "./ratingService.js";
-import * as achievementService from "./achievementService.js";
-import * as imageUploadService from "./imageUploadService.js";
-
-document.addEventListener("DOMContentLoaded", async function () {
-  const dataCache = {
-    experiences: null,
-    certifications: null,
-    education: null,
-    ratings: null,
-    achievements: null,
-  };
-
-  let isProfileOwner = false;
-
-  // Initialize notifications
-  let notificationsData = [];
-  try {
-    notificationsData = await window.auth.fetchNotifications();
-    console.log("Notifications loaded:", notificationsData);
-  } catch (error) {
-    console.error("Failed to fetch notifications:", error.message);
-  }
-
-  // Setup authentication UI
-  const authSection = document.querySelector(".left_Sec");
-  if (authSection) {
     common.initializeAuth(
       authSection,
       notificationsData,
@@ -2178,10 +93,97 @@ document.addEventListener("DOMContentLoaded", async function () {
     common.renderNotifications(notificationsData, () =>
       common.updateNotificationCount(notificationsData)
     );
-  }
+  },
+};
 
-  // Initialize Flatpickr for date inputs
-  function initializeFlatpickr() {
+// Profile Module
+const profileModule = {
+  async loadUserProfile() {
+    const profileContainer = document.querySelector("#profile-hero");
+    if (!profileContainer) return;
+
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      common.showLoginPopup();
+      return;
+    }
+
+    try {
+      const userData = await common.fetchUserData(token);
+      const elements = {
+        image1: profileContainer.querySelector("#image1"),
+        image2: profileContainer.querySelector("#image2"),
+        profileImagePreview: document.getElementById("profileImagePreview"),
+        mentorName: profileContainer.querySelector(".mentor_name"),
+        mentorJob: profileContainer.querySelector("#mentor_jop"),
+        mentorBio: document.querySelector("#mentorBio"),
+        linkedinLink: profileContainer.querySelector("#linkedinLink"),
+        behanceLink: profileContainer.querySelector("#behanceLink"),
+        githubLink: profileContainer.querySelector("#githubLink"),
+        instagramLink: document.querySelector("#instagramLink"),
+        totalMinutes: document.getElementById("totalMinutes"),
+        totalSessions: document.getElementById("totalSessions"),
+        backgroundImage: document.getElementById("background_image"),
+      };
+
+      if (elements.image1)
+        elements.image1.src =
+          userData.image_url || "../mentor-images/NoProfilePhoto.svg";
+      if (elements.image2)
+        elements.image2.src =
+          userData.image_url || "../mentor-images/NoProfilePhoto.svg";
+      if (elements.profileImagePreview)
+        elements.profileImagePreview.src =
+          userData.image_url || "../mentor-images/NoProfilePhoto.svg";
+      if (elements.mentorName)
+        elements.mentorName.textContent = userData.name || "المرشد الأول";
+      if (elements.mentorJob)
+        elements.mentorJob.textContent = userData.specialization || "غير محدد";
+      if (elements.mentorBio)
+        elements.mentorBio.textContent = userData.bio || "لا توجد نبذة";
+      if (elements.linkedinLink)
+        elements.linkedinLink.href = userData.linkedin || "#";
+      if (elements.behanceLink)
+        elements.behanceLink.href = userData.behance || "#";
+      if (elements.githubLink)
+        elements.githubLink.href = userData.github || "#";
+      if (elements.instagramLink)
+        elements.instagramLink.href = userData.instagram || "#";
+      if (elements.totalMinutes)
+        elements.totalMinutes.textContent = `${
+          userData.totalMinutes || 0
+        } دقيقة`;
+      if (elements.totalSessions)
+        elements.totalSessions.textContent = userData.totalSessions || 0;
+      if (elements.backgroundImage)
+        elements.backgroundImage.src =
+          userData.background_image_url ||
+          "../mentor-images/dummyBackground.png";
+
+      // Populate edit forms
+      const formFields = [
+        "mentor_name",
+        "about_me",
+        "gender",
+        "country",
+        "linkedin",
+        "behance",
+        "github",
+        "instagram",
+      ];
+      formFields.forEach((field) => {
+        const input = document.getElementById(field);
+        if (input) input.value = userData[field.replace("_", "")] || "";
+      });
+    } catch (error) {
+      console.error("Failed to load user profile:", error.message);
+    }
+  },
+};
+
+// Popup Module
+const popupModule = {
+  initializeFlatpickr() {
     const dateInputs = document.querySelectorAll(".date-start, .date-end");
     dateInputs.forEach((input) => {
       flatpickr(input, {
@@ -2190,7 +192,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         allowInput: true,
         altInput: true,
         altFormat: "d/m/Y",
-        onChange: function (selectedDates, dateStr) {
+        onChange: (selectedDates, dateStr) => {
           const pairId = input.dataset.pair;
           if (pairId && input.classList.contains("date-start")) {
             const pairInput = document.getElementById(pairId);
@@ -2199,103 +201,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         },
       });
     });
-  }
+  },
 
-  // Toggle visibility of edit/upload buttons based on ownership
-  function toggleEditButtons() {
-    const editElementIds = [
-      "editBtn",
-      "editBtnMain",
-      "edit_2BtnExp",
-      "edit_addExp",
-      "moreExBtn_EX",
-      "edit_2BtnCert",
-      "edit_addCert",
-      "moreExBtn_SP",
-      "edit_2BtnEdu",
-      "edit_addEdu",
-      "moreExBtn_Edu",
-      "edit_2BtnRating",
-      "edit_addRating",
-      "moreExBtn_Rating",
-      "edit_2BtnAchievement",
-      "edit_addAchievement",
-      "moreExBtn_Achievement",
-      "edit_bigimage",
-      "uploadImage",
-      "uploadImageBackground",
-      "videoInput",
-      "removeProfileImage",
-    ];
-    const editClasses = [
-      "edit-exp",
-      "delete-exp",
-      "edit-cert",
-      "delete-cert",
-      "edit-edu",
-      "delete-edu",
-      "edit-btn",
-      "delete-btn",
-      "like-btn",
-    ];
-
-    const editElements = [];
-    editElementIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) editElements.push(el);
-      else console.warn(`Element with ID ${id} not found`);
-    });
-    editClasses.forEach((cls) => {
-      const elements = document.querySelectorAll(`.${cls}`);
-      elements.forEach((el) => editElements.push(el));
-    });
-
-    editElements.forEach((el) => {
-      if (isProfileOwner) {
-        el.style.display = "";
-        el.style.visibility = "visible";
-        el.setAttribute("aria-hidden", "false");
-        if (el.tagName === "BUTTON" || el.tagName === "INPUT") {
-          el.disabled = false;
-        }
-      } else {
-        el.style.display = "none";
-        el.style.visibility = "hidden";
-        el.setAttribute("aria-hidden", "true");
-        if (el.tagName === "BUTTON" || el.tagName === "INPUT") {
-          el.disabled = true;
-        }
-      }
-    });
-
-    // Display view-only message for non-owners
-    const viewOnlyMessage = document.getElementById("viewOnlyMessage");
-    if (!isProfileOwner) {
-      if (!viewOnlyMessage) {
-        const message = document.createElement("p");
-        message.id = "viewOnlyMessage";
-        message.textContent = "هذا الملف الشخصي في وضع العرض فقط";
-        message.style.color = "#666";
-        message.style.margin = "10px 0";
-        message.style.textAlign = "center";
-        const profileContainer = document.querySelector("#profile-hero");
-        if (profileContainer) {
-          profileContainer.insertBefore(message, profileContainer.firstChild);
-        }
-      }
-    } else if (viewOnlyMessage) {
-      viewOnlyMessage.remove();
-    }
-  }
-
-  // Show popup for editing (only for profile owner)
-  function showPopup(popupId, screenId, data = {}) {
-    if (!isProfileOwner) {
-      console.log("Edit blocked: User is not the profile owner");
-      common.showAlert("غير مسموح", "لا يمكنك تعديل هذا الملف الشخصي", "error");
-      return;
-    }
-
+  showPopup(popupId, screenId, data = {}) {
     const popupContainer = document.getElementById(popupId);
     const popupOverlay = popupContainer?.parentElement;
     if (!popupContainer || !popupOverlay) {
@@ -2304,7 +212,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     document.querySelectorAll(".overlay.show").forEach((modal) => {
-      if (modal !== popupOverlay) hidePopup(modal.querySelector(".popup-container")?.id);
+      if (modal !== popupOverlay)
+        this.hidePopup(modal.querySelector(".popup-container")?.id);
     });
 
     popupOverlay.classList.add("show");
@@ -2324,11 +233,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       Object.entries(data).forEach(([key, value]) => {
         const input = form.querySelector(`#${key}`);
         if (input) {
-          if (input.type === "checkbox") {
-            input.checked = !!value;
-          } else {
-            input.value = value || "";
-          }
+          input[input.type === "checkbox" ? "checked" : "value"] = value || "";
         }
       });
       if (data.id) form.dataset.id = data.id;
@@ -2336,28 +241,29 @@ document.addEventListener("DOMContentLoaded", async function () {
         const currentlyWorking = form.querySelector("#currentlyWorking");
         if (currentlyWorking) currentlyWorking.checked = data.currentlyWorking;
       }
-      form.querySelectorAll(".error").forEach((span) => (span.textContent = ""));
+      form
+        .querySelectorAll(".error")
+        .forEach((span) => (span.textContent = ""));
       form.querySelectorAll("input, textarea, select").forEach((input) => {
-        profileService.checkInputDirection(input);
-        input.addEventListener("input", () => profileService.checkInputDirection(input));
+        utils.checkInputDirection(input);
+        input.addEventListener("input", () => utils.checkInputDirection(input));
       });
     }
 
-    const authPopups = [
+    [
       "hideSignupPopup",
       "hideLoginPopup",
       "hideMentorApplicationPopup",
       "hidePasswordResetPopup",
-    ];
-    authPopups.forEach((fn) => {
+    ].forEach((fn) => {
       if (typeof common[fn] === "function") common[fn]();
+      else console.warn(`Common function ${fn} is not defined`);
     });
 
-    initializeFlatpickr();
-  }
+    this.initializeFlatpickr();
+  },
 
-  // Hide popup with smooth transition
-  function hidePopup(popupId) {
+  hidePopup(popupId) {
     const popupContainer = document.getElementById(popupId);
     const popupOverlay = popupContainer?.parentElement;
     if (!popupContainer || !popupOverlay) {
@@ -2372,28 +278,965 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     setTimeout(() => {
       popupContainer.style.display = "none";
-      popupOverlay.style.display = "none";
+      // popupOverlay.style.display = "none";
     }, 300);
 
     const form = popupContainer.querySelector("form");
     if (form) {
       form.reset();
       delete form.dataset.id;
-      form.querySelectorAll(".error").forEach((span) => (span.textContent = ""));
+      form
+        .querySelectorAll(".error")
+        .forEach((span) => (span.textContent = ""));
       form.querySelectorAll("input, textarea, select").forEach((input) => {
         const clone = input.cloneNode(true);
         input.parentNode.replaceChild(clone, input);
       });
     }
-  }
+  },
+};
 
-  // Switch between profile tabs
-  async function switchTab(tabName) {
+// Form Validation Module
+const formValidation = {
+  validateForm(form, type) {
+    let isValid = true;
+    form.querySelectorAll(".error").forEach((span) => (span.textContent = ""));
+
+    const validations = {
+      professional: [
+        {
+          id: "mentor_name",
+          error: "يرجى إدخال الاسم الكامل",
+          check: (v) => v.trim(),
+        },
+        { id: "gender", error: "يرجى اختيار الجنس", check: (v) => v },
+        { id: "country", error: "يرجى اختيار البلد", check: (v) => v },
+        {
+          id: "about_me",
+          error: "النبذة يجب أن تكون 20 حرفًا على الأقل",
+          check: (v) => v.trim().length >= 20,
+        },
+      ],
+      social: [
+        {
+          id: "linkedin",
+          error: "يرجى إدخال رابط LinkedIn صالح",
+          check: (v) => !v || v.match(/https?:\/\/(www\.)?linkedin\.com\/.+/),
+        },
+        {
+          id: "behance",
+          error: "يرجى إدخال رابط Behance/Dribbble صالح",
+          check: (v) =>
+            !v ||
+            v.match(/https?:\/\/(www\.)?(behance\.net|dribbble\.com)\/.+/),
+        },
+        {
+          id: "github",
+          error: "يرجى إدخال رابط GitHub صالح",
+          check: (v) => !v || v.match(/https?:\/\/(www\.)?github\.com\/.+/),
+        },
+        {
+          id: "instagram",
+          error: "يرجى إدخال رابط Instagram صالح",
+          check: (v) => !v || v.match(/https?:\/\/(www\.)?instagram\.com\/.+/),
+        },
+      ],
+      experience: [
+        {
+          id: "title",
+          error: "يرجى إدخال المسمى الوظيفي",
+          check: (v) => v.trim(),
+        },
+        {
+          id: "companyName",
+          error: "يرجى إدخال اسم الشركة",
+          check: (v) => v.trim(),
+        },
+        {
+          id: "expStartDate",
+          error: "يرجى إدخال تاريخ البدء",
+          check: (v) => v,
+        },
+        {
+          id: "expDescription",
+          error: "يرجى إدخال الوصف",
+          check: (v) => v.trim(),
+        },
+      ],
+      certificate: [
+        {
+          id: "certificateName",
+          error: "يرجى إدخال اسم الشهادة",
+          check: (v) => v.trim(),
+        },
+        {
+          id: "issuingAuthority",
+          error: "يرجى إدخال الجهة المصدرة",
+          check: (v) => v.trim(),
+        },
+        {
+          id: "certStartDate",
+          error: "يرجى إدخال تاريخ الإصدار",
+          check: (v) => v,
+        },
+        {
+          id: "certificateNumber",
+          error: "يرجى إدخال رقم الشهادة",
+          check: (v) => v.trim(),
+        },
+      ],
+      education: [
+        {
+          id: "degree",
+          error: "يرجى إدخال الدرجة العلمية",
+          check: (v) => v.trim(),
+        },
+        {
+          id: "institution",
+          error: "يرجى إدخال المؤسسة",
+          check: (v) => v.trim(),
+        },
+        { id: "field", error: "يرجى إدخال التخصص", check: (v) => v.trim() },
+        {
+          id: "eduStartDate",
+          error: "يرجى إدخال تاريخ البدء",
+          check: (v) => v,
+        },
+      ],
+      rating: [
+        {
+          id: "reviewerName",
+          error: "يرجى إدخال اسم المراجع",
+          check: (v) => v.trim(),
+        },
+        {
+          id: "comment",
+          error: "يرجى إدخال التعليق",
+          check: (v) => v.trim(),
+        },
+        {
+          id: "ratingScore",
+          error: "يرجى إدخال تقييم بين 1 و5",
+          check: (v) => v && v >= 1 && v <= 5,
+        },
+      ],
+      achievement: [
+        {
+          id: "achievementTitle",
+          error: "يرجى إدخال عنوان الإنجاز",
+          check: (v) => v.trim(),
+        },
+        {
+          id: "achievementDescription",
+          error: "يرجى إدخال الوصف",
+          check: (v) => v.trim(),
+        },
+        {
+          id: "achievedAt",
+          error: "يرجى إدخال تاريخ الإنجاز",
+          check: (v) => v,
+        },
+      ],
+      service: [
+        {
+          id: "serviceTitle",
+          error: "يرجى إدخال عنوان الخدمة",
+          check: (v) => v.trim(),
+        },
+        {
+          id: "serviceDescription",
+          error: "يرجى إدخال الوصف",
+          check: (v) => v.trim(),
+        },
+      ],
+    };
+
+    (validations[type] || []).forEach(({ id, error, check }) => {
+      const input = form.querySelector(`#${id}`);
+      if (input && !check(input.value)) {
+        form.querySelector(`#${id}Error`).textContent = error;
+        isValid = false;
+      }
+    });
+
+    if (!isValid) {
+      const firstError = form.querySelector(".error:not(:empty)");
+      if (firstError) {
+        firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+        firstError.parentElement.querySelector("input,textarea")?.focus();
+      }
+    }
+
+    return isValid;
+  },
+};
+
+// Section Module
+const sectionModule = {
+  async loadSectionData(section, containerId, renderFn, listId) {
+    console.log("List ID " + listId);
+    const container = document.querySelector(containerId);
+
+    const listContainer = document.getElementById(listId);
+    console.log(listContainer);
+    if (!container || !listContainer) return;
+
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) throw new Error("No auth token found");
+
+      const decodedToken = common.decodeJWT(token);
+      const userId = decodedToken?.sub || decodedToken?.id;
+      if (!userId) throw new Error("Invalid token: User ID not found");
+
+      let items = dataCache[section];
+      if (items === null) {
+        items =
+          section === "certifications"
+            ? await getCertifications(userId, token)
+            : section === "experiences"
+            ? await getExperiences(userId, token)
+            : section === "education"
+            ? await getEducation(userId, token)
+            : section === "ratings"
+            ? await getRatings(userId, token)
+            : section === "achievements"
+            ? await getAchievements(userId, token)
+            : await getServices(userId, token);
+        dataCache[section] = items;
+      }
+
+      container.innerHTML = "";
+      listContainer.innerHTML = "";
+      if (items.length === 0) {
+        container.innerHTML = `<p class="no-data">لا توجد نتائج لعرضها</p>`;
+        listContainer.innerHTML = `<p class="no-data">لا توجد نتائج لعرضها</p>`;
+        return;
+      }
+
+      items.forEach((item, index) => {
+        renderFn(container, item, false);
+        renderFn(listContainer, item, true);
+        // if (
+        //   section === "certifications" &&
+        //   index >= 3 &&
+        //   containerId === "#certificatesContainer"
+        // ) {
+        //   const hiddenContainer =
+        //     document.getElementById("hiddenCertificates") ||
+        //     document.createElement("div");
+        //   hiddenContainer.id = "hiddenCertificates";
+        //   hiddenContainer.style.display = "none";
+        //   container.appendChild(hiddenContainer);
+        //   hiddenContainer.appendChild(container.lastChild);
+        // }
+      });
+
+      if (section === "certifications") {
+        const moreBtn = document.getElementById("moreBtnCert");
+        if (moreBtn && items.length > 3) {
+          moreBtn.style.display = "block";
+          const btnText = moreBtn.querySelector(".btn-text");
+          btnText.textContent = `عرض المزيد +${items.length - 3}`;
+          let isExpanded = false;
+          moreBtn.onclick = () => {
+            isExpanded = !isExpanded;
+            const hiddenContainer =
+              document.getElementById("hiddenCertificates");
+            hiddenContainer.style.display = isExpanded ? "block" : "none";
+            btnText.textContent = isExpanded
+              ? "عرض أقل"
+              : `عرض المزيد +${items.length - 3}`;
+            moreBtn.querySelector(".more-icon").style.transform = isExpanded
+              ? "rotate(180deg)"
+              : "rotate(0deg)";
+          };
+        } else if (moreBtn) {
+          moreBtn.style.display = "none";
+        }
+      }
+    } catch (error) {
+      console.error(`Failed to load ${section}:`, error.message);
+      container.innerHTML = `<p class="no-data">لا توجد نتائج لعرضها</p>`;
+      listContainer.innerHTML = `<p class="no-data">لا توجد نتائج لعرضها</p>`;
+    }
+  },
+
+  renderExperience(container, item, isList) {
+    const div = document.createElement("div");
+    div.className = "second_con";
+    div.innerHTML = `
+      <div class="veiw_con">
+        <img src="../mentor-images/briefcase.svg" alt="أيقونة عمل">
+        <div class="text">
+          <h4>${utils.sanitizeHTML(
+            item.jobTitle || item.title || "غير محدد"
+          )}</h4>
+          <p>${utils.sanitizeHTML(
+            item.companyName || item.company || "غير محدد"
+          )}</p>
+          ${
+            isList
+              ? ""
+              : `<p>${utils.sanitizeHTML(
+                  item.description || "لا يوجد وصف"
+                )}</p>`
+          }
+        </div>
+      </div>
+      <div class="${isList ? "date2_con" : "date2"}">
+        <p>${utils.formatDate(item.startDate)} - ${
+      item.endDate ? utils.formatDate(item.endDate) : "الحالي"
+    }</p>
+        ${
+          isList
+            ? `
+          <img src="../mentor-images/edit-2.svg" alt="تعديل" class="edit-exp" data-id="${item.id}">
+          <img src="../mentor-images/trash.svg" alt="حذف" class="delete-exp" data-id="${item.id}">
+        `
+            : ""
+        }
+      </div>
+    `;
+    container.appendChild(div);
+  },
+
+  renderCertificate(container, item, isList) {
+    const div = document.createElement("div");
+    div.className = "second_con";
+    div.innerHTML = `
+      <div class="veiw_con">
+        <img src="${utils.sanitizeHTML(
+          item.image_url || "../mentor-images/default-cert.jpg"
+        )}" width="100px" alt="صورة الشهادة">
+        <div class="text">
+          <h4>${utils.sanitizeHTML(item.name || "غير محدد")}</h4>
+          <p>${utils.sanitizeHTML(
+            item.donor || item.issuingAuthority || "غير محدد"
+          )}</p>
+          <p>${utils.formatDate(item.date)}</p>
+        </div>
+      </div>
+      <div class="education">
+        <div class="edu_con">
+          ${
+            item.link
+              ? `<a href="${utils.sanitizeHTML(
+                  item.link
+                )}" target="_blank">عرض الشهادة</a>`
+              : "<p>عرض الشهادة</p>"
+          }
+          <img src="../mentor-images/export.svg" alt="عرض">
+        </div>
+        ${
+          isList
+            ? `
+          <img src="../mentor-images/edit-2.svg" alt="تعديل" class="edit-cert" data-id="${item.id}">
+          <img src="../mentor-images/trash.svg" alt="حذف" class="delete-cert" data-id="${item.id}">
+        `
+            : ""
+        }
+      </div>
+    `;
+    container.appendChild(div);
+  },
+
+  renderEducation(container, item, isList) {
+    const div = document.createElement("div");
+    div.className = "second_con";
+    div.innerHTML = `
+      <div class="veiw_con">
+        <img src="../mentor-images/education.svg" alt="أيقونة تعليم">
+        <div class="text">
+          <h4>${utils.sanitizeHTML(item.degree || "غير محدد")}</h4>
+          <p>${utils.sanitizeHTML(item.institution || "غير محدد")}</p>
+        </div>
+      </div>
+      <div class="${isList ? "date2_con" : "date2"}">
+        <p>${utils.formatDate(item.startDate)} - ${utils.formatDate(
+      item.endDate
+    )}</p>
+        ${
+          isList
+            ? `
+          <img src="../mentor-images/edit-2.svg" alt="تعديل" class="edit-edu" data-id="${item.id}">
+          <img src="../mentor-images/trash.svg" alt="حذف" class="delete-edu" data-id="${item.id}">
+        `
+            : ""
+        }
+      </div>
+    `;
+    container.appendChild(div);
+  },
+
+  renderRating(container, item, isList) {
+    const div = document.createElement("div");
+    div.className = "session1 sessionsFormat";
+    const starsHtml = this.generateStars(item.rating);
+    const formattedDate = new Date(
+      item.createdAt || item.date
+    ).toLocaleDateString("ar-EG", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+    div.innerHTML = `
+      <div class="session_con">
+        <img class="menteePhoto" src="${utils.sanitizeHTML(
+          item.menteeImage || "../mentor-images/default-user.jpg"
+        )}" alt="مجهول" />
+        <div class="time timeR">
+          <h4>${utils.sanitizeHTML(
+            item.reviewerName || item.menteeName || "مجهول"
+          )}</h4>
+          <p>${utils.sanitizeHTML(item.comment || "لا يوجد تعليق")}</p>
+          <div class="stars_con">
+            <p>${item.rating.toFixed(1)}</p>
+            <div class="stars">${starsHtml}</div>
+          </div>
+        </div>
+        <div class="rette-con">
+          <div class="ratte">
+            <span><p>${(Math.random() * 10).toFixed(
+              1
+            )}</p><img src="../mentor-images/hand-thumb-up.svg" alt="Likes" /></span>
+            <span><p>رد</p><img src="../mentor-images/chat-bubble-oval-left-ellipsis.svg" alt="Reply" /></span>
+          </div>
+          <div class="date dateR"><p>${formattedDate}</p></div>
+        </div>
+      </div>
+      ${
+        isList
+          ? `
+        <div class="edit-actions">
+          <button class="edit-btn" data-id="${item.id}">تعديل</button>
+          <button class="delete-btn" data-id="${item.id}">حذف</button>
+          <button class="like-btn" data-id="${item.id}">${
+              item.liked ? "إلغاء الإعجاب" : "إعجاب"
+            }</button>
+        </div>
+      `
+          : ""
+      }
+    `;
+    container.appendChild(div);
+  },
+
+  generateStars(rating) {
+    const filledStars = Math.floor(rating);
+    const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+    const emptyStars = 5 - filledStars - halfStar;
+    return `
+      ${'<img src="../mentor-images/ic_baseline-star.svg" alt="Filled Star" />'.repeat(
+        filledStars
+      )}
+      ${
+        halfStar
+          ? '<img src="../mentor-images/IcBaselineStarHalf.svg" alt="Half Star" />'
+          : ""
+      }
+      ${'<img src="../mentor-images/ic_baseline-star (1).svg" alt="Empty Star" />'.repeat(
+        emptyStars
+      )}
+    `;
+  },
+
+  renderAchievement(container, item, isList) {
+    const div = document.createElement("div");
+    div.className = "session1 sessionsFormat";
+    const progress = item.unlocked ? 100 : item.progress || 0;
+    div.innerHTML = `
+      <div class="session_con">
+        <img class="AchievementPhoto" src="${utils.sanitizeHTML(
+          item.icon || "../mentor-images/default-achievement.svg"
+        )}" alt="إنجاز" />
+        <div class="time">
+          <h4>${utils.sanitizeHTML(item.title || "بدون عنوان")}</h4>
+          <p>${utils.sanitizeHTML(item.description || "بدون وصف")}</p>
+        </div>
+      </div>
+      ${
+        item.unlocked
+          ? `<div class="date"><p>${utils.formatDate(
+              item.achievedAt || item.date
+            )}</p></div>`
+          : `<div class="progress"><progress value="${progress}" max="100"></progress><span>${progress}%</span></div>`
+      }
+      ${
+        isList
+          ? `
+        <div class="edit-actions">
+          <button class="edit-btn" data-id="${item.id}">تعديل</button>
+          <button class="delete-btn" data-id="${item.id}">حذف</button>
+        </div>
+      `
+          : ""
+      }
+    `;
+    container.appendChild(div);
+  },
+
+  renderService(container, item, isList) {
+    const div = document.createElement("div");
+    div.className = "session1 sessionsFormat";
+    div.innerHTML = `
+      <div class="session_con">
+        <div class="text">
+          <h4>${utils.sanitizeHTML(item.title || "غير محدد")}</h4>
+          <p>${utils.sanitizeHTML(item.description || "لا يوجد وصف")}</p>
+        </div>
+      </div>
+      ${
+        isList
+          ? `
+        <div class="edit-actions">
+          <button class="edit-btn" data-id="${item.id}">تعديل</button>
+          <button class="delete-btn" data-id="${item.id}">حذف</button>
+        </div>
+      `
+          : ""
+      }
+    `;
+    container.appendChild(div);
+  },
+
+  async deleteItem(section, id, containerId, listId, renderFn) {
+    try {
+      const token = localStorage.getItem("authToken");
+      await (section === "certifications"
+        ? deleteCertification(id, token)
+        : section === "experiences"
+        ? deleteExperience(id, token)
+        : section === "education"
+        ? deleteEducation(id, token)
+        : section === "ratings"
+        ? deleteRating(id, token)
+        : section === "achievements"
+        ? deleteAchievement(id, token)
+        : deleteService(id, token));
+      common.showAlert("تم", "تم الحذف بنجاح", "success");
+      dataCache[section] = null;
+      await this.loadSectionData(section, containerId, renderFn, listId);
+    } catch (error) {
+      console.error(`Delete ${section} error:`, error.message);
+    }
+  },
+
+  async likeRating(id) {
+    try {
+      const token = localStorage.getItem("authToken");
+      await likeRating(id, token);
+      common.showAlert("تم", "تم الإعجاب بالتقييم", "success");
+      dataCache.ratings = null;
+      await this.loadSectionData(
+        "ratings",
+        "#ratingContent",
+        this.renderRating,
+        "ratingList"
+      );
+    } catch (error) {
+      console.error("Like rating error:", error.message);
+    }
+  },
+};
+
+// Form Handler Module
+const formHandler = {
+  initializeForm(
+    formId,
+    type,
+    endpoint,
+    successMessage,
+    section,
+    containerId,
+    listId,
+    renderFn,
+    popupId
+  ) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+
+    if (type === "experience") {
+      const currentlyWorking = form.querySelector("#currentlyWorking");
+      const endDateInput = form.querySelector("#expEndDate");
+      if (currentlyWorking) {
+        currentlyWorking.addEventListener("change", (e) => {
+          endDateInput.disabled = e.target.checked;
+          if (e.target.checked) endDateInput.value = "";
+        });
+      }
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!formValidation.validateForm(form, type)) return;
+
+      const data = {};
+      form.querySelectorAll("input, textarea, select").forEach((input) => {
+        if (input.type === "checkbox") {
+          data[input.id] = input.checked || false;
+        } else if (input.value) {
+          data[input.id] = input.value.trim();
+        }
+      });
+
+      try {
+        const token = localStorage.getItem("authToken");
+        const decodedToken = common.decodeJWT(token);
+        const userId = decodedToken?.sub || decodedToken?.id;
+
+        let apiData;
+        if (type === "certificate") {
+          apiData = {
+            name: data.certificateName,
+            link: data.certificateLink,
+            donor: data.issuingAuthority,
+            date: data.certStartDate,
+            expireAt: data.certEndDate,
+            number: data.certificateNumber,
+          };
+        } else if (type === "experience") {
+          apiData = {
+            title: data.title,
+            company: data.companyName,
+            from: data.expStartDate,
+            to: data.currentlyWorking ? null : data.expEndDate,
+            summary: data.expDescription,
+            stillThere: data.currentlyWorking ?? false,
+          };
+        } else if (type === "education") {
+          apiData = {
+            school: data.degree,
+            degree: data.institution,
+            from: data.eduStartDate,
+            to: data.eduEndDate,
+          };
+        } else if (type === "rating") {
+          apiData = {
+            reviewerName: data.reviewerName,
+            comment: data.comment,
+            rating: parseInt(data.ratingScore),
+          };
+        } else if (type === "achievement") {
+          apiData = {
+            title: data.achievementTitle,
+            description: data.achievementDescription,
+            date: data.achievedAt,
+          };
+        } else if (type === "service") {
+          apiData = {
+            title: data.serviceTitle,
+            description: data.serviceDescription,
+          };
+        } else {
+          apiData = data;
+        }
+
+        if (form.dataset.id) {
+          // Update existing item
+          await (type === "certificate"
+            ? updateCertification(form.dataset.id, apiData, token)
+            : type === "experience"
+            ? updateExperience(form.dataset.id, apiData, token)
+            : type === "education"
+            ? updateEducation(form.dataset.id, apiData, token)
+            : type === "rating"
+            ? updateRating(form.dataset.id, apiData, token)
+            : type === "achievement"
+            ? updateAchievement(form.dataset.id, apiData, token)
+            : type === "service"
+            ? updateService(form.dataset.id, apiData, token)
+            : common.updateUser(apiData, token));
+        } else {
+          // Create new item
+          console.log("apiData");
+          await (type === "certificate"
+            ? createCertification(apiData, token)
+            : type === "experience"
+            ? createExperience(apiData, token, userId)
+            : type === "education"
+            ? createEducation(apiData, token, userId)
+            : type === "rating"
+            ? createRating(apiData, token, userId)
+            : type === "achievement"
+            ? createAchievement(apiData, token, userId)
+            : type === "service"
+            ? createService(apiData, token, userId)
+            : common.updateUser(apiData, token));
+        }
+        console.log("llllllllllllllllllllllllll");
+
+        common.showAlert("تم", successMessage, "success");
+        if (section) {
+          dataCache[section] = null;
+          await sectionModule.loadSectionData(
+            section,
+            containerId,
+            renderFn,
+            listId
+          );
+        }
+        popupModule.hidePopup(popupId);
+      } catch (error) {
+        console.error(`${type} form submission error:`, error.message);
+      }
+    });
+  },
+
+  initializeProfileForms() {
+    this.initializeForm(
+      "professionalForm",
+      "professional",
+      "users",
+      "تم تحديث المعلومات الأساسية بنجاح",
+      null,
+      null,
+      null,
+      null,
+      "editProfileInfo"
+    );
+    this.initializeForm(
+      "socialForm",
+      "social",
+      "users",
+      "تم تحديث الروابط الاجتماعية بنجاح",
+      null,
+      null,
+      null,
+      null,
+      "editProfileInfo"
+    );
+    this.initializeForm(
+      "experienceForm",
+      "experience",
+      "experiences",
+      "تم حفظ الخبرة بنجاح",
+      "experiences",
+      "#experiencesContainer",
+      "experienceList",
+      sectionModule.renderExperience,
+      "editProfileEx_edit2"
+    );
+    this.initializeForm(
+      "certificateForm",
+      "certificate",
+      "certifications",
+      "تم حفظ الشهادة بنجاح",
+      "certifications",
+      "#certificatesContainer",
+      "certificateList",
+      sectionModule.renderCertificate,
+      "editProfileSp_add"
+    );
+    this.initializeForm(
+      "educationForm",
+      "education",
+      "education",
+      "تم حفظ التعليم بنجاح",
+      "education",
+      "#educationContainer",
+      "educationList",
+      sectionModule.renderEducation,
+      "editProfileEdu_add"
+    );
+    this.initializeForm(
+      "ratingForm",
+      "rating",
+      "ratings",
+      "تم حفظ التقييم بنجاح",
+      "ratings",
+      "#ratingContent",
+      "ratingList",
+      sectionModule.renderRating,
+      "editProfileRating_add"
+    );
+    this.initializeForm(
+      "achievementForm",
+      "achievement",
+      "achievements",
+      "تم حفظ الإنجاز بنجاح",
+      "achievements",
+      "#achievementsContent",
+      "achievementList",
+      sectionModule.renderAchievement,
+      "editProfileAchievement_add"
+    );
+    this.initializeForm(
+      "serviceForm",
+      "service",
+      "services",
+      "تم حفظ الخدمة بنجاح",
+      "services",
+      "#servicesContent",
+      "serviceList",
+      sectionModule.renderService,
+      "editProfileService_add"
+    );
+  },
+};
+
+// Image Upload Module
+const imageUpload = {
+  initialize() {
+    const uploadImage = document.getElementById("uploadImage");
+    const uploadImageBackground = document.getElementById(
+      "uploadImageBackground"
+    );
+    const profileImagePreview = document.getElementById("profileImagePreview");
+    const editBtnMain = document.getElementById("editBtnMain");
+    const removeProfileImage = document.getElementById("removeProfileImage");
+    const videoInput = document.getElementById("videoInput");
+
+    if (uploadImage && profileImagePreview) {
+      uploadImage.addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (file && file.size > 2 * 1024 * 1024) {
+          common.showAlert(
+            "خطأ",
+            "حجم الصورة يجب أن يكون أقل من 2 ميجا بايت",
+            "error"
+          );
+          return;
+        }
+
+        try {
+          const formData = new FormData();
+          formData.append("image", file);
+          const token = localStorage.getItem("authToken");
+          const decodedToken = common.decodeJWT(token);
+          const userId = decodedToken?.sub || decodedToken?.id;
+          const data = await apiRequest(
+            `/users/profileImg/${userId}`,
+            "PATCH",
+            formData,
+            token,
+            true
+          );
+          profileImagePreview.src = data.image_url;
+          await profileModule.loadUserProfile();
+        } catch (error) {
+          console.error("Image upload error:", error.message);
+        }
+      });
+    }
+
+    if (uploadImageBackground) {
+      uploadImageBackground.addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+          const formData = new FormData();
+          formData.append("image", file);
+          const token = localStorage.getItem("authToken");
+          const decodedToken = common.decodeJWT(token);
+          const userId = decodedToken?.sub || decodedToken?.id;
+          const data = await apiRequest(
+            `/users/coverImg/${userId}`,
+            "POST",
+            formData,
+            token,
+            true
+          );
+          document.getElementById("background_image").src =
+            data.background_image_url;
+          await profileModule.loadUserProfile();
+        } catch (error) {
+          console.error("Background image upload error:", error.message);
+        }
+      });
+    }
+
+    if (videoInput) {
+      videoInput.addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (
+          file &&
+          file.type.includes("mp4") &&
+          file.size <= 25 * 1024 * 1024
+        ) {
+          try {
+            const formData = new FormData();
+            formData.append("video", file);
+            const token = localStorage.getItem("authToken");
+            const decodedToken = common.decodeJWT(token);
+            const userId = decodedToken?.sub || decodedToken?.id;
+            const data = await apiRequest(
+              `/users/${userId}/upload-video`,
+              "POST",
+              formData,
+              token,
+              true
+            );
+            const videoPlayer = document.getElementById("videoPlayer");
+            videoPlayer.src = data.video_url;
+            videoPlayer.style.display = "block";
+            document.getElementById("uplodimage").style.display = "none";
+            document.getElementById("uplodeBtn").style.display = "none";
+            document.getElementById("size").style.display = "none";
+            await profileModule.loadUserProfile();
+          } catch (error) {
+            console.error("Video upload error:", error.message);
+          }
+        } else {
+          common.showAlert(
+            "خطأ",
+            "يجب أن يكون الفيديو بصيغة MP4 وحجمه أقل من 25 ميجابايت",
+            "error"
+          );
+        }
+      });
+    }
+
+    if (editBtnMain)
+      editBtnMain.addEventListener("click", () => uploadImage.click());
+
+    if (removeProfileImage) {
+      removeProfileImage.addEventListener("click", async () => {
+        try {
+          const token = localStorage.getItem("authToken");
+          const decodedToken = common.decodeJWT(token);
+          const userId = decodedToken?.sub || decodedToken?.id;
+          await apiRequest(
+            `/users/${userId}/remove-image`,
+            "DELETE",
+            null,
+            token
+          );
+          profileImagePreview.src = "../mentor-images/personal_image.png";
+          await profileModule.loadUserProfile();
+        } catch (error) {
+          console.error("Image removal error:", error.message);
+        }
+      });
+    }
+  },
+};
+
+// Tab Module
+const tabModule = {
+  async switchTab(tabName) {
     const tabs = {
-      overview: { content: "overviewContent", tab: "overviewTab", section: null },
-      services: { content: "servicesContent", tab: "manageservices", section: null },
-      rating: { content: "ratingContent", tab: "ratingTab", section: "ratings" },
-      achievements: { content: "achievementsContent", tab: "achievementsTab", section: "achievements" },
+      overview: {
+        content: "overviewContent",
+        tab: "overviewTab",
+        section: null,
+      },
+      services: {
+        content: "servicesContent",
+        tab: "manageservices",
+        section: "services",
+      },
+      rating: {
+        content: "ratingContent",
+        tab: "ratingTab",
+        section: "ratings",
+      },
+      achievements: {
+        content: "achievementsContent",
+        tab: "achievementsTab",
+        section: "achievements",
+      },
     };
 
     Object.values(tabs).forEach(({ content, tab }) => {
@@ -2409,62 +1252,222 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (selectedTab) selectedTab.classList.add("checked");
 
     if (tabs[tabName].section) {
-      const service = tabs[tabName].section === "ratings" ? ratingService : achievementService;
-      await service.loadSectionData(
-        dataCache,
+      await sectionModule.loadSectionData(
+        tabs[tabName].section,
         `#${tabs[tabName].content}`,
-        service.renderItem,
+        tabs[tabName].section === "ratings"
+          ? sectionModule.renderRating
+          : tabs[tabName].section === "achievements"
+          ? sectionModule.renderAchievement
+          : sectionModule.renderService,
         `#${tabs[tabName].section}List`
       );
     }
-  }
+  },
 
-  // Initialize event listeners
-  function initializeEventListeners() {
+  initializeProfileTabs() {
+    const tabs = {
+      BasicInfoTab: ["professionalForm", "socialForm"],
+      ExperienceTab: ["experienceList"],
+      CertificatesTab: ["certificateList"],
+      EducationTab: ["educationList"],
+      RatingsTab: ["ratingList"],
+      AchievementsTab: ["achievementList"],
+      ServicesTab: ["serviceList"],
+    };
+
+    Object.entries(tabs).forEach(([tabId, sections]) => {
+      const tab = document.getElementById(tabId);
+      if (tab) {
+        tab.addEventListener("click", async () => {
+          Object.keys(tabs).forEach((t) => {
+            document.getElementById(t).classList.remove("checked");
+            tabs[t].forEach((id) => {
+              const el = document.getElementById(id);
+              if (el) el.style.display = "none";
+            });
+          });
+
+          tab.classList.add("checked");
+          sections.forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = "block";
+          });
+
+          const addButtons = {
+            ExperienceTab: "moreExBtn_EX",
+            CertificatesTab: "moreExBtn_SP",
+            EducationTab: "moreExBtn_Edu",
+            RatingsTab: "moreExBtn_Rating",
+            AchievementsTab: "moreExBtn_Achievement",
+            ServicesTab: "moreExBtn_Service",
+          };
+          Object.values(addButtons).forEach((btnId) => {
+            const btn = document.getElementById(btnId);
+            if (btn) btn.style.display = "none";
+          });
+          if (addButtons[tabId])
+            document.getElementById(addButtons[tabId]).style.display = "block";
+
+          const sectionMap = {
+            ExperienceTab: "experiences",
+            CertificatesTab: "certifications",
+            EducationTab: "education",
+            RatingsTab: "ratings",
+            AchievementsTab: "achievements",
+            ServicesTab: "services",
+          };
+          if (sectionMap[tabId]) {
+            await sectionModule.loadSectionData(
+              sectionMap[tabId],
+              `#${sectionMap[tabId]}Container`,
+              sectionMap[tabId] === "ratings"
+                ? sectionModule.renderRating
+                : sectionMap[tabId] === "achievements"
+                ? sectionModule.renderAchievement
+                : sectionMap[tabId] === "experiences"
+                ? sectionModule.renderExperience
+                : sectionMap[tabId] === "certifications"
+                ? sectionModule.renderCertificate
+                : sectionMap[tabId] === "education"
+                ? sectionModule.renderEducation
+                : sectionModule.renderService,
+              `#${sectionMap[tabId]}List`
+            );
+          }
+        });
+      }
+    });
+  },
+};
+
+// Event Listeners Module
+const eventListeners = {
+  initialize() {
     const openModalConfigs = [
-      { btnId: "editBtn", modalId: "editProfileInfo", screenId: "professionalForm" },
-      { btnId: "editBtnMain", modalId: null, action: () => document.getElementById("uploadImage")?.click() },
-      { btnId: "edit_2BtnExp", modalId: "editProfileEx_edit", screenId: "experienceList" },
-      { btnId: "edit_addExp", modalId: "editProfileEx_edit2", screenId: "experienceFormScreen" },
-      { btnId: "moreExBtn_EX", modalId: "editProfileEx_edit2", screenId: "experienceFormScreen" },
-      { btnId: "edit_2BtnCert", modalId: "editProfileSp_edit", screenId: "certificateList" },
-      { btnId: "edit_addCert", modalId: "editProfileSp_add", screenId: "certificateFormScreen" },
-      { btnId: "moreExBtn_SP", modalId: "editProfileSp_add", screenId: "certificateFormScreen" },
-      { btnId: "edit_2BtnEdu", modalId: "editProfileEdu_edit", screenId: "educationList" },
-      { btnId: "edit_addEdu", modalId: "editProfileEdu_add", screenId: "educationFormScreen" },
-      { btnId: "moreExBtn_Edu", modalId: "editProfileEdu_add", screenId: "educationFormScreen" },
-      { btnId: "edit_2BtnRating", modalId: "editProfileRating_edit", screenId: "ratingList" },
-      { btnId: "edit_addRating", modalId: "editProfileRating_add", screenId: "ratingFormScreen" },
-      { btnId: "moreExBtn_Rating", modalId: "editProfileRating_add", screenId: "ratingFormScreen" },
-      { btnId: "edit_2BtnAchievement", modalId: "editProfileAchievement_edit", screenId: "achievementList" },
-      { btnId: "edit_addAchievement", modalId: "editProfileAchievement_add", screenId: "achievementFormScreen" },
-      { btnId: "moreExBtn_Achievement", modalId: "editProfileAchievement_add", screenId: "achievementFormScreen" },
-      { btnId: "edit_bigimage", modalId: null, action: () => document.getElementById("uploadImageBackground")?.click() },
+      {
+        btnId: "editBtn",
+        modalId: "editProfileInfo",
+        screenId: "professionalForm",
+      },
+      {
+        btnId: "editBtnMain",
+        modalId: "editProfileInfo",
+        screenId: "professionalForm",
+      },
+      {
+        btnId: "edit_2BtnExp",
+        modalId: "editProfileEx_edit",
+        screenId: "experienceList",
+      },
+      {
+        btnId: "edit_addExp",
+        modalId: "editProfileEx_edit2",
+        screenId: "experienceFormScreen",
+      },
+      {
+        btnId: "moreExBtn_EX",
+        modalId: "editProfileEx_edit2",
+        screenId: "experienceFormScreen",
+      },
+      {
+        btnId: "edit_2BtnCert",
+        modalId: "editProfileSp_edit",
+        screenId: "certificateList",
+      },
+      {
+        btnId: "edit_addCert",
+        modalId: "editProfileSp_add",
+        screenId: "certificateFormScreen",
+      },
+      {
+        btnId: "moreExBtn_SP",
+        modalId: "editProfileSp_add",
+        screenId: "certificateFormScreen",
+      },
+      {
+        btnId: "edit_2BtnEdu",
+        modalId: "editProfileEdu_edit",
+        screenId: "educationList",
+      },
+      {
+        btnId: "edit_addEdu",
+        modalId: "editProfileEdu_add",
+        screenId: "educationFormScreen",
+      },
+      {
+        btnId: "moreExBtn_Edu",
+        modalId: "editProfileEdu_add",
+        screenId: "educationFormScreen",
+      },
+      {
+        btnId: "edit_2BtnRating",
+        modalId: "editProfileRating_edit",
+        screenId: "ratingList",
+      },
+      {
+        btnId: "edit_addRating",
+        modalId: "editProfileRating_add",
+        screenId: "ratingFormScreen",
+      },
+      {
+        btnId: "moreExBtn_Rating",
+        modalId: "editProfileRating_add",
+        screenId: "ratingFormScreen",
+      },
+      {
+        btnId: "edit_2BtnAchievement",
+        modalId: "editProfileAchievement_edit",
+        screenId: "achievementList",
+      },
+      {
+        btnId: "edit_addAchievement",
+        modalId: "editProfileAchievement_add",
+        screenId: "achievementFormScreen",
+      },
+      {
+        btnId: "moreExBtn_Achievement",
+        modalId: "editProfileAchievement_add",
+        screenId: "achievementFormScreen",
+      },
+      {
+        btnId: "edit_2BtnService",
+        modalId: "editProfileService_edit",
+        screenId: "serviceList",
+      },
+      {
+        btnId: "edit_addService",
+        modalId: "editProfileService_add",
+        screenId: "serviceFormScreen",
+      },
+      {
+        btnId: "moreExBtn_Service",
+        modalId: "editProfileService_add",
+        screenId: "serviceFormScreen",
+      },
+      {
+        btnId: "edit_bigimage",
+        action: () => document.getElementById("uploadImageBackground").click(),
+      },
     ];
 
-    if (isProfileOwner) {
-      openModalConfigs.forEach((config) => {
-        const button = document.getElementById(config.btnId);
-        if (button) {
-          button.addEventListener("click", (e) => {
-            e.preventDefault();
-            if (config.modalId) {
-              const form = document.getElementById(config.screenId.replace("Screen", ""));
-              if (form) delete form.dataset.id;
-              showPopup(config.modalId, config.screenId);
-            } else if (config.action) {
-              config.action();
-            }
-          });
-        }
-      });
-
-      experienceService.initializeEventListeners(dataCache, showPopup);
-      certificateService.initializeEventListeners(dataCache, showPopup);
-      educationService.initializeEventListeners(dataCache, showPopup);
-      ratingService.initializeEventListeners(dataCache, showPopup);
-      achievementService.initializeEventListeners(dataCache, showPopup);
-    }
+    openModalConfigs.forEach((config) => {
+      const button = document.getElementById(config.btnId);
+      if (button) {
+        button.addEventListener("click", (e) => {
+          e.preventDefault();
+          if (config.modalId) {
+            const form = document.getElementById(
+              config.screenId.replace("Screen", "")
+            );
+            if (form) delete form.dataset.id;
+            popupModule.showPopup(config.modalId, config.screenId);
+          } else if (config.action) {
+            config.action();
+          }
+        });
+      }
+    });
 
     const closeModalConfigs = [
       { btnId: "closeBtn1", modalId: "editProfileInfo" },
@@ -2478,85 +1481,291 @@ document.addEventListener("DOMContentLoaded", async function () {
       { btnId: "closeBtn11", modalId: "editProfileRating_edit" },
       { btnId: "closeBtn12", modalId: "editProfileAchievement_add" },
       { btnId: "closeBtn13", modalId: "editProfileAchievement_edit" },
+      { btnId: "closeBtn14", modalId: "editProfileService_add" },
+      { btnId: "closeBtn15", modalId: "editProfileService_edit" },
     ];
 
     closeModalConfigs.forEach((config) => {
       const button = document.getElementById(config.btnId);
-      if (button) {
-        button.addEventListener("click", () => hidePopup(config.modalId));
+      if (button)
+        button.addEventListener("click", () =>
+          popupModule.hidePopup(config.modalId)
+        );
+    });
+
+    const editDeleteConfigs = [
+      {
+        listId: "experienceList",
+        editClass: "edit-exp",
+        deleteClass: "delete-exp",
+        section: "experiences",
+        containerId: "#experiencesContainer",
+        listId: "experienceList",
+        renderFn: sectionModule.renderExperience,
+        popupId: "editProfileEx_edit2",
+        screenId: "experienceFormScreen",
+        endpoint: "experiences",
+        formFields: [
+          "title",
+          "companyName",
+          "expStartDate",
+          "expEndDate",
+          "expDescription",
+          "currentlyWorking",
+        ],
+      },
+      {
+        listId: "certificateList",
+        editClass: "edit-cert",
+        deleteClass: "delete-cert",
+        section: "certifications",
+        containerId: "#certificatesContainer",
+        listId: "certificateList",
+        renderFn: sectionModule.renderCertificate,
+        popupId: "editProfileSp_add",
+        screenId: "certificateFormScreen",
+        endpoint: "certifications",
+        formFields: [
+          "certificateName",
+          "issuingAuthority",
+          "certStartDate",
+          "certEndDate",
+          "certificateLink",
+          "certificateNumber",
+        ],
+      },
+      {
+        listId: "educationList",
+        editClass: "edit-edu",
+        deleteClass: "delete-edu",
+        section: "education",
+        containerId: "#educationContainer",
+        listId: "educationList",
+        renderFn: sectionModule.renderEducation,
+        popupId: "editProfileEdu_add",
+        screenId: "educationFormScreen",
+        endpoint: "education",
+        formFields: [
+          "degree",
+          "institution",
+          "field",
+          "eduStartDate",
+          "eduEndDate",
+        ],
+      },
+      {
+        listId: "ratingList",
+        editClass: "edit-btn",
+        deleteClass: "delete-btn",
+        section: "ratings",
+        containerId: "#ratingContent",
+        listId: "ratingList",
+        renderFn: sectionModule.renderRating,
+        popupId: "editProfileRating_add",
+        screenId: "ratingFormScreen",
+        endpoint: "ratings",
+        formFields: ["reviewerName", "comment", "ratingScore"],
+      },
+      {
+        listId: "achievementList",
+        editClass: "edit-btn",
+        deleteClass: "delete-btn",
+        section: "achievements",
+        containerId: "#achievementsContent",
+        listId: "achievementList",
+        renderFn: sectionModule.renderAchievement,
+        popupId: "editProfileAchievement_add",
+        screenId: "achievementFormScreen",
+        endpoint: "achievements",
+        formFields: [
+          "achievementTitle",
+          "achievementDescription",
+          "achievedAt",
+        ],
+      },
+      {
+        listId: "serviceList",
+        editClass: "edit-btn",
+        deleteClass: "delete-btn",
+        section: "services",
+        containerId: "#servicesContent",
+        listId: "serviceList",
+        renderFn: sectionModule.renderService,
+        popupId: "editProfileService_add",
+        screenId: "serviceFormScreen",
+        endpoint: "services",
+        formFields: ["serviceTitle", "serviceDescription"],
+      },
+    ];
+
+    editDeleteConfigs.forEach((config) => {
+      const list = document.querySelector(`#${config.listId}`);
+      if (list) {
+        list.addEventListener("click", async (e) => {
+          if (e.target.classList.contains(config.editClass)) {
+            const id = e.target.dataset.id;
+            try {
+              const token = localStorage.getItem("authToken");
+              const decodedToken = common.decodeJWT(token);
+              const userId = decodedToken?.sub || decodedToken?.id;
+              const data =
+                config.section === "certifications"
+                  ? await getCertification(userId, id, token)
+                  : config.section === "experiences"
+                  ? await getExperience(userId, id, token)
+                  : config.section === "education"
+                  ? await getEducationItem(userId, id, token)
+                  : config.section === "ratings"
+                  ? await getRating(userId, id, token)
+                  : config.section === "achievements"
+                  ? await getAchievement(userId, id, token)
+                  : await getService(userId, id, token);
+
+              const formData = {};
+              config.formFields.forEach((field) => {
+                if (config.section === "certifications") {
+                  const apiFieldMap = {
+                    certificateName: "name",
+                    issuingAuthority: "donor",
+                    certStartDate: "date",
+                    certEndDate: "expireAt",
+                    certificateLink: "link",
+                    certificateNumber: "number",
+                  };
+                  formData[field] = data[apiFieldMap[field]] || "";
+                } else if (config.section === "experiences") {
+                  const apiFieldMap = {
+                    title: "title",
+                    companyName: "company",
+                    expStartDate: "from",
+                    expEndDate: "to",
+                    expDescription: "summary",
+                  };
+                  formData[field] = data[apiFieldMap[field]] || "";
+                  if (field === "currentlyWorking") {
+                    formData[field] = !data.endDate;
+                  }
+                } else if (config.section === "education") {
+                  const apiFieldMap = {
+                    degree: "degree",
+                    institution: "institution",
+                    field: "field",
+                    eduStartDate: "startDate",
+                    eduEndDate: "endDate",
+                  };
+                  formData[field] = data[apiFieldMap[field]] || "";
+                } else if (config.section === "ratings") {
+                  const apiFieldMap = {
+                    reviewerName: "reviewerName",
+                    comment: "comment",
+                    ratingScore: "rating",
+                  };
+                  formData[field] = data[apiFieldMap[field]] || "";
+                } else if (config.section === "achievements") {
+                  const apiFieldMap = {
+                    achievementTitle: "title",
+                    achievementDescription: "description",
+                    achievedAt: "date",
+                  };
+                  formData[field] = data[apiFieldMap[field]] || "";
+                } else if (config.section === "services") {
+                  const apiFieldMap = {
+                    serviceTitle: "title",
+                    serviceDescription: "description",
+                  };
+                  formData[field] = data[apiFieldMap[field]] || "";
+                }
+              });
+
+              const form = document.getElementById(
+                config.listId.replace("List", "Form")
+              );
+              if (form) form.dataset.id = id;
+              popupModule.showPopup(config.popupId, config.screenId, formData);
+            } catch (error) {
+              console.error(`Fetch ${config.section} error:`, error.message);
+            }
+          } else if (e.target.classList.contains(config.deleteClass)) {
+            if (confirm(`هل أنت متأكد من حذف هذا ${config.section}؟`)) {
+              await sectionModule.deleteItem(
+                config.section,
+                e.target.dataset.id,
+                config.containerId,
+                config.listId,
+                config.renderFn
+              );
+            }
+          } else if (
+            e.target.classList.contains("like-btn") &&
+            config.section === "ratings"
+          ) {
+            await sectionModule.likeRating(e.target.dataset.id);
+          }
+        });
       }
     });
 
     document.querySelectorAll(".tab").forEach((tab) => {
       tab.addEventListener("click", async () => {
         const tabName = tab.id.replace("Tab", "");
-        await switchTab(tabName);
+        await tabModule.switchTab(tabName);
       });
     });
-  }
+  },
+};
 
-  // Initialize the page
-  async function initialize() {
-    const profileData = await profileService.loadUserProfile();
-    isProfileOwner = profileData.isProfileOwner;
-
-    toggleEditButtons();
-
-    common.initializeLoginPopup(common.showSignupPopup);
-    common.initializeSignupPopup();
-    common.initializeMentorApplicationPopup();
-
-    if (isProfileOwner) {
-      profileService.initializeProfilePopup(showPopup, hidePopup);
-      experienceService.initializePopup(showPopup, hidePopup, dataCache);
-      certificateService.initializePopup(showPopup, hidePopup, dataCache);
-      educationService.initializePopup(showPopup, hidePopup, dataCache);
-      ratingService.initializePopup(showPopup, hidePopup, dataCache);
-      achievementService.initializePopup(showPopup, hidePopup, dataCache);
-      imageUploadService.initializeImageUpload();
-    }
-
+// Initialize Application
+async function initialize() {
+  try {
     await Promise.all([
-      experienceService.loadSectionData(
-        dataCache,
+      authModule.initialize(),
+      profileModule.loadUserProfile(),
+      tabModule.initializeProfileTabs(),
+      formHandler.initializeProfileForms(),
+      imageUpload.initialize(),
+      eventListeners.initialize(),
+      sectionModule.loadSectionData(
+        "experiences",
         "#experiencesContainer",
-        experienceService.renderItem,
-        "#experienceList"
+        sectionModule.renderExperience,
+        "experienceList"
       ),
-      certificateService.loadSectionData(
-        dataCache,
+      sectionModule.loadSectionData(
+        "certifications",
         "#certificatesContainer",
-        certificateService.renderItem,
-        "#certificateList"
+        sectionModule.renderCertificate,
+        "certificateList"
       ),
-      educationService.loadSectionData(
-        dataCache,
+      sectionModule.loadSectionData(
+        "education",
         "#educationContainer",
-        educationService.renderItem,
-        "#educationList"
+        sectionModule.renderEducation,
+        "educationList"
       ),
-      ratingService.loadSectionData(
-        dataCache,
+      sectionModule.loadSectionData(
+        "ratings",
         "#ratingContent",
-        ratingService.renderItem,
-        "#ratingList"
+        sectionModule.renderRating,
+        "ratingList"
       ),
-      achievementService.loadSectionData(
-        dataCache,
+      sectionModule.loadSectionData(
+        "achievements",
         "#achievementsContent",
-        achievementService.renderItem,
-        "#achievementList"
+        sectionModule.renderAchievement,
+        "achievementList"
+      ),
+      sectionModule.loadSectionData(
+        "services",
+        "#servicesContent",
+        sectionModule.renderService,
+        "serviceList"
       ),
     ]);
-
-    await switchTab("overview");
-    initializeEventListeners();
-  }
-
-  try {
-    await initialize();
+    await tabModule.switchTab("overview");
   } catch (error) {
     console.error("Initialization error:", error.message);
-    common.showAlert("خطأ", "فشل تهيئة الصفحة", "error");
   }
-});
+}
+
+document.addEventListener("DOMContentLoaded", initialize);
+// important
