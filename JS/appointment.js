@@ -13,12 +13,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   const dateRangeRadio = document.getElementById("date-range");
   const changeDatesBtn = document.getElementById("change-dates-btn");
 
-  // Set current date to today (May 20, 2025, 12:55 PM EEST)
-  let currentDate = new Date("2025-05-20T12:55:00+03:00");
+  // Get duration and scheduleId from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const duration = parseInt(urlParams.get("duration")) || 30; // Default to 30 minutes
+  const scheduleId = urlParams.get("scheduleId");
+
+  // Set current date to today
+  let currentDate = new Date();
   let availabilityData = {
     title: titleInput.value || "Work time",
-    availableFrom: "2025-05-20",
-    expireAt: "2026-05-20",
+    availableFrom: currentDate.toISOString().split("T")[0],
+    expireAt: new Date(
+      currentDate.getFullYear() + 1,
+      currentDate.getMonth(),
+      currentDate.getDate()
+    )
+      .toISOString()
+      .split("T")[0],
     maxDaysBefore: parseInt(maxDaysBeforeInput.value) || 30,
     minHoursBefore: parseInt(minHoursBeforeInput.value) || 24,
     maxBookingsPerDay: 5,
@@ -27,7 +38,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     days: [
       {
         dayOfWeek: "MONDAY",
-        intervals: [{ startTime: "13:00", endTime: "14:00" }],
+        intervals: [
+          {
+            startTime: "13:00",
+            endTime: `13:${duration.toString().padStart(2, "0")}`,
+          },
+        ],
       },
     ],
   };
@@ -111,6 +127,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     return localAvailability;
   }
 
+  // Function to generate time slots based on duration
+  function generateTimeSlots(duration) {
+    const slots = [];
+    const minutesPerDay = 24 * 60;
+    for (let minutes = 0; minutes < minutesPerDay; minutes += duration) {
+      const hours = Math.floor(minutes / 60);
+      const mins = minutes % 60;
+      const time = `${hours.toString().padStart(2, "0")}:${mins
+        .toString()
+        .padStart(2, "0")}`;
+      slots.push(time);
+    }
+    return slots;
+  }
+
   // Function to render the calendar
   function renderCalendar(localAvailability) {
     calendarHeader.innerHTML = "";
@@ -123,7 +154,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Header: Time label and days
     const timeLabel = document.createElement("div");
     timeLabel.className = "time-label";
-    timeLabel.textContent = "GMT-5";
+    timeLabel.textContent = "GMT+3"; // Adjusted to EEST
     calendarHeader.appendChild(timeLabel);
 
     const days = [
@@ -147,11 +178,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       calendarHeader.appendChild(dayLabel);
     }
 
-    // Body: Time slots
-    for (let hour = 0; hour < 24; hour++) {
+    // Body: Time slots based on duration
+    const timeSlots = generateTimeSlots(duration);
+    timeSlots.forEach((time) => {
       const timeCell = document.createElement("div");
       timeCell.className = "time-cell";
-      timeCell.textContent = `${hour.toString().padStart(2, "0")}:00`;
+      timeCell.textContent = time;
       calendarBody.appendChild(timeCell);
 
       for (let day = 0; day < 7; day++) {
@@ -160,14 +192,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         const dayName = days[day];
         if (localAvailability[dayName]) {
           localAvailability[dayName].forEach((slot) => {
-            const startHour = parseInt(slot.start.split(":")[0]);
-            const startMin = parseInt(slot.start.split(":")[1]);
-            const endHour = parseInt(slot.end.split(":")[0]);
-            const endMin = parseInt(slot.end.split(":")[1]);
-            const startTime = startHour + startMin / 60;
-            const endTime = endHour + endMin / 60;
-
-            if (startTime <= hour && hour < endTime) {
+            const slotStartMinutes =
+              parseInt(slot.start.split(":")[0]) * 60 +
+              parseInt(slot.start.split(":")[1]);
+            const slotEndMinutes =
+              parseInt(slot.end.split(":")[0]) * 60 +
+              parseInt(slot.end.split(":")[1]);
+            const cellStartMinutes =
+              parseInt(time.split(":")[0]) * 60 + parseInt(time.split(":")[1]);
+            if (
+              slotStartMinutes <= cellStartMinutes &&
+              cellStartMinutes < slotEndMinutes
+            ) {
               const timeSlotBlock = document.createElement("div");
               timeSlotBlock.className = "time-slot-block";
               timeSlotBlock.textContent = `${slot.start} - ${slot.end}`;
@@ -177,7 +213,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         calendarBody.appendChild(calendarCell);
       }
-    }
+    });
   }
 
   // Function to update the current week display
@@ -204,7 +240,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   function isValidSlot(slot) {
     const start = new Date(`1970-01-01T${slot.start}:00`);
     const end = new Date(`1970-01-01T${slot.end}:00`);
-    return end > start;
+    const durationMinutes = (end - start) / (1000 * 60);
+    return end > start && durationMinutes === duration; // Ensure slot matches duration
   }
 
   // Function to sort time slots
@@ -219,64 +256,32 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Function to generate a unique time slot
   function getUniqueTimeSlot(dayName, localAvailability) {
     const existingSlots = localAvailability[dayName] || [];
-    const possibleStarts = [
-      "08:00",
-      "09:00",
-      "10:00",
-      "11:00",
-      "12:00",
-      "13:00",
-      "14:00",
-      "15:00",
-      "16:00",
-      "17:00",
-    ];
+    const possibleStarts = generateTimeSlots(duration).slice(0, -1); // Exclude last slot to ensure end time fits
 
     for (let start of possibleStarts) {
-      const startHour = parseInt(start.split(":")[0]);
-      const durations = [1, 1.5, 2];
-      for (let duration of durations) {
-        const endHour = Math.floor(startHour + duration);
-        const endMin = (duration % 1) * 60;
-        const end = `${endHour.toString().padStart(2, "0")}:${endMin
-          .toString()
-          .padStart(2, "0")}`;
-        const newSlot = { start, end };
-        if (endHour <= 18 && isValidSlot(newSlot)) {
-          const hasConflict = existingSlots.some((slot) =>
-            isOverlapping(slot, newSlot)
-          );
-          if (!hasConflict) {
-            return newSlot;
-          }
-        }
-      }
-    }
-
-    if (existingSlots.length > 0) {
-      const lastSlot = existingSlots[existingSlots.length - 1];
-      const lastEndHour = parseInt(lastSlot.end.split(":")[0]);
-      const lastEndMin = parseInt(lastSlot.end.split(":")[1]);
-      const lastEndTime = lastEndHour + lastEndMin / 60;
-      if (lastEndTime < 18) {
-        const startHour = Math.floor(lastEndTime);
-        const startMin = (lastEndTime % 1) * 60;
-        const start = `${startHour.toString().padStart(2, "0")}:${startMin
-          .toString()
-          .padStart(2, "0")}`;
-        const endHour = Math.floor(lastEndTime + 1);
-        const end = `${endHour.toString().padStart(2, "0")}:00`;
-        const newSlot = { start, end };
-        if (
-          isValidSlot(newSlot) &&
-          !existingSlots.some((slot) => isOverlapping(slot, newSlot))
-        ) {
+      const startMinutes =
+        parseInt(start.split(":")[0]) * 60 + parseInt(start.split(":")[1]);
+      const endMinutes = startMinutes + duration;
+      const endHour = Math.floor(endMinutes / 60);
+      const endMin = endMinutes % 60;
+      const end = `${endHour.toString().padStart(2, "0")}:${endMin
+        .toString()
+        .padStart(2, "0")}`;
+      const newSlot = { start, end };
+      if (endHour < 24 && isValidSlot(newSlot)) {
+        const hasConflict = existingSlots.some((slot) =>
+          isOverlapping(slot, newSlot)
+        );
+        if (!hasConflict) {
           return newSlot;
         }
       }
     }
 
-    return { start: "08:00", end: "09:00" };
+    return {
+      start: "08:00",
+      end: `08:${duration.toString().padStart(2, "0")}`,
+    };
   }
 
   // Function to update availability status
@@ -293,9 +298,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const localAvailability = collectAvailabilityFromUI();
     const apiData = convertToApiFormat(localAvailability);
     try {
-      await apiService.createMentorAvailability(apiData);
+      const response = await apiService.createMentorAvailability(apiData);
       showNotification("تم حفظ التغييرات بنجاح");
       availabilityData = apiData; // Update local data
+      window.opener.postMessage(
+        { scheduleId, availabilityId: response.data.id },
+        "*"
+      ); // Send availability ID back to parent
     } catch (error) {
       showNotification(`خطأ أثناء الحفظ: ${error.message}`);
     }
@@ -303,9 +312,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Mock date picker for "Change Dates" button
   changeDatesBtn.addEventListener("click", () => {
-    // Simulate date picker (replace with actual date picker logic)
-    const newStart = prompt("أدخل تاريخ البدء (YYYY-MM-DD):", "2025-05-20");
-    const newEnd = prompt("أدخل تاريخ الانتهاء (YYYY-MM-DD):", "2026-05-20");
+    const newStart = prompt(
+      "أدخل تاريخ البدء (YYYY-MM-DD):",
+      availabilityData.availableFrom
+    );
+    const newEnd = prompt(
+      "أدخل تاريخ الانتهاء (YYYY-MM-DD):",
+      availabilityData.expireAt
+    );
     if (newStart && newEnd) {
       availabilityData.availableFrom = newStart;
       availabilityData.expireAt = newEnd;
@@ -348,10 +362,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         const timeSlotElement = document.createElement("div");
         timeSlotElement.className = "time-slot";
         timeSlotElement.innerHTML = `
-          <input type="time" class="slot-start" value="${slot.start}" />
+          <input type="time" class="slot-start" value="${slot.start}" step="${
+          duration * 60
+        }" />
           <span>-</span>
-          <input type="time" class="slot-end" value="${slot.end}" />
-          <button class="remove-slot-btn">×</button>
+          <input type="time" class="slot-end" value="${slot.end}" step="${
+          duration * 60
+        }" />
+          <button class="remove-slot-btn">×</button>          
         `;
         timeSlotsDiv.appendChild(timeSlotElement);
 
@@ -372,11 +390,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       startInput.addEventListener("change", () => {
         const localAvailability = convertToLocalFormat(availabilityData);
         const newStart = startInput.value;
-        const currentEnd = localAvailability[dayName][index].end;
-        const updatedSlot = { start: newStart, end: currentEnd };
+        const startMinutes =
+          parseInt(newStart.split(":")[0]) * 60 +
+          parseInt(newStart.split(":")[1]);
+        const endMinutes = startMinutes + duration;
+        const endHour = Math.floor(endMinutes / 60);
+        const endMin = endMinutes % 60;
+        const newEnd = `${endHour.toString().padStart(2, "0")}:${endMin
+          .toString()
+          .padStart(2, "0")}`;
+        const updatedSlot = { start: newStart, end: newEnd };
 
         if (!isValidSlot(updatedSlot)) {
-          alert("وقت الانتهاء يجب أن يكون بعد وقت البدء");
+          alert("وقت الانتهاء يجب أن يكون بعد وقت البدء ويطابق المدة المحددة");
           startInput.value = localAvailability[dayName][index].start;
           return;
         }
@@ -391,6 +417,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         localAvailability[dayName][index].start = newStart;
+        localAvailability[dayName][index].end = newEnd;
         localAvailability[dayName] = sortSlots(localAvailability[dayName]);
         availabilityData = convertToApiFormat(localAvailability);
         rebuildTimeSlots();
@@ -398,31 +425,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
 
       endInput.addEventListener("change", () => {
-        const localAvailability = convertToLocalFormat(availabilityData);
-        const newEnd = endInput.value;
-        const currentStart = localAvailability[dayName][index].start;
-        const updatedSlot = { start: currentStart, end: newEnd };
-
-        if (!isValidSlot(updatedSlot)) {
-          alert("وقت الانتهاء يجب أن يكون بعد وقت البدء");
-          endInput.value = localAvailability[dayName][index].end;
-          return;
-        }
-
-        const hasOverlap = localAvailability[dayName].some(
-          (slot, i) => i !== index && isOverlapping(slot, updatedSlot)
+        alert(
+          "يرجى تعديل وقت البدء فقط، وقت الانتهاء يتم تحديده تلقائيًا بناءً على المدة"
         );
-        if (hasOverlap) {
-          alert("الفترة الزمنية تتداخل مع فترة أخرى");
-          endInput.value = localAvailability[dayName][index].end;
-          return;
-        }
-
-        localAvailability[dayName][index].end = newEnd;
-        localAvailability[dayName] = sortSlots(localAvailability[dayName]);
-        availabilityData = convertToApiFormat(localAvailability);
-        rebuildTimeSlots();
-        renderCalendar(localAvailability);
+        endInput.value = localAvailability[dayName][index].end;
       });
 
       removeBtn.addEventListener("click", () => {
@@ -448,9 +454,13 @@ document.addEventListener("DOMContentLoaded", async () => {
           const timeSlotElement = document.createElement("div");
           timeSlotElement.className = "time-slot";
           timeSlotElement.innerHTML = `
-            <input type="time" class="slot-start" value="${slot.start}" />
+            <input type="time" class="slot-start" value="${slot.start}" step="${
+            duration * 60
+          }" />
             <span>-</span>
-            <input type="time" class="slot-end" value="${slot.end}" />
+            <input type="time" class="slot-end" value="${slot.end}" step="${
+            duration * 60
+          }" disabled />
             <button class="remove-slot-btn">×</button>
           `;
           timeSlotsDiv.appendChild(timeSlotElement);
@@ -471,3 +481,4 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderCalendar(convertToLocalFormat(availabilityData));
   updateCurrentWeek();
 });
+// important

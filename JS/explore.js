@@ -46,7 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let currentMentors = [];
   let currentNotifications = [...notificationsData];
-  // currentNotifications = window.auth.fetchNotifications();
+  currentNotifications = window.auth.fetchNotifications();
+
   let selectedCategory = "الكل";
   let searchQuery = "";
   let isAscending = true;

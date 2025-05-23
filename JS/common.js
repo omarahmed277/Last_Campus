@@ -1493,12 +1493,12 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
         <div class="notification-content">
           <h3 class="notification-title">${
-            common.sanitizeHTML(notification.title) || "إشعار"
+            common.sanitizeHTML(notification.subject) || "إشعار"
           }</h3>
           ${
-            notification.text
+            notification.content
               ? `<p class="notification-text">${common.sanitizeHTML(
-                  notification.text
+                  notification.content
                 )}</p>`
               : ""
           }

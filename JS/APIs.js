@@ -463,7 +463,8 @@ document.addEventListener("DOMContentLoaded", function () {
       try {
         const token = localStorage.getItem("authToken");
         if (!token) {
-          throw new Error("غير مصرح: يجب تسجيل الدخول");
+          console.error("غير مصرح: يجب تسجيل الدخول");
+          return [];
         }
 
         const decodedToken = decodeJWT(token);

@@ -171,3 +171,4 @@ function showNotification(message, duration = 5000) {
     }
   }, duration);
 }
+// important

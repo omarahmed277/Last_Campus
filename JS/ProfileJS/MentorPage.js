@@ -505,7 +505,6 @@ const sectionModule = {
             : await getServices(userId, token);
         dataCache[section] = items;
       }
-
       container.innerHTML = "";
       listContainer.innerHTML = "";
       if (items.length === 0) {
@@ -513,6 +512,8 @@ const sectionModule = {
         listContainer.innerHTML = `<p class="no-data">لا توجد نتائج لعرضها</p>`;
         return;
       }
+
+      console.log("Items loaded for" + section + ":", items);
 
       items.forEach((item, index) => {
         renderFn(container, item, false);
@@ -672,7 +673,7 @@ const sectionModule = {
   renderRating(container, item, isList) {
     const div = document.createElement("div");
     div.className = "session1 sessionsFormat";
-    const starsHtml = this.generateStars(item.rating);
+    const starsHtml = "";
     const formattedDate = new Date(
       item.createdAt || item.date
     ).toLocaleDateString("ar-EG", {
@@ -691,7 +692,7 @@ const sectionModule = {
           )}</h4>
           <p>${utils.sanitizeHTML(item.comment || "لا يوجد تعليق")}</p>
           <div class="stars_con">
-            <p>${item.rating.toFixed(1)}</p>
+            <p>${item.stars.toFixed(1)}</p>
             <div class="stars">${starsHtml}</div>
           </div>
         </div>
@@ -719,6 +720,7 @@ const sectionModule = {
           : ""
       }
     `;
+    console.log(div);
     container.appendChild(div);
   },
 
@@ -1215,7 +1217,7 @@ const imageUpload = {
 
 // Tab Module
 const tabModule = {
-  async switchTab(tabName) {
+  switchTab(tabName) {
     const tabs = {
       overview: {
         content: "overviewContent",
@@ -1224,7 +1226,7 @@ const tabModule = {
       },
       services: {
         content: "servicesContent",
-        tab: "manageservices",
+        tab: "servicesTab",
         section: "services",
       },
       rating: {
@@ -1247,12 +1249,13 @@ const tabModule = {
     });
 
     const selectedContent = document.getElementById(tabs[tabName].content);
+    console.log("selectedConten a7aaaaaaaaaa", selectedContent);
     const selectedTab = document.getElementById(tabs[tabName].tab);
     if (selectedContent) selectedContent.style.display = "block";
     if (selectedTab) selectedTab.classList.add("checked");
 
     if (tabs[tabName].section) {
-      await sectionModule.loadSectionData(
+      sectionModule.loadSectionData(
         tabs[tabName].section,
         `#${tabs[tabName].content}`,
         tabs[tabName].section === "ratings"
@@ -1340,6 +1343,9 @@ const tabModule = {
     });
   },
 };
+
+// Ratings Tab
+const ratingsModule = {};
 
 // Event Listeners Module
 const eventListeners = {
@@ -1705,10 +1711,10 @@ const eventListeners = {
       }
     });
 
-    document.querySelectorAll(".tab").forEach((tab) => {
+    document.querySelectorAll(".Tab").forEach((tab) => {
       tab.addEventListener("click", async () => {
         const tabName = tab.id.replace("Tab", "");
-        await tabModule.switchTab(tabName);
+        tabModule.switchTab(tabName);
       });
     });
   },
