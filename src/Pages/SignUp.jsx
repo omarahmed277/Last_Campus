@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import SignUpStepOne from "../components/auth/SignUpStepOne";
-import SignUpStepTwo from "../components/auth/SignUpStepTwo";
-import EmailVerification from "../components/auth/EmailVerification";
+import SignUpStepOne from "../Features/auth/SignUpStepOne";
+import SignUpStepTwo from "../Features/auth/SignUpStepTwo";
+import EmailVerification from "../Features/auth/EmailVerification";
 
 const SignUp = () => {
   const [step, setStep] = useState(1);
@@ -28,7 +28,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="module">
+    <>
       {registrationError && (
         <div className="error-message">{registrationError}</div>
       )}
@@ -43,8 +43,10 @@ const SignUp = () => {
         />
       )}
 
-      {step === 3 && <EmailVerification email={userData?.email} />}
-    </div>
+      {step === 3 && (
+        <EmailVerification email={userData?.email} direction={"signup"} />
+      )}
+    </>
   );
 };
 

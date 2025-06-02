@@ -1,25 +1,16 @@
-import { Outlet, useParams } from "react-router-dom";
-import ProfileInfo from "../components/MyProfile/ProfileInfo";
-import NavBar from "../components/NavBar/NavBar";
-import SectionsLinks from "../components/Sections/SectionsLinks";
-import { useEffect } from "react";
+import { Outlet } from "react-router-dom";
+import ProfileInfo from "../Features/MyProfile/ProfileInfo";
+import SectionsLinks from "../Features/Sections/SectionsLinks";
+import { useUserData } from "../contexts/useUserData";
 
-function User({ curAcount, getUser, user }) {
-  const { id } = useParams();
-  // const user = getUser(id);
-  useEffect(
-    function () {
-      getUser(id);
-    },
-    [id]
-  );
+function User() {
+  const { user } = useUserData();
   return (
-    <div className="container">
-      <NavBar user={curAcount} />
+    <>
       <ProfileInfo user={user} />
       <SectionsLinks />
       <Outlet />
-    </div>
+    </>
   );
 }
 

@@ -66,12 +66,11 @@ h2 svg {
   color: var(--Gray-900, #101828);
   text-align: center;
 
-  /* Global Tokens/Headings/H-9 */
   font-family: "Baloo Bhaijaan 2";
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
-  line-height: 39px; /* 162.5% */
+  line-height: 39px;  
 }
 .module h2 + p {
   color: var(--COLORS-Primary-1000, #202020);
@@ -80,7 +79,7 @@ h2 svg {
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
-  line-height: 27px; /* 150% */
+  line-height: 27px; 
 }
 
 .module form {
@@ -104,12 +103,11 @@ h2 svg {
   color: var(--Gray-900, #101828);
   text-align: right;
 
-  /* Global Tokens/Body/B-1 */
   font-family: "Baloo Bhaijaan 2";
   font-size: 18px;
   font-style: normal;
   font-weight: 500;
-  line-height: 27px; /* 150% */
+  line-height: 27px; 
 }
 .module form div:first-child input {
   font-family: var(--font-family-font-family, DM_Sans);
@@ -125,11 +123,12 @@ h2 svg {
   font-family: "Baloo Bhaijaan 2";
   outline: none;
 
-  /* text-base/regular */
   font-size: 16px;
   font-style: normal;
   font-weight: var(--font-weight-normal, 400);
-  line-height: var(--line-height-text-base, 24px); /* 150% */
+  line-height: var(--line-height-text-base, 24px); 
+  direction: ltr;
+  text-align: end;
 }
 
 .code {
@@ -139,20 +138,22 @@ h2 svg {
   align-self: stretch;
   flex-direction: row;
   justify-content: center;
+  flex-direction: row !important;
+  direction: ltr;
 }
 .code input {
-  width: 74px;
-  padding-top: 25px;
-  border: none;
-  outline: none;
-  border-radius: 0;
-  border-bottom: 1px solid #000;
-  color: #000;
-  text-align: center;
-  font-size: 34px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 51px; /* 150% */
+  width: 74px !important;
+  padding-top: 25px !important;
+  border: none !important;
+  outline: none !important;
+  border-radius: 0 !important;
+  border-bottom: 1px solid #000 !important;
+  color: #000 !important;
+  text-align: center !important;
+  font-size: 34px !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  line-height: 51px !important; 
 }
 
 .error-message {
@@ -174,7 +175,7 @@ h2 svg {
   color: var(--COLORS-Primary-1000, #202020);
   font-family: "Maven Pro";
   font-weight: 500;
-  line-height: 160%; /* 25.6px */
+  line-height: 160%; 
 
   appearance: none;
   background-image: url(/images/arrow-down.svg);
@@ -196,12 +197,11 @@ h2 svg {
   color: var(--COLORS-Neutral-500, #a4a4a4);
   text-align: center;
 
-  /* Global Tokens/Body/B-7 */
   font-family: "Maven Pro";
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
-  line-height: 160%; /* 22.4px */
+  line-height: 160%; 
   position: relative;
 }
 .module form div:last-child > span::before {
@@ -249,7 +249,8 @@ h2 svg {
   text-decoration: none;
 }
 .module > a,
-.module form input[type="submit"] {
+.module form input[type="submit"],
+.module form button[type="submit"] {
   margin-top: 16px;
   display: flex;
   padding: 0.56vw 0.8vw;
@@ -264,27 +265,41 @@ h2 svg {
   border: none;
   color: #ffffff;
 
-  /* Global Tokens/Body/B-1 */
   font-family: "Baloo Bhaijaan 2";
   font-size: 18px;
   font-style: normal;
   font-weight: 500;
-  line-height: 27px; /* 150% */
+  line-height: 27px; 
+  text-align: center;
+}
+.success-message {
+  color: var(--COLORS-Primary-1000, #c0eba6);
+  text-align: center;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 27px; 
 }
 
+.module form > p:last-child,
 .module form div:last-child p:last-of-type {
   color: var(--COLORS-Neutral-700, #777);
   font-family: "Baloo Bhaijaan 2";
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
-  line-height: 27px; /* 150% */
+  line-height: 27px; 
   text-align: center;
+  display: block;
+  margin: auto;
 }
-.module form div:last-child p a {
+.module form div:last-child p a,
+.module form p:last-child span {
   color: var(--COLORS-Neutral-1000, #333);
   font-weight: 700;
   text-decoration: none;
+  cursor: pointer;
 }
 .module form .save-me {
   flex-direction: row;
@@ -298,7 +313,7 @@ h2 svg {
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
-  line-height: 24px; /* 150% */
+  line-height: 24px; 
   cursor: pointer;
   text-decoration: none;
 }
@@ -311,6 +326,6 @@ h2 svg {
 .module form .save-me label {
   font-size: 16px;
   font-weight: 400;
-  line-height: 24px; /* 150% */
+  line-height: 24px; 
   cursor: pointer;
 }

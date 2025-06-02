@@ -23,7 +23,7 @@ body {
   display: none;
 }
 .modules {
-  display: none;
+  /* display: none; */
   width: 535px;
   padding: 1.7vw;
   position: absolute;

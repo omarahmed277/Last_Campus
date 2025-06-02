@@ -1,0 +1,33 @@
+.sections a:hover {
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+.sections :global(.active) {
+  border-bottom: 3px solid var(--Colors-Primary-500, #f82548);
+  color: var(--Colors-Primary-500, #f82548);
+}
+
+.sections {
+  display: flex;
+  padding: 0.56vw 0px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid var(--Colors-Neutral-200, #e8e8e8);
+  margin-bottom: 1.1vw;
+  z-index: 10;
+  position: relative;
+}
+.sections a {
+  padding: 0.56vw;
+  color: var(--Colors-Neutral-700, #777);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27px; /* 112.5% */
+  cursor: pointer;
+  text-decoration: none;
+}

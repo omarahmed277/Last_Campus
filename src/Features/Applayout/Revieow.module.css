@@ -1,0 +1,67 @@
+.revieow {
+  display: flex;
+  width: 533px;
+  padding: 24px;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+  border: 1px solid var(--Neutral-300, #d1d5db);
+  background: #fff;
+}
+.revieow span {
+  color: var(--Neutral-800, #1f2937);
+  text-align: center;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.revieow p {
+  color: var(--Colors-Neutral-700, #777);
+  text-align: center;
+  font-feature-settings: "liga" off, "clig" off;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.678px;
+  margin-bottom: 16px;
+}
+.revieow .emojies {
+  display: flex;
+  width: 298px;
+  padding: 4px;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.revieow .emojies input {
+  appearance: none;
+}
+.revieow .emojies label svg {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  aspect-ratio: 1/1;
+}
+.revieow button {
+  display: flex;
+  height: 48px;
+  padding: var(--2, 8px) var(--3, 12px);
+  justify-content: center;
+  align-items: center;
+  gap: var(--2, 8px);
+  align-self: stretch;
+  border-radius: var(--ui-radius, 6px);
+  background: var(--Colors-Primary-500, #f82548);
+  color: #ffffff;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 120% */
+  border: none;
+}

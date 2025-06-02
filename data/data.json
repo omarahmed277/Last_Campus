@@ -2,7 +2,7 @@
   "users": [
     {
       "id": "123",
-      "userName": "هادى محمد",
+      "name": "هادى محمد",
       "backGroundImage": "public/images/8a5c72484a506d9c88179ec1010ed390.png",
       "userImage": "/public/images/avatar-01.png",
       "jop": "Front End Developer",
@@ -187,7 +187,7 @@
     },
     {
       "id": "456",
-      "userName": "معتصم شعبان",
+      "name": "معتصم شعبان",
       "backGroundImage": "/public/images/8a5c72484a506d9c88179ec1010ed390.png",
       "userImage": "/public/images/avatar-02.png",
       "jop": "UI/UX Designer",
@@ -288,7 +288,7 @@
     },
     {
       "id": "789",
-      "userName": "نهال سراج",
+      "name": "نهال سراج",
       "backGroundImage": "/public/images/8a5c72484a506d9c88179ec1010ed390.png",
       "userImage": "/public/images/Frame 1171278255 (1).png",
       "jop": "Product Manager",
@@ -389,7 +389,7 @@
     },
     {
       "id": "725",
-      "userName": "احمد شارونى",
+      "name": "احمد شارونى",
       "backGroundImage": "/public/images/bg-developer.jpg",
       "userImage": "/public/images/avatar-04.png",
       "jop": "Backend Developer",
@@ -470,7 +470,7 @@
     },
     {
       "id": "101",
-      "userName": "عمر احمد",
+      "name": "عمر احمد",
       "backGroundImage": "/public/images/bg-mobile.jpg",
       "userImage": "/public/images/avatar-05.png",
       "jop": "Mobile Developer",
@@ -551,7 +551,7 @@
     },
     {
       "id": "102",
-      "userName": "على سليم",
+      "name": "على سليم",
       "backGroundImage": "/public/images/bg-security.jpg",
       "userImage": "/public/images/avatar-03.png",
       "jop": "Security Engineer",
@@ -632,7 +632,7 @@
     },
     {
       "id": "103",
-      "userName": "عبدالله عمرو",
+      "name": "عبدالله عمرو",
       "backGroundImage": "/public/images/bg-devops.jpg",
       "userImage": "/public/images/avatar-02.png",
       "jop": "DevOps Engineer",
@@ -768,6 +768,18 @@
       "specialization": "front end",
       "country": "egypt",
       "bio": "hhhh",
+      "gender": "MALE",
+      "experienceLevel": "INTERMEDIATE"
+    },
+    {
+      "id": "7241",
+      "name": "hady",
+      "email": "hady25750@gmail.com",
+      "password": "123123",
+      "phone": "01025541212",
+      "specialization": "front end",
+      "country": "egypt",
+      "bio": "sss",
       "gender": "MALE",
       "experienceLevel": "INTERMEDIATE"
     }

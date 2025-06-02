@@ -1,16 +1,19 @@
-import { useState } from "react";
-import NavBar from "../components/NavBar/NavBar";
-import Search from "../components/explore/Search";
+import { useEffect } from "react";
+import Search from "../Features/explore/Search";
 import styles from "./Explore.module.css";
-import Filter from "../components/explore/Filter";
-import Catigories from "../components/explore/Catigories";
-import ExploredMentors from "../components/explore/ExploredMentors";
+import Filter from "../Features/explore/Filter";
+import Catigories from "../Features/explore/Catigories";
+import ExploredMentors from "../Features/explore/ExploredMentors";
+import { useNavigate } from "react-router-dom";
 
-function Explore({ curUser, users }) {
-  const [query, setQuery] = useState("");
+function Explore() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!localStorage.getItem("token")) navigate("/login");
+  }, [localStorage.length]);
+
   return (
-    <div className="container">
-      <NavBar user={curUser} query={query} setQuery={setQuery} />
+    <>
       <div className={styles.searchBar}>
         <Search />
         <Filter />
@@ -18,8 +21,8 @@ function Explore({ curUser, users }) {
       <div>
         <Catigories />
       </div>
-      <ExploredMentors users={users} />
-    </div>
+      <ExploredMentors />
+    </>
   );
 }
 

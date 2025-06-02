@@ -1,0 +1,110 @@
+.mentor {
+  border-radius: 8px;
+  border: 0.883px solid var(--Colors-Neutral-300, #d2d2d2);
+  background: #fff;
+  width: 318px;
+  /* Global Tokens/E2 */
+  box-shadow: 0px 16px 32px -12px rgba(88, 92, 95, 0.1);
+}
+.mentor > div:first-child {
+  display: flex;
+  /* padding: 22.083px 22.083px 6.833px 22.083px; */
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  align-self: stretch;
+  background: #f2f2f2;
+}
+.mentor > div:last-child {
+  display: flex;
+  padding: 22.083px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 13.25px;
+  align-self: stretch;
+}
+
+.mentor > div:first-child > img {
+  height: 310px;
+  width: 100%;
+}
+.mentor > div:first-child a {
+  color: #000;
+
+  /* Global Tokens/Body/B-1 */
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27px; /* 150% */
+  text-decoration: none;
+}
+.mentor > div:first-child p:first-of-type {
+  color: var(--Colors-Neutral-600, #8e8e8e);
+
+  /* Global Tokens/Body/B-2 */
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+}
+.mentor > div:first-child p:last-of-type {
+  color: var(--Colors-Neutral-900, #4a4a4a);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 120%; /* 16.8px */
+}
+
+.mentor > div:first-child .social {
+  display: flex;
+  width: 273.833px;
+  padding: 10.6px 0px;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.mentor > div:first-child .social img {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.mentor > div:last-child p {
+  color: var(--Colors-Neutral-700, #777);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.mentor > div:last-child .btns {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  align-self: stretch;
+}
+.mentor > div:last-child .btns button {
+  display: flex;
+  padding: 8px 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  flex: 1 0 0;
+  color: var(--Colors-Primary-500, #f82548);
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; /* 150% */
+  border-radius: 6px;
+  border: 2px solid var(--Colors-Primary-Alpha-50, rgba(255, 29, 53, 0.5));
+  background-color: #fff;
+  cursor: pointer;
+}

@@ -8,6 +8,7 @@
   align-items: center;
   justify-content: space-between;
   height: 83.1vh;
+  gap: 33px;
 }
 .chatHeader {
   border-radius: 8px;
@@ -142,11 +143,10 @@
   background: var(--Alert-FF353F, #ff353f);
 }
 .chatContainer {
-  display: flex;
   height: 100%;
-  justify-content: center;
-  align-items: center;
+
   flex: 1;
+  position: relative;
 }
 .empaty {
   display: flex;
@@ -156,6 +156,10 @@
   align-self: stretch;
   justify-content: center;
   width: 316px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .empaty > img {
   width: 54px;
@@ -206,4 +210,167 @@
 .empaty a img {
   width: 20px;
   height: 20px;
+}
+
+.userInfo {
+  display: flex;
+  padding: 16px;
+  gap: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--Colors-Neutral-200, #e8e8e8);
+  background: #fff;
+  margin-block: 14px;
+}
+
+.userInfo img {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-size: cover;
+}
+.userInfo div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.userInfo div span {
+  color: var(--Colors-Neutral-1000, #333);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 120% */
+}
+.userInfo div p {
+  color: var(--Colors-Neutral-500, #a4a4a4);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px; /* 112.5% */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.userInfo div p::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #78da78;
+}
+.chatMessages {
+  display: flex;
+  flex-direction: column;
+  gap: 33px;
+  overflow: auto;
+  height: 68%;
+}
+.userMessage {
+  /* justify-content: flex-end; */
+  flex-direction: row-reverse;
+}
+.userMessage,
+.myMessage {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.userMessage img,
+.myMessage img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+.userMessage p,
+.myMessage p {
+  display: flex;
+  padding: 12px 20px;
+  align-items: flex-start;
+  gap: 8px;
+  border-radius: 24px 0px 24px 24px;
+  background: var(--Red-Color, #f82548);
+  /* Elevation 100 */
+  box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.24),
+    0px 2px 4px 0px rgba(0, 0, 0, 0.16), 0px -1px 1px 0px rgba(0, 0, 0, 0.08);
+  color: var(--opacity-white-100, #fff);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 21px; /* 150% */
+  position: relative;
+}
+.userMessage p {
+  color: var(--COLORS-Neutral-1000, #333);
+
+  border-radius: 0px 24px 24px 24px;
+  background: var(--Colors-Neutral-200, #e8e8e8);
+
+  /* Elevation 100 */
+  box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.24),
+    0px 2px 4px 0px rgba(0, 0, 0, 0.16), 0px -1px 1px 0px rgba(0, 0, 0, 0.08);
+}
+.userMessage p span,
+.myMessage p span {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  color: var(--Colors-Neutral-800, #606060);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px; /* 112.5% */
+}
+.userMessage p span {
+  right: 0;
+}
+
+.chatInput {
+  display: flex;
+  padding: 16px 18px;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px solid var(--Storke-Color, #d2d2d2);
+  background: #fff;
+  margin-top: 21px;
+}
+.chatInput input {
+  color: var(--Colors-Neutral-700, #777);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px; /* 100% */
+  border: none;
+  width: 95%;
+}
+.chatInput div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 93%;
+}
+.chatInput div img {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+.chatInput > img {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  cursor: pointer;
 }

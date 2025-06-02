@@ -1,0 +1,206 @@
+.module {
+  margin: 6vw auto;
+  width: 488px;
+  padding: 2.2vw;
+  display: grid;
+  gap: 0.56vw;
+  border-radius: 16px;
+  border: 1px solid var(--Colors-Neutral-300, #d2d2d2);
+  background: #fff;
+  box-shadow: 0px 16px 32px -12px rgba(88, 92, 95, 0.1);
+}
+.module h1 {
+  color: var(--Warm-black, #333);
+  text-align: center;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-bottom: 16px;
+}
+.module > div > span {
+  color: var(--Colors-Neutral-900, #4a4a4a);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 36px; /* 150% */
+}
+.module > div > p {
+  color: var(--Colors-Neutral-600, #8e8e8e);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 21px; /* 131.25% */
+}
+.status {
+  display: flex;
+  width: 424px;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+}
+.status > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  width: 100%;
+}
+.status img {
+  width: 237.305px;
+  height: 208.656px;
+}
+.status > div .text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  align-self: stretch;
+}
+.status > div .text span {
+  color: var(--Text-Primary, #00001d);
+  text-align: center;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 30px; /* 93.75% */
+}
+.status > div .text p {
+  color: var(--Text-Secondary, #667);
+  text-align: center;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 30px */
+}
+
+.status a {
+  text-decoration: none;
+
+  display: flex;
+  padding: 0.56vw 0.8vw;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 6px;
+  background: var(--Colors-Primary-500, #f82548);
+  color: var(--COLORS-Neutral-100, #fff);
+  cursor: pointer;
+  border: none;
+  color: #ffffff;
+
+  /* Global Tokens/Body/B-1 */
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27px; /* 150% */
+}
+
+.module form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25vw;
+  align-self: stretch;
+}
+.module form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.56vw;
+  align-self: stretch;
+}
+.module form .checkbox {
+  flex-direction: row;
+  align-items: flex-start;
+}
+.module form div label {
+  color: var(--Gray-900, #101828);
+  text-align: right;
+
+  /* Global Tokens/Body/B-1 */
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27px; /* 150% */
+}
+.module form div:first-child input {
+  font-family: var(--font-family-font-family, DM_Sans);
+}
+.module form div select,
+.module form div textarea,
+.module form div input {
+  padding: 0.56vw 0.8vw;
+  border-radius: 6px;
+  border: 1px solid var(--Colors-Neutral-300, #d2d2d2);
+  background: #fff;
+  color: var(--Colors-Neutral-500, #a4a4a4);
+  font-family: "Baloo Bhaijaan 2";
+  outline: none;
+
+  /* text-base/regular */
+  font-size: 16px;
+  font-style: normal;
+  font-weight: var(--font-weight-normal, 400);
+  line-height: var(--line-height-text-base, 24px); /* 150% */
+}
+
+.error-message {
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20.54px;
+  text-align: right;
+  color: #db3b21;
+  margin: 0;
+  margin-top: -0.29vw;
+}
+
+.module form div textarea {
+  resize: none;
+  height: 6.18vw;
+}
+.module form div select {
+  color: var(--Gray500, #667085);
+  text-align: right;
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.module > a {
+  text-decoration: none;
+}
+.module > a,
+.module form input[type="submit"] {
+  margin-top: 16px;
+  display: flex;
+  padding: 0.56vw 0.8vw;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 6px;
+  background: var(--Colors-Primary-500, #f82548);
+  color: var(--COLORS-Neutral-100, #fff);
+  cursor: pointer;
+  border: none;
+  color: #ffffff;
+
+  /* Global Tokens/Body/B-1 */
+  font-family: "Baloo Bhaijaan 2";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 27px; /* 150% */
+}
